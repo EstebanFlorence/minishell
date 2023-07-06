@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/05 23:14:33 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/06 02:32:03 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,9 @@ typedef struct	s_shell
 
 
 void	shell_innit(t_shell *shell);
+void	shell_env(t_shell *shell);
 void	shell_loop(t_shell *shell);
+void	shell_exit(t_shell *shell);
 
 
 #endif

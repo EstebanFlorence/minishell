@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/06 00:46:35 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/06 02:39:30 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,16 @@ SRC_DIR		=	src
 
 OBJ_DIR		=	obj
 
-SRCS		=   src/minishell.c		src/tools.c
+SRCS		=   src/minishell.c		src/tools/tools.c
 
-OBJS		=	${addprefix obj/,${notdir ${SRCS:.c=.o}}}
+#OBJS		=	${addprefix obj/,${notdir ${SRCS:.c=.o}}}
+OBJS        =	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 CC			=	gcc
 
 RM			=	rm -rf
 
-FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
+FLAGS		=	-g -Iinclude/ -Ilibft/include/ #-Wall -Wextra -Werror
 
 MAKEFLAGS	+=	--silent
 
@@ -41,7 +42,7 @@ CYAN 		=	\033[1;36m
 
 
 ${OBJ_DIR}/%.o:	${SRC_DIR}/%.c
-				@mkdir -p ${OBJ_DIR}
+				@mkdir -p ${@D}
 				@${CC} ${FLAGS} -c $< -o $@
 
 ${NAME}:		${OBJS}
