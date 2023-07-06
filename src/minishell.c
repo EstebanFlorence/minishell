@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/06 02:43:40 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:21:04 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	shell_innit(t_shell *shell)
 	char	*tmp;
 
 	tmp = ft_strjoin(PURPLE, getenv("USER"));
-	shell->prompt = ft_strjoin(tmp, "@zeshell" CLR_RMV "> ");
+	shell->prompt = ft_strjoin(tmp, "@zeshell" CLR_RMV " > ");
 	free (tmp);
 
 	//shell_env(shell);

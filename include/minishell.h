@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/06 02:32:03 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/06 19:48:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 
 typedef struct	s_lexer
 {
-	char			*str;
+	char			*token;
 
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
