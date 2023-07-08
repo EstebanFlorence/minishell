@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/06 19:48:29 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:44:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # include <stdbool.h>
 # include <sys/wait.h>
 # include <sys/time.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define CLR_RMV	"\033[0m"
 # define RED		"\033[1;31m"
@@ -45,8 +45,6 @@ typedef struct	s_shell
 	char	**env;
 	char	**path;
 
-
-
 	pid_t	pid;
 
 	bool	history;
@@ -58,6 +56,11 @@ void	shell_innit(t_shell *shell);
 void	shell_env(t_shell *shell);
 void	shell_loop(t_shell *shell);
 void	shell_exit(t_shell *shell);
+
+int		ft_isvalid(char *s);
+void	ft_builder(t_shell *shell);
+int		ft_wordcount(char *s);
+int		check_builtins(char *s);
 
 
 #endif

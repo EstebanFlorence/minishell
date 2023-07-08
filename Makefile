@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/06 02:39:30 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/08 16:29:44 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,10 +16,9 @@ SRC_DIR		=	src
 
 OBJ_DIR		=	obj
 
-SRCS		=   src/minishell.c		src/tools/tools.c
+SRCS		=   ${SRC_DIR}/minishell.c		${SRC_DIR}/tools/tools.c
 
-#OBJS		=	${addprefix obj/,${notdir ${SRCS:.c=.o}}}
-OBJS        =	$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
+OBJS        =	${patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRCS}}
 
 CC			=	gcc
 
@@ -31,7 +30,7 @@ MAKEFLAGS	+=	--silent
 
 LIB			=	libft
 
-LIBFLAGS	=	-L./libft/include -lft
+LIBFLAGS	=	-L./libft/include/ -lft
 
 CLR_RMV		=	\033[0m
 RED		    =	\033[1;31m
@@ -43,15 +42,15 @@ CYAN 		=	\033[1;36m
 
 ${OBJ_DIR}/%.o:	${SRC_DIR}/%.c
 				@mkdir -p ${@D}
-				@${CC} ${FLAGS} -c $< -o $@
+				${CC} ${FLAGS} -c $< -o $@
 
 ${NAME}:		${OBJS}
-				@echo "$(GREEN)Compilation ${CLR_RMV}of ${YELLOW}$(LIB) ${CLR_RMV}..."
+				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${LIB} ${CLR_RMV}..."
 				@make -C ./libft
-				@echo "$(GREEN)$(LIB) created[0m ✔️"
+				@echo "${GREEN}${LIB} created[0m ✔️"
 
 				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME} ${CLR_RMV}..."
-				@${CC} ${FLAGS} ${OBJS} ${LIBFLAGS} -lreadline -o ${NAME}
+				${CC} ${FLAGS} ${OBJS} ${LIBFLAGS} -lreadline -o ${NAME}
 				@echo "${GREEN}${NAME} created[0m ✔️"
 
 all:			${NAME}
@@ -60,7 +59,7 @@ objs:
 				@mkdir -p obj
 
 clean:
-				@ echo "$(RED)Deleting $(CYAN)$(LIB) $(CLR_RMV)libft objs ✔️"
+				@ echo "${RED}Deleting ${CYAN}${LIB} ${CLR_RMV}libft objs ✔️"
 				@make clean -C ./libft
 
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
@@ -68,7 +67,7 @@ clean:
 
 
 fclean:			clean
-				@ echo "$(RED)Deleting $(CYAN)$(LIB) $(CLR_RMV)binary ✔️"
+				@ echo "${RED}Deleting ${CYAN}${LIB} ${CLR_RMV}binary ✔️"
 				@make fclean -C ./libft
 
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}binary ✔️"

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/06 18:21:04 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:52:48 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,20 @@ void	shell_loop(t_shell *shell)
 	while (42)
 	{
 		shell->input = readline(shell->prompt);
-
 		if (!ft_strncmp(shell->input, "exit", 5))
 			shell_exit(shell);
 
-		ft_printf("%s\n", shell->input);
+		if (!ft_isvalid(shell->input))
+			ft_builder(shell);
+
+		if (!check_builtins(shell->input))
+			ft_printf("bulitin\n");
+
+
+		//ft_printf("%s\n", shell->input);
 
 		free (shell->input);
 	}
-}
-
-void	shell_env(t_shell *shell)
-{
-	
-
-
 }
 
 void	shell_innit(t_shell *shell)
@@ -43,12 +42,7 @@ void	shell_innit(t_shell *shell)
 	free (tmp);
 
 	//shell_env(shell);
-	
-}
 
-void	shell_check()
-{
-	
 }
 
 int	main(int ac, char **av/* , char **env */)
