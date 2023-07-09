@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/08 18:52:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/09 22:25:17 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	shell_loop(t_shell *shell)
 
 		//ft_printf("%s\n", shell->input);
 
-		free (shell->input);
+		free(shell->input);
 	}
 }
 
@@ -41,6 +41,12 @@ void	shell_innit(t_shell *shell)
 	shell->prompt = ft_strjoin(tmp, "@zeshell" CLR_RMV " > ");
 	free (tmp);
 
+	//shell->prompt = 0;
+	//shell->input = 0;
+
+	shell->exit = 0;
+	shell->words = 0;
+
 	//shell_env(shell);
 
 }
@@ -48,9 +54,11 @@ void	shell_innit(t_shell *shell)
 int	main(int ac, char **av/* , char **env */)
 {
 	t_shell	shell;
+//	t_lexer	*lexer;
 
 	(void)ac;
 	(void)av;
+//	lexer = NULL;
 
 	ft_printf("%sWelcome %s!%s\n", GREEN, getenv("USER"), CLR_RMV);
 

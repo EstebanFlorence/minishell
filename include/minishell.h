@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/08 18:44:23 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/09 23:34:04 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 typedef struct	s_lexer
 {
+	int				id;
 	char			*token;
 
 	struct s_lexer	*next;
@@ -42,8 +43,13 @@ typedef struct	s_shell
 {
 	char	*prompt;
 	char	*input;
+	char	**inputs;
 	char	**env;
 	char	**path;
+
+	int		words;
+
+	int		exit;
 
 	pid_t	pid;
 
@@ -59,8 +65,15 @@ void	shell_exit(t_shell *shell);
 
 int		ft_isvalid(char *s);
 void	ft_builder(t_shell *shell);
-int		ft_wordcount(char *s);
+int		ft_wordscount(char *s);
 int		check_builtins(char *s);
+
+//	LEXER
+void	lexer_innit(t_shell *shell, t_lexer **lexer);
+void	lex_lstadd_back(t_lexer **lexer, t_lexer *new);
+t_lexer	*lex_lstlast(t_lexer *lexer);
+t_lexer	*lex_lstnew(int i, char *s);
+void	lex_free(t_lexer *lexer);
 
 
 #endif

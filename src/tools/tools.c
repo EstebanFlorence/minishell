@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/08 18:52:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/09 23:29:43 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,45 +38,18 @@ int	check_builtins(char *s)
 	return (1);
 }
 
-int	ft_wordcount(char *s)
-{
-	int	i;
-	int	words;
-
-	i = 0;
-	words = 0;
-	while (s[i])
-	{
-		while (s[i] && s[i] != ' ')
-		{
-			if (s[i + 1] == ' ' || !s[i + 1])
-				words++;
-			i++;
-		}
-		while (s[i] && s[i] == ' ')
-			i++;
-	}
-	ft_printf("words: %d\n", words);
-	return (words);
-}
-
-void	ft_builder(t_shell *shell)
-{
-	char	**words;
-
-	words = ft_split(shell->input, ' ');
-
-	for (int i = 0; words[i]; i++)
-		ft_printf("%s\n", words[i]);
-
-	free(words);
-}
-
 void	shell_exit(t_shell *shell)
 {
+	int	i;
+
 	free(shell->input);
 	free(shell->prompt);
-	
+	i = -1;
+	while (++i < shell->words)
+		free(shell->inputs[i]);
+	free(shell->inputs);
+
+
 	exit (EXIT_SUCCESS);
 }
 
