@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/09 23:34:04 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/10 18:11:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,21 @@ void	shell_env(t_shell *shell);
 void	shell_loop(t_shell *shell);
 void	shell_exit(t_shell *shell);
 
+//	Tools
+void	ft_error(int n);
 int		ft_isvalid(char *s);
-void	ft_builder(t_shell *shell);
-int		ft_wordscount(char *s);
 int		check_builtins(char *s);
 
-//	LEXER
-void	lexer_innit(t_shell *shell, t_lexer **lexer);
+//	Lexer
+void	lexer(t_shell *shell);
+void	lex_innit(t_shell *shell, t_lexer **lexer);
 void	lex_lstadd_back(t_lexer **lexer, t_lexer *new);
+void	lex_free(t_lexer *lexer);
+int		lex_wordscount(char *s);
 t_lexer	*lex_lstlast(t_lexer *lexer);
 t_lexer	*lex_lstnew(int i, char *s);
-void	lex_free(t_lexer *lexer);
 
+//	Parser
+void	parser(t_lexer **lexer);
 
 #endif

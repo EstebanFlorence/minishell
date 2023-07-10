@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/09 22:25:17 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/10 17:56:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,15 @@ void	shell_loop(t_shell *shell)
 	while (42)
 	{
 		shell->input = readline(shell->prompt);
+
 		if (!ft_strncmp(shell->input, "exit", 5))
 			shell_exit(shell);
 
 		if (!ft_isvalid(shell->input))
-			ft_builder(shell);
-
-		if (!check_builtins(shell->input))
-			ft_printf("bulitin\n");
+			lexer(shell);
 
 
-		//ft_printf("%s\n", shell->input);
+		//printf("%s\n", shell->input);
 
 		free(shell->input);
 	}
@@ -35,14 +33,11 @@ void	shell_loop(t_shell *shell)
 
 void	shell_innit(t_shell *shell)
 {
-	char	*tmp;
+	char	*user;
 
-	tmp = ft_strjoin(PURPLE, getenv("USER"));
-	shell->prompt = ft_strjoin(tmp, "@zeshell" CLR_RMV " > ");
-	free (tmp);
-
-	//shell->prompt = 0;
-	//shell->input = 0;
+	user = ft_strjoin(PURPLE, getenv("USER"));
+	shell->prompt = ft_strjoin(user, "@zeShell" CLR_RMV " > ");
+	free (user);
 
 	shell->exit = 0;
 	shell->words = 0;

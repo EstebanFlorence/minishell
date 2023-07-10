@@ -6,11 +6,19 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/09 23:29:43 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/10 14:26:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_error(int n)
+{
+	write(STDERR_FILENO, "Error:\n", 8);
+	if (n == 0)
+		write(STDERR_FILENO, "> Invalid input\n", 17);
+	
+}
 
 int	check_builtins(char *s)
 {
@@ -47,7 +55,7 @@ void	shell_exit(t_shell *shell)
 	i = -1;
 	while (++i < shell->words)
 		free(shell->inputs[i]);
-	free(shell->inputs);
+	//free(shell->inputs);
 
 
 	exit (EXIT_SUCCESS);
