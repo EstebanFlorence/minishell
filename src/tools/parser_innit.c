@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_innit.c                                      :+:      :+:    :+:   */
+/*   parser_innit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 16:46:17 by adi-nata         ###   ########.fr       */
+/*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
+/*   Updated: 2023/07/11 20:19:11 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer	*lex_lstnew(int i, char *s)
+t_parser	*pars_lstnew(char *s, int id)
 {
-	t_lexer	*new;
+	t_parser	*new;
 
-	new = (t_lexer *)malloc(sizeof(t_lexer) * 1);
+	new = (t_parser *)malloc(sizeof(t_parser) * 1);
 	if (new == NULL)
 		return (NULL);
-	new->id = i + 1;
-	new->token = s;
+	new->id = id + 1;
+	new->token = ft_strdup(s);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
 }
 
-t_lexer	*lex_lstlast(t_lexer *lexer)
+t_parser	*pars_lstlast(t_parser *parser)
 {
-	t_lexer	*next;
+	t_parser	*next;
 
-	if (lexer != NULL)
+	if (parser != NULL)
 	{
-		next = lexer;
+		next = parser;
 		while (1)
 		{
 			if (next->next == NULL)
@@ -43,30 +43,21 @@ t_lexer	*lex_lstlast(t_lexer *lexer)
 	return (NULL);
 }
 
-void	lex_lstadd_back(t_lexer **lexer, t_lexer *new)
+void	pars_lstadd_back(t_parser **parser, t_parser *new)
 {
-	t_lexer	*last;
+	t_parser	*last;
 
-	if (!lexer)
+	if (!parser)
 		return ;
-	if (*lexer == NULL)
-		*lexer = new;
+	if (*parser == NULL)
+		*parser = new;
 	else
 	{
-		last = lex_lstlast(*lexer);
+		last = pars_lstlast(*parser);
 		if (last != NULL)
 		{
 			last->next = new;
 			new->prev = last;
 		}
 	}
-}
-
-void	lex_innit(t_shell *shell, t_lexer **lexer)
-{
-	int	i;
-
-	i = -1;
-	while (shell->inputs[++i])
-		lex_lstadd_back(lexer, lex_lstnew(i, shell->inputs[i]));
 }

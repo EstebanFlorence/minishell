@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/28 21:24:46 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/08 16:22:36 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/11 14:48:36 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ SRCS	=	srcs/ft_isalpha.c		srcs/ft_isdigit.c\
 			ft_printf/printf_u.c\
 			ft_printf/printf_x.c
 
-OBJS	=	${SRCS:.c=.o}
+OBJS    =   $(patsubst %.c, obj/%.o, $(SRCS))
 
 CC		=	gcc
 
@@ -67,11 +67,12 @@ ${NAME}:	${OBJS}
 
 all:		${NAME}
 
-.c.o:
-			@${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+obj/%.o: %.c
+			@mkdir -p $(@D)
+			@${CC} ${FLAGS} -c $< -o $@
 
 clean:
-			@${RM} *.o */*.o */*/*.o
+			@${RM} -r obj
 
 fclean:		clean
 			@${RM} ${NAME}

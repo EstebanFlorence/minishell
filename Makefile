@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/10 18:01:48 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/10 23:10:12 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,13 +14,14 @@ NAME		=	minishell
 
 SRC_DIR		=	src
 
-OBJ_DIR		=	obj
+OBJ_DIR		=	.obj
 
 SRCS		=   ${SRC_DIR}/minishell.c\
 \
-				${SRC_DIR}/tools/tools.c		${SRC_DIR}/tools/lexer_innit.c\
+				${SRC_DIR}/tools/tools.c			${SRC_DIR}/tools/lexer_innit.c\
+				${SRC_DIR}/tools/parser_innit.c\
 \
-				${SRC_DIR}/parser/lexer.c		${SRC_DIR}/parser/parser.c
+				${SRC_DIR}/parser/lexer.c			${SRC_DIR}/parser/parser.c
 
 OBJS        =	${patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRCS}}
 
@@ -28,7 +29,7 @@ CC			=	gcc
 
 RM			=	rm -rf
 
-FLAGS		=	-g -Iinclude/ -Ilibft/include/ #-Wall -Wextra -Werror
+FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
 
 MAKEFLAGS	+=	--silent
 

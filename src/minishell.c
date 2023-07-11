@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/10 17:56:07 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 20:55:56 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ void	shell_loop(t_shell *shell)
 			shell_exit(shell);
 
 		if (!ft_isvalid(shell->input))
-			lexer(shell);
+		{
+			ft_parser(shell);
+
+
+		}
 
 
 		//printf("%s\n", shell->input);
@@ -49,11 +53,9 @@ void	shell_innit(t_shell *shell)
 int	main(int ac, char **av/* , char **env */)
 {
 	t_shell	shell;
-//	t_lexer	*lexer;
 
 	(void)ac;
 	(void)av;
-//	lexer = NULL;
 
 	ft_printf("%sWelcome %s!%s\n", GREEN, getenv("USER"), CLR_RMV);
 

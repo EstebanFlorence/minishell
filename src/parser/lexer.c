@@ -6,35 +6,22 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 19:00:46 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/10 18:10:08 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 20:50:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	lexer(t_shell *shell)
+void	ft_lexer(t_shell *shell, t_lexer **lexer)
 {
-	t_lexer	*lexer;
-
-	lexer = NULL;
-	shell->words = lex_wordscount(shell->input);
-	printf("lex_wordscount: %d\n", shell->words);
-
 	shell->inputs = ft_split(shell->input, ' ');
-	for (int i = 0; i < shell->words; i++)
-		printf("%s\n", shell->inputs[i]);
-
-	lex_innit(shell, &lexer);
-	t_lexer *tmp = lexer;
+	lex_innit(shell, lexer);
+	t_lexer *tmp = *lexer;
 	while (tmp)
 	{
 		printf("lexer id: %d token: %s\n", tmp->id, tmp->token);
 		tmp = tmp->next;
 	}
-	parser(lexer);
-	lex_free(lexer);
-
-
 }
 
 int	lex_wordscount(char *s)
