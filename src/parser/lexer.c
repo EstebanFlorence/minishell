@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 19:00:46 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 20:50:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 21:39:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,18 @@ int	lex_wordscount(char *s)
 			i++;
 	}
 	return (words);
+}
+
+void	lex_remove(t_lexer *lexer)
+{
+	t_lexer	*tmp;
+
+	while (lexer)
+	{
+		tmp = lexer;
+		lexer = lexer->prev;
+		free (tmp);
+	}
 }
 
 void	lex_free(t_lexer *lexer)

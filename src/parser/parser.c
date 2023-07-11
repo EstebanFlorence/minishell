@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 21:01:58 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 23:06:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,9 @@ void	pars_checker(t_lexer **lexer, t_parser **parser)
 		{
 			printf("pipe\n");
 			pars_commander(index, parser);
+			if (index->prev)
+				lex_remove(index->prev);
+			(*lexer) = index;
 		}
 		else if (ft_strncmp(index->token, "$", 2) == 0)
 		{
@@ -96,6 +99,8 @@ void	pars_checker(t_lexer **lexer, t_parser **parser)
 		//	printf("bonus\n");
 		//else if (ft_strncmp(index->token, "&&", 3) == 0)
 		//	printf("bonus\n");
+
+		//printf("pars_checker id: %d\n", index->id);
 
 		index = index->next;
 	}
@@ -111,7 +116,15 @@ void	ft_parser(t_shell *shell)
 	ft_lexer(shell, &lexer);
 	pars_checker(&lexer, &parser);
 
+	t_lexer *tmp = lexer;
+	while (tmp)
+	{
+		printf("lexer id: %d\n", tmp->id);
+		tmp = tmp->next;
+	}
+
 	lex_free(lexer);
+	pars_free(parser);
 }
 
 void	pars_free(t_parser *parser)

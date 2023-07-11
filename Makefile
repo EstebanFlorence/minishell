@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/10 23:10:12 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/11 23:12:08 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ clean:
 				@make clean -C ./libft
 
 				@ echo "${RED}Deleting ${CYAN}${NAME} ${CLR_RMV}objs ✔️"
-				@${RM} obj
+				@${RM} ${OBJ_DIR}
 
 
 fclean:			clean

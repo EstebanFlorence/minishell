@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 20:44:00 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 21:39:49 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int			check_builtins(char *s);
 void		ft_lexer(t_shell *shell, t_lexer **lexer);
 void		lex_innit(t_shell *shell, t_lexer **lexer);
 void		lex_lstadd_back(t_lexer **lexer, t_lexer *new);
+void		lex_remove(t_lexer *lexer);
 void		lex_free(t_lexer *lexer);
 int			lex_wordscount(char *s);
 t_lexer		*lex_lstlast(t_lexer *lexer);
