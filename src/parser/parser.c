@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/13 01:53:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/13 14:49:34 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@ void	pars_lstadd(t_pars **parser, char *s)
 	i++;
 }
 
+
+
 void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 {
-	//t_lex	*index;
 	char	*command;
 	char	*tmp;
 
-	//index = pars_starter(lexer);
 	command = ft_strdup(start->token);
 	while (start->id < end->id)
 	{
-		if (start->next->id < end->id )
+		if (start->next->id < end->id || !end->next)
 		{
 			tmp = ft_strjoin(command, " ");
 			free(command);
@@ -43,15 +43,12 @@ void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 	printf("command: %s\n", command);
 	pars_lstadd(parser, command);
 	free(command);
-	if (!start->next)
-		pars_lstadd(parser, start->token);
 }
 
-void	pars_checker(t_lex **lexer, t_pars **parser)
+void	pars_piper(t_lex **lexer, t_pars **parser)
 {
 	t_lex	*index;
 
-	printf("pars_checker:\n");
 	index = (*lexer);
 	while (index)
 	{
@@ -59,18 +56,13 @@ void	pars_checker(t_lex **lexer, t_pars **parser)
 		{
 			printf("pipe:\n");
 			pars_commander((*lexer), index, parser);
-
-			//(*lexer) = index->prev;
 			lex_remove(*lexer, index);
 			(*lexer) = index;
-
 		}
 		if (!index->next)
 		{
 			printf("end:\n");
 			pars_commander((*lexer), index, parser);
-
-			
 		}
 		index = index->next;
 	}
@@ -79,13 +71,16 @@ void	pars_checker(t_lex **lexer, t_pars **parser)
 
 void	ft_pars(t_shell *shell)
 {
-	t_lex		*lexer;
+	t_lex	*lexer;
 	t_pars	*parser;
 
 	lexer = NULL;
 	parser = NULL;
 	ft_lex(shell, &lexer);
-	pars_checker(&lexer, &parser);
+//	if (ft_strnstr(shell->input, "|", 2))
+	pars_piper(&lexer, &parser);
+//	pars_redirect(&lexer, &parser);
+//	parse_inout();
 
 	t_pars *tmp = parser;
 	while (tmp)

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/12 16:11:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/13 02:48:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,15 @@ t_lex		*lex_lstnew(int i, char *s);
 
 //	Parser
 void		ft_pars(t_shell *shell);
-void		pars_checker(t_lex **lexer, t_pars **parser);
+void		pars_piper(t_lex **lexer, t_pars **parser);
 void		pars_lstadd(t_pars **parser, char *s);
 void		pars_lstadd_back(t_pars **parser, t_pars *new);
 void		pars_commander(t_lex *start, t_lex *end, t_pars **parser);
 void		pars_free(t_pars *parser);
 int			pars_finder(t_lex *lexer);
 t_lex		*pars_starter(t_lex *lexer);
-t_pars	*pars_lstlast(t_pars *parser);
-t_pars	*pars_lstnew(char *s, int id);
+t_pars		*pars_lstlast(t_pars *parser);
+t_pars		*pars_lstnew(char *s, int id);
 
 
 
