@@ -6,58 +6,129 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 23:06:07 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/13 01:53:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pars_lstadd(t_parser **parser, char *s)
+void	pars_lstadd(t_pars **parser, char *s)
 {
-	static int	i;
+	static int	i = 0;
 
-	i = 0;
 	pars_lstadd_back(parser, pars_lstnew(s, i));
 	i++;
 }
 
-t_lexer	*pars_starter(t_lexer *lexer)
+void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 {
-	t_lexer	*index;
-
-	index = lexer;
-	while(index->prev)
-		index = index->prev;
-	return (index);
-}
-
-void	pars_commander(t_lexer *lexer, t_parser **parser)
-{
-	t_lexer	*index;
+	//t_lex	*index;
 	char	*command;
 	char	*tmp;
 
-	index = pars_starter(lexer);
-	command = ft_strdup(index->token);
-	while (index->id < lexer->id)
+	//index = pars_starter(lexer);
+	command = ft_strdup(start->token);
+	while (start->id < end->id)
 	{
-		if (index->next->id < lexer->id )
+		if (start->next->id < end->id )
 		{
 			tmp = ft_strjoin(command, " ");
 			free(command);
-			command = ft_strjoin(tmp, index->next->token);
+			command = ft_strjoin(tmp, start->next->token);
 			free(tmp);
 		}
-		index = index->next;
+		start = start->next;
 	}
+
 	printf("command: %s\n", command);
 	pars_lstadd(parser, command);
 	free(command);
+	if (!start->next)
+		pars_lstadd(parser, start->token);
 }
 
-void	pars_checker(t_lexer **lexer, t_parser **parser)
+void	pars_checker(t_lex **lexer, t_pars **parser)
 {
-	t_lexer		*index;
+	t_lex	*index;
+
+	printf("pars_checker:\n");
+	index = (*lexer);
+	while (index)
+	{
+		if (ft_strncmp(index->token, "|", 2) == 0)
+		{
+			printf("pipe:\n");
+			pars_commander((*lexer), index, parser);
+
+			//(*lexer) = index->prev;
+			lex_remove(*lexer, index);
+			(*lexer) = index;
+
+		}
+		if (!index->next)
+		{
+			printf("end:\n");
+			pars_commander((*lexer), index, parser);
+
+			
+		}
+		index = index->next;
+	}
+
+}
+
+void	ft_pars(t_shell *shell)
+{
+	t_lex		*lexer;
+	t_pars	*parser;
+
+	lexer = NULL;
+	parser = NULL;
+	ft_lex(shell, &lexer);
+	pars_checker(&lexer, &parser);
+
+	t_pars *tmp = parser;
+	while (tmp)
+	{
+		printf("parser id: %d\tcommand: %s\n", tmp->id, tmp->token);
+		tmp = tmp->next;
+	}
+
+	lex_free(lexer);
+	pars_free(parser);
+}
+
+void	pars_free(t_pars *parser)
+{
+	t_pars	*tmp;
+
+	while (parser)
+	{
+		tmp = parser;
+		parser = parser->next;
+		free(tmp->token);
+		free (tmp);
+	}
+}
+
+
+/* 
+t_lex	*pars_starter(t_lex *lexer)
+{
+	t_lex	*index;
+
+	index = lexer;
+	while(index->prev)
+	{
+		if (ft_strncmp(index->token, "|", 2) == 0)
+			return (index->next);
+		index = index->prev;
+	}
+	return (index);
+} */
+/* void	pars_checker(t_lex **lexer, t_pars **parser)
+{
+	t_lex		*index;
 
 	index = *lexer;
 	while (index)
@@ -104,45 +175,10 @@ void	pars_checker(t_lexer **lexer, t_parser **parser)
 
 		index = index->next;
 	}
-}
-
-void	ft_parser(t_shell *shell)
-{
-	t_lexer		*lexer;
-	t_parser	*parser;
-
-	lexer = NULL;
-	parser = NULL;
-	ft_lexer(shell, &lexer);
-	pars_checker(&lexer, &parser);
-
-	t_lexer *tmp = lexer;
-	while (tmp)
-	{
-		printf("lexer id: %d\n", tmp->id);
-		tmp = tmp->next;
-	}
-
-	lex_free(lexer);
-	pars_free(parser);
-}
-
-void	pars_free(t_parser *parser)
-{
-	t_parser	*tmp;
-
-	while (parser)
-	{
-		tmp = parser;
-		parser = parser->next;
-		free(tmp->token);
-		free (tmp);
-	}
-}
-
+} */
 
 /* 
-void	pipe_split(t_shell *shell, t_lexer *lexer)
+void	pipe_split(t_shell *shell, t_lex *lexer)
 {
 	char	**commands;
 
@@ -150,15 +186,15 @@ void	pipe_split(t_shell *shell, t_lexer *lexer)
 
 }
 
-void	pars_checker(t_lexer **lexer, t_parser **parser)
+void	pars_checker(t_lex **lexer, t_pars **parser)
 {
 
 }
 */
 /*
- int	pars_finder(t_lexer *lexer)
+ int	pars_finder(t_lex *lexer)
 {
-	t_lexer	*index;
+	t_lex	*index;
 
 	index = lexer;
 	while (index)

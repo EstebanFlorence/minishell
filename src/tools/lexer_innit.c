@@ -6,17 +6,17 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 16:46:17 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/11 23:38:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_lexer	*lex_lstnew(int i, char *s)
+t_lex	*lex_lstnew(int i, char *s)
 {
-	t_lexer	*new;
+	t_lex	*new;
 
-	new = (t_lexer *)malloc(sizeof(t_lexer) * 1);
+	new = (t_lex *)malloc(sizeof(t_lex) * 1);
 	if (new == NULL)
 		return (NULL);
 	new->id = i + 1;
@@ -26,9 +26,9 @@ t_lexer	*lex_lstnew(int i, char *s)
 	return (new);
 }
 
-t_lexer	*lex_lstlast(t_lexer *lexer)
+t_lex	*lex_lstlast(t_lex *lexer)
 {
-	t_lexer	*next;
+	t_lex	*next;
 
 	if (lexer != NULL)
 	{
@@ -43,9 +43,9 @@ t_lexer	*lex_lstlast(t_lexer *lexer)
 	return (NULL);
 }
 
-void	lex_lstadd_back(t_lexer **lexer, t_lexer *new)
+void	lex_lstadd_back(t_lex **lexer, t_lex *new)
 {
-	t_lexer	*last;
+	t_lex	*last;
 
 	if (!lexer)
 		return ;
@@ -62,7 +62,7 @@ void	lex_lstadd_back(t_lexer **lexer, t_lexer *new)
 	}
 }
 
-void	lex_innit(t_shell *shell, t_lexer **lexer)
+void	lex_innit(t_shell *shell, t_lex **lexer)
 {
 	int	i;
 

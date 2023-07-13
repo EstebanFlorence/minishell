@@ -6,17 +6,17 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 19:00:46 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 21:39:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:15:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lexer(t_shell *shell, t_lexer **lexer)
+void	ft_lex(t_shell *shell, t_lex **lexer)
 {
 	shell->inputs = ft_split(shell->input, ' ');
 	lex_innit(shell, lexer);
-	t_lexer *tmp = *lexer;
+	t_lex *tmp = *lexer;
 	while (tmp)
 	{
 		printf("lexer id: %d token: %s\n", tmp->id, tmp->token);
@@ -45,21 +45,21 @@ int	lex_wordscount(char *s)
 	return (words);
 }
 
-void	lex_remove(t_lexer *lexer)
+void	lex_remove(t_lex *start, t_lex *end)
 {
-	t_lexer	*tmp;
+	t_lex	*tmp;
 
-	while (lexer)
+	while (start->id < end->id)
 	{
-		tmp = lexer;
-		lexer = lexer->prev;
-		free (tmp);
+		tmp = start;
+		start = start->next;
+		free(tmp);
 	}
 }
 
-void	lex_free(t_lexer *lexer)
+void	lex_free(t_lex *lexer)
 {
-	t_lexer	*tmp;
+	t_lex	*tmp;
 
 	while (lexer)
 	{

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 21:39:49 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:11:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct	s_parser
 
 	struct s_parser	*next;
 	struct s_parser	*prev;
-}	t_parser;
+}	t_pars;
 
 typedef struct	s_lexer
 {
@@ -52,7 +52,7 @@ typedef struct	s_lexer
 
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
-}	t_lexer;
+}	t_lex;
 
 typedef struct	s_shell
 {
@@ -84,26 +84,26 @@ int			ft_isvalid(char *s);
 int			check_builtins(char *s);
 
 //	Lexer
-void		ft_lexer(t_shell *shell, t_lexer **lexer);
-void		lex_innit(t_shell *shell, t_lexer **lexer);
-void		lex_lstadd_back(t_lexer **lexer, t_lexer *new);
-void		lex_remove(t_lexer *lexer);
-void		lex_free(t_lexer *lexer);
+void		ft_lex(t_shell *shell, t_lex **lexer);
+void		lex_innit(t_shell *shell, t_lex **lexer);
+void		lex_lstadd_back(t_lex **lexer, t_lex *new);
+void		lex_remove(t_lex *end, t_lex *start);
+void		lex_free(t_lex *lexer);
 int			lex_wordscount(char *s);
-t_lexer		*lex_lstlast(t_lexer *lexer);
-t_lexer		*lex_lstnew(int i, char *s);
+t_lex		*lex_lstlast(t_lex *lexer);
+t_lex		*lex_lstnew(int i, char *s);
 
 //	Parser
-void		ft_parser(t_shell *shell);
-void		pars_checker(t_lexer **lexer, t_parser **parser);
-void		pars_lstadd(t_parser **parser, char *s);
-void		pars_lstadd_back(t_parser **parser, t_parser *new);
-void		pars_commander(t_lexer *lexer, t_parser **parser);
-void		pars_free(t_parser *parser);
-int			pars_finder(t_lexer *lexer);
-t_lexer		*pars_starter(t_lexer *lexer);
-t_parser	*pars_lstlast(t_parser *parser);
-t_parser	*pars_lstnew(char *s, int id);
+void		ft_pars(t_shell *shell);
+void		pars_checker(t_lex **lexer, t_pars **parser);
+void		pars_lstadd(t_pars **parser, char *s);
+void		pars_lstadd_back(t_pars **parser, t_pars *new);
+void		pars_commander(t_lex *start, t_lex *end, t_pars **parser);
+void		pars_free(t_pars *parser);
+int			pars_finder(t_lex *lexer);
+t_lex		*pars_starter(t_lex *lexer);
+t_pars	*pars_lstlast(t_pars *parser);
+t_pars	*pars_lstnew(char *s, int id);
 
 
 
