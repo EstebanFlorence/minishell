@@ -6,14 +6,18 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 23:39:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:06:18 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	shell_loop(t_shell *shell)
+void	shell_loop(t_shell *shell, char **env)
 {
+	t_pars	*parser;
+
+	parser = NULL;
+	(void)env;
 	while (42)
 	{
 		shell->input = readline(shell->prompt);
@@ -23,13 +27,9 @@ void	shell_loop(t_shell *shell)
 
 		if (!ft_isvalid(shell->input))
 		{
-			ft_pars(shell);
-
-
+			ft_pars(shell, &parser);
+			//ft_exec(shell, &parser, env);
 		}
-
-
-		//printf("%s\n", shell->input);
 
 		free(shell->input);
 	}
@@ -43,25 +43,22 @@ void	shell_innit(t_shell *shell)
 	shell->prompt = ft_strjoin(user, "@zeShell" CLR_RMV " > ");
 	free (user);
 
-	shell->exit = 0;
-	shell->words = 0;
-
-	//shell_env(shell);
-
+	//shell_env(env, &shell);
 }
 
-int	main(int ac, char **av/* , char **env */)
+int	main(int ac, char **av, char **env)
 {
 	t_shell	shell;
 
 	(void)ac;
 	(void)av;
+	(void)env;
 
 	ft_printf("%sWelcome %s!%s\n", GREEN, getenv("USER"), CLR_RMV);
 
 	shell_innit(&shell);
 
-	shell_loop(&shell);
+	shell_loop(&shell, env);
 
 	return (0);
 }

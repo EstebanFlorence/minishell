@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/14 01:08:01 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:51:18 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,21 +72,19 @@ typedef struct	s_shell
 	char	**env;
 	char	**path;
 
-	int		words;
-
 	int		exit;
+	bool	history;
 
 	pid_t	pid;
-
-	bool	history;
 
 }	t_shell;
 
 
 void		shell_innit(t_shell *shell);
-void		shell_env(t_shell *shell);
-void		shell_loop(t_shell *shell);
+void		shell_loop(t_shell *shell, char **env);
 void		shell_exit(t_shell *shell);
+
+void		shell_env(char **env, t_shell *shell);
 
 //	Tools
 void		ft_error(int n);
@@ -106,7 +104,7 @@ t_lex		*lex_lstnew(int i, char *s, int type);
 int			lex_type(char *s);
 
 //	Parser
-void		ft_pars(t_shell *shell);
+void		ft_pars(t_shell *shell, t_pars **parser);
 void		pars_piper(t_lex **lexer, t_pars **parser);
 void		pars_lstadd(t_pars **parser, char *s);
 void		pars_lstadd_back(t_pars **parser, t_pars *new);
@@ -117,5 +115,11 @@ t_lex		*pars_starter(t_lex *lexer);
 t_pars		*pars_lstlast(t_pars *parser);
 t_pars		*pars_lstnew(char *s, int id);
 
+
+//	Executer
+void		ft_exec(t_shell *shell, t_pars *parser, char **env);
+int			exec_check(t_shell *shell, t_pars **parser, char **env);
+void		exec_freepaths(char **paths);
+char		*exec_path(t_shell *shell, char *cmd, char **env);
 
 #endif

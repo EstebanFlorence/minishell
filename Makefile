@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/11 23:12:08 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/14 18:19:07 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,10 @@ SRCS		=   ${SRC_DIR}/minishell.c\
 				${SRC_DIR}/tools/tools.c			${SRC_DIR}/tools/lexer_innit.c\
 				${SRC_DIR}/tools/parser_innit.c\
 \
-				${SRC_DIR}/parser/lexer.c			${SRC_DIR}/parser/parser.c
+				${SRC_DIR}/parser/lexer.c			${SRC_DIR}/parser/parser.c\
+\
+				${SRC_DIR}/executer/start.c
+
 
 OBJS        =	${patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRCS}}
 

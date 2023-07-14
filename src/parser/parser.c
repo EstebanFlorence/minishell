@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/14 01:08:26 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/14 17:55:25 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,20 +124,20 @@ void	pars_piper(t_lex **lexer, t_pars **parser)
 
 }
 
-void	ft_pars(t_shell *shell)
+void	ft_pars(t_shell *shell, t_pars **parser)
 {
 	t_lex	*lexer;
-	t_pars	*parser;
+//	t_pars	*parser;
 
 	lexer = NULL;
-	parser = NULL;
+//	parser = NULL;
 	ft_lex(shell, &lexer);
 //	if (ft_strnstr(shell->input, "|", 2))
-	pars_piper(&lexer, &parser);
+	pars_piper(&lexer, parser);
 //	pars_redirect(&lexer, &parser);
 //	parse_inout();
 
-	t_pars *tmp = parser;
+	t_pars *tmp = *parser;
 	while (tmp)
 	{
 		printf("parser id: %d\tcommand: %s\n", tmp->id, tmp->token);
@@ -145,7 +145,7 @@ void	ft_pars(t_shell *shell)
 	}
 
 	lex_free(lexer);
-	pars_free(parser);
+	pars_free(*parser);
 }
 
 void	pars_free(t_pars *parser)
