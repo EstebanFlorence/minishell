@@ -6,21 +6,58 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/13 14:49:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/14 01:08:26 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pars_lstadd(t_pars **parser, char *s)
+/* void	pars_checker(t_lex **lexer, t_pars **parser)
 {
-	static int	i = 0;
+	t_lex	*index;
+	char	*tokenset;
+	int		i;
+	int		j;
 
-	pars_lstadd_back(parser, pars_lstnew(s, i));
-	i++;
-}
+	index = *lexer;
+	tokenset = "<>|$";
+	i = 0;
+	while (index)
+	{
+		if (ft_strncmp(index->token, "<", 2) == 0)
+		{
+			printf("redirection\n");
+			//pars_commander(*lexer);
+		}
+		else if (ft_strncmp(index->token, ">", 2) == 0)
+		{
+			printf("redirection\n");
+			//pars_commander(*lexer);
+		}
+		else if (ft_strncmp(index->token, "<<", 3) == 0)
+		{
+			printf("redirection\n");
+			//pars_commander(*lexer);
+		}
+		else if (ft_strncmp(index->token, ">>", 3 == 0))
+		{
+			printf("redirection\n");
+			//pars_commander(*lexer);
+		}
+		else if (ft_strncmp(index->token, "|", 2) == 0)
+		{
+			printf("pipe\n");
+			pars_ends();
+		}
+		else if (ft_strncmp(index->token, "$", 2) == 0)
+		{
+			printf("env / expander?\n");
+			//pars_commander(*lexer);
+		}
 
-
+		index = index->next;
+	}
+} */
 
 void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 {
@@ -45,6 +82,24 @@ void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 	free(command);
 }
 
+t_lex	*pars_starter(t_lex *lexer)
+{
+	t_lex	*index;
+
+	index = lexer;
+	while(index->prev)
+	{
+		if (ft_strncmp(index->token, "|", 2) == 0)
+			return (index->next);
+/* 		if (pars_checker(index))
+		{
+			return (index->next);
+		} */
+		index = index->prev;
+	}
+	return (lexer);
+}
+
 void	pars_piper(t_lex **lexer, t_pars **parser)
 {
 	t_lex	*index;
@@ -55,14 +110,14 @@ void	pars_piper(t_lex **lexer, t_pars **parser)
 		if (ft_strncmp(index->token, "|", 2) == 0)
 		{
 			printf("pipe:\n");
-			pars_commander((*lexer), index, parser);
+			pars_commander(pars_starter(*lexer), index, parser);
 			lex_remove(*lexer, index);
 			(*lexer) = index;
 		}
 		if (!index->next)
 		{
 			printf("end:\n");
-			pars_commander((*lexer), index, parser);
+			pars_commander(pars_starter(*lexer), index, parser);
 		}
 		index = index->next;
 	}
@@ -106,71 +161,16 @@ void	pars_free(t_pars *parser)
 	}
 }
 
-
-/* 
-t_lex	*pars_starter(t_lex *lexer)
+void	pars_lstadd(t_pars **parser, char *s)
 {
-	t_lex	*index;
+	static int	i = 0;
 
-	index = lexer;
-	while(index->prev)
-	{
-		if (ft_strncmp(index->token, "|", 2) == 0)
-			return (index->next);
-		index = index->prev;
-	}
-	return (index);
-} */
-/* void	pars_checker(t_lex **lexer, t_pars **parser)
-{
-	t_lex		*index;
+	pars_lstadd_back(parser, pars_lstnew(s, i));
+	i++;
+}
 
-	index = *lexer;
-	while (index)
-	{
-		if (ft_strncmp(index->token, "<", 2) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, ">", 2) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, "<<", 3) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, ">>", 3 == 0))
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, "|", 2) == 0)
-		{
-			printf("pipe\n");
-			pars_commander(index, parser);
-			if (index->prev)
-				lex_remove(index->prev);
-			(*lexer) = index;
-		}
-		else if (ft_strncmp(index->token, "$", 2) == 0)
-		{
-			printf("env / expander?\n");
-			//pars_commander(*lexer);
-		}
-		//else if (ft_strncmp(index->token, "||", 3) == 0)
-		//	printf("bonus\n");
-		//else if (ft_strncmp(index->token, "&&", 3) == 0)
-		//	printf("bonus\n");
 
-		//printf("pars_checker id: %d\n", index->id);
 
-		index = index->next;
-	}
-} */
 
 /* 
 void	pipe_split(t_shell *shell, t_lex *lexer)

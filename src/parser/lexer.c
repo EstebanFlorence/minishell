@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 19:00:46 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/12 16:15:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/14 01:05:14 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_lex(t_shell *shell, t_lex **lexer)
 	t_lex *tmp = *lexer;
 	while (tmp)
 	{
-		printf("lexer id: %d token: %s\n", tmp->id, tmp->token);
+		printf("lexer id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
 		tmp = tmp->next;
 	}
 }
