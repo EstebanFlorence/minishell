@@ -6,12 +6,14 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 16:02:14 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/06/27 00:50:54 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/16 15:09:19 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
+
+# include "printf.h"
 
 # include <stdio.h>
 # include <unistd.h>
@@ -65,6 +67,7 @@ char				*ft_strmapi(const char *s, char (*f)(unsigned int, char));
 char				**ft_split(const char *s, char c);
 void				ft_splitta(const char *s, char c, char **split, size_t n);
 size_t				numstr(const char *s, char c);
+char				*ft_strtok(char *str, const char *delim);
 
 int					ft_atoi(const char *nptr);
 long int			ft_atol(const char *nbr);
