@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/14 01:06:03 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/16 17:43:27 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ int	lex_type(char *s)
 	return (EMPTY);
 }
 
-t_lex	*lex_lstnew(int i, char *s, int type)
+t_tok	*lex_lstnew(int i, char *s, int type)
 {
-	t_lex	*new;
+	t_tok	*new;
 
-	new = (t_lex *)malloc(sizeof(t_lex) * 1);
+	new = (t_tok *)malloc(sizeof(t_tok) * 1);
 	if (new == NULL)
 		return (NULL);
 	new->id = i + 1;
@@ -58,9 +58,9 @@ t_lex	*lex_lstnew(int i, char *s, int type)
 	return (new);
 }
 
-t_lex	*lex_lstlast(t_lex *lexer)
+t_tok	*lex_lstlast(t_tok *lexer)
 {
-	t_lex	*next;
+	t_tok	*next;
 
 	if (lexer != NULL)
 	{
@@ -75,9 +75,9 @@ t_lex	*lex_lstlast(t_lex *lexer)
 	return (NULL);
 }
 
-void	lex_lstadd_back(t_lex **lexer, t_lex *new)
+void	lex_lstadd_back(t_tok **lexer, t_tok *new)
 {
-	t_lex	*last;
+	t_tok	*last;
 
 	if (!lexer)
 		return ;
@@ -94,11 +94,10 @@ void	lex_lstadd_back(t_lex **lexer, t_lex *new)
 	}
 }
 
-void	lex_innit(t_shell *shell, t_lex **lexer)
+void	lex_add(t_shell *shell, t_tok **lexer, char *token)
 {
-	int	i;
+	static int	i = 0;
 
-	i = -1;
-	while (shell->inputs[++i])
-		lex_lstadd_back(lexer, lex_lstnew(i, shell->inputs[i], lex_type(shell->inputs[i])));
+	lex_lstadd_back(lexer, lex_lstnew(i, token, lex_type(shell->inputs[i])));
+	i++;
 }

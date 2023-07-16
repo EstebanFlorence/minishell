@@ -6,60 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/14 17:55:25 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/16 18:16:14 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* void	pars_checker(t_lex **lexer, t_pars **parser)
-{
-	t_lex	*index;
-	char	*tokenset;
-	int		i;
-	int		j;
-
-	index = *lexer;
-	tokenset = "<>|$";
-	i = 0;
-	while (index)
-	{
-		if (ft_strncmp(index->token, "<", 2) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, ">", 2) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, "<<", 3) == 0)
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, ">>", 3 == 0))
-		{
-			printf("redirection\n");
-			//pars_commander(*lexer);
-		}
-		else if (ft_strncmp(index->token, "|", 2) == 0)
-		{
-			printf("pipe\n");
-			pars_ends();
-		}
-		else if (ft_strncmp(index->token, "$", 2) == 0)
-		{
-			printf("env / expander?\n");
-			//pars_commander(*lexer);
-		}
-
-		index = index->next;
-	}
-} */
-
-void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
+void	pars_commander(t_tok *start, t_tok *end, t_pars **parser)
 {
 	char	*command;
 	char	*tmp;
@@ -82,70 +35,28 @@ void	pars_commander(t_lex *start, t_lex *end, t_pars **parser)
 	free(command);
 }
 
-t_lex	*pars_starter(t_lex *lexer)
+void	shell_parser(t_shell *shell, t_pars **parser)
 {
-	t_lex	*index;
+	t_tok	*lexer;
 
-	index = lexer;
-	while(index->prev)
-	{
-		if (ft_strncmp(index->token, "|", 2) == 0)
-			return (index->next);
-/* 		if (pars_checker(index))
-		{
-			return (index->next);
-		} */
-		index = index->prev;
-	}
-	return (lexer);
-}
-
-void	pars_piper(t_lex **lexer, t_pars **parser)
-{
-	t_lex	*index;
-
-	index = (*lexer);
-	while (index)
-	{
-		if (ft_strncmp(index->token, "|", 2) == 0)
-		{
-			printf("pipe:\n");
-			pars_commander(pars_starter(*lexer), index, parser);
-			lex_remove(*lexer, index);
-			(*lexer) = index;
-		}
-		if (!index->next)
-		{
-			printf("end:\n");
-			pars_commander(pars_starter(*lexer), index, parser);
-		}
-		index = index->next;
-	}
-
-}
-
-void	ft_pars(t_shell *shell, t_pars **parser)
-{
-	t_lex	*lexer;
-//	t_pars	*parser;
-
+	(void)parser;
 	lexer = NULL;
-//	parser = NULL;
-	ft_lex(shell, &lexer);
-//	if (ft_strnstr(shell->input, "|", 2))
-	pars_piper(&lexer, parser);
+	shell_lexer(shell, &lexer);
+//	if (strchr_index(shell->input, '|'))
+//		pars_piper(&lexer, parser);
 //	pars_redirect(&lexer, &parser);
 //	parse_inout();
 
-	t_pars *tmp = *parser;
+/* 	t_pars *tmp = *parser;
 	while (tmp)
 	{
 		printf("parser id: %d\tcommand: %s\n", tmp->id, tmp->token);
 		tmp = tmp->next;
-	}
+	} 
+*/
 
-	lex_free(lexer);
-	pars_free(*parser);
+	//lex_free(lexer);
+	//pars_free(*parser);
 }
 
 void	pars_free(t_pars *parser)
@@ -173,7 +84,7 @@ void	pars_lstadd(t_pars **parser, char *s)
 
 
 /* 
-void	pipe_split(t_shell *shell, t_lex *lexer)
+void	pipe_split(t_shell *shell, t_tok *lexer)
 {
 	char	**commands;
 
@@ -181,15 +92,15 @@ void	pipe_split(t_shell *shell, t_lex *lexer)
 
 }
 
-void	pars_checker(t_lex **lexer, t_pars **parser)
+void	pars_checker(t_tok **lexer, t_pars **parser)
 {
 
 }
 */
 /*
- int	pars_finder(t_lex *lexer)
+ int	pars_finder(t_tok *lexer)
 {
-	t_lex	*index;
+	t_tok	*index;
 
 	index = lexer;
 	while (index)

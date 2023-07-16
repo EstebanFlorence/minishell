@@ -6,13 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:28:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/07/14 18:52:12 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/15 01:52:55 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*exec_path(t_shell *shell, char *cmd, char **env)
+char	*exec_path(char *cmd, char **env)
 {
 	char	**paths;
 	char	*path;
@@ -26,20 +26,20 @@ char	*exec_path(t_shell *shell, char *cmd, char **env)
 	i = 0;
 	while (paths[i])
 	{
-		tmp = ft_strjoin(path[i], "/");
+		tmp = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(paths, X_OK) == 0)
+		if (access(path, X_OK) == 0)
 			return (path);
 		free(path);
 		i++;
 	}
-	ft_freepaths(paths);
+	env_freepaths(paths);
 	exit(127);
 	return (NULL);
 }
 
-void	exec_freepaths(char **paths)
+void	env_freepaths(char **paths)
 {
 	int	i;
 
