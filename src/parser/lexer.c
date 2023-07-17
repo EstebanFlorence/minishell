@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:18:44 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 22:50:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/17 01:40:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,47 +23,43 @@ void	state_dollarquotes(char c, t_lex *lex)
 		{
 			// End of variable name, append expaded value to current word
 
-			//lex->word[i] = '\0';
-			//i = 0;
+			lex->word[i] = '\0';
+			lex->len = 0;
 			lex->state = STATE_DOUBLE_QUOTE;
 		}
 		else
 		{
 			// Append space to current word inside quotes
 
-			lex->word[i] = c;
-			//i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
 	else if (c == DOUBLE_QUOTE)
 	{
 		// End of double quoted sequence
 
-		lex->state = STATE_NORMAL;
 		lex->in_quotes = false;
+		lex->state = STATE_NORMAL;
 	}
 	else/*  if (c == '$') */
 	{
 		// Escaped $ sign (and others) = treat it as regular char
 
-		lex->word[i] = c;
-		i++;
+		lex->word[lex->len] = c;
+		lex->len++;
 	}
-	lex->len = i;
 }
 
 void	state_dollar(char c, t_lex *lex)
 {
-	int	i;
-
-	i = lex->len;
 	if (c == ' ')
 	{
 		if (!lex->in_quotes)
 		{
 			// End of variable name, append expanded value to current word
 
-			lex->word[i] = '\0';
+			lex->word[lex->len] = '\0';
 			lex->len = 0;
 			lex->state = STATE_NORMAL;
 		}
@@ -71,25 +67,23 @@ void	state_dollar(char c, t_lex *lex)
 		{
 			// Append space to current word inside quotes
 
-			lex->word[i] = c;
-			//i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
 	else/*  if (c == '$') */
 	{
 		// Escaped $ sign (and others) = treat it as regular char
 
-		lex->word[i] = c;
-		//i++;
+		lex->word[lex->len] = c;
+		lex->len++;
 	}
-	lex->len = i;
 }
+
+
 
 void	state_quotes(char c, t_lex *lex)
 {
-	int	i;
-
-	i = lex->len;
 	if (lex->state == STATE_DOUBLE_QUOTE)
 	{
 		if (c == DOUBLE_QUOTE)
@@ -97,7 +91,13 @@ void	state_quotes(char c, t_lex *lex)
 			// End of double quoted sequence
 
 			lex->in_quotes = false;
+			//lex->state = STATE_NORMAL;
+		}
+		else if (c == ' ')
+		{
+			// Space after end of double quoted sentence
 
+			lex->state = STATE_NORMAL;
 		}
 		else if (c == '$')
 		{
@@ -109,8 +109,8 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// Append char to current word inside double quotes
 
-			lex->word[i] = c;
-			//i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
 	else if (lex->state == STATE_SINGLE_QUOTE)
@@ -120,40 +120,44 @@ void	state_quotes(char c, t_lex *lex)
 			// End of single quoted sequence
 
 			lex->in_quotes = false;
+			//lex->state = STATE_NORMAL
+		}
+		else if (c == ' ')
+		{
+			// Space after end of single quoted sentence
 
+			lex->state = STATE_NORMAL;
 		}
 		else
 		{
 			// Append char to current word inside single quotes
 
-			lex->word[i] = c;
-			//i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
-	lex->len = i;
 }
 
 void	state_normal(char c, t_lex *lex)
 {
-	int	i;
-
-	i = lex->len;
 	if (c == ' ')
 	{
 		if (!lex->in_quotes)
 		{
 			// End of word
 
-			lex->word[i] = '\0';
-			//i++;
-			//i = 0;
+			if (lex->len > 0)
+			{
+				lex->word[lex->len] = '\0';
+				lex->len = 0;
+			}
 		}
 		else
 		{
 			// Append space in quoted sequence
 
-			lex->word[i] = c;
-			//i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
 	else if (c == DOUBLE_QUOTE)
@@ -163,6 +167,7 @@ void	state_normal(char c, t_lex *lex)
 			// End of double quoted sequence
 
 			lex->in_quotes = false;
+			//lex->state = STATE_NORMAL;
 		}
 		else
 		{
@@ -172,7 +177,7 @@ void	state_normal(char c, t_lex *lex)
 			lex->in_quotes = true;
 		}
 	}
-	else if (lex->state == SINGLE_QUOTE)
+	else if (c == SINGLE_QUOTE)
 	{
 		if (!lex->in_quotes)
 		{
@@ -185,8 +190,8 @@ void	state_normal(char c, t_lex *lex)
 		{
 			// Append single quote to current word inside quotes
 
-			lex->word[i] = c;
-			i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 
 	}
@@ -203,43 +208,41 @@ void	state_normal(char c, t_lex *lex)
 		{
 			// Append $ sign to current word inside quotes
 
-			lex->word[i] = c;
-			i++;
+			lex->word[lex->len] = c;
+			lex->len++;
 		}
 	}
 	else
 	{
 		// Append char to current word
 
-		lex->word[i] = c;
-		//i++;
+		lex->word[lex->len] = c;
+		lex->len++;
 	}		
-
-	lex->len = i;
 }
 
 void	lex_tokenizer(const char *input)
 {
 	t_lex	lex;
-	//int		i;
+	int		i;
 
 	lex.state = STATE_NORMAL;
 	lex.len = 0;
 	lex.word = ft_calloc(ft_strlen(input), sizeof(char));
 	lex.in_quotes = false;
-	//i = 0;
-	while(input[lex.len])
+	i = 0;
+	while(input[i])
 	{
 		if (lex.state == STATE_NORMAL)
-			state_normal(input[lex.len], &lex);
+			state_normal(input[i], &lex);
 		else if (lex.state ==  STATE_DOUBLE_QUOTE || lex.state == STATE_SINGLE_QUOTE)
-			state_quotes(input[lex.len], &lex);
+			state_quotes(input[i], &lex);
 		else if (lex.state == STATE_DOLLAR_SIGN)
-			state_dollar(input[lex.len], &lex);
+			state_dollar(input[i], &lex);
 		else if (lex.state == STATE_DOLLAR_SIGN_DOUBLE_QUOTE)
-			state_dollarquotes(input[lex.len], &lex);
+			state_dollarquotes(input[i], &lex);
 		printf("%c", lex.word[lex.len]);
-		lex.len++;
+		i++;
 	}
 	if (lex.len)
 		lex.word[lex.len] = '\0';
