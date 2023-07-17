@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 19:49:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/17 18:37:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,17 @@ int			ft_isvalid(char *s);
 int			check_builtins(char *s);
 int			strchr_index(char *s, char c);
 
+char		**shell_split(const char *s, char c);
+void		shell_splitta(const char *s, char c, char **split, size_t n);
+size_t		shell_numstr(const char *s, char c);
+
+
 //	Lexer
 void		shell_lexer(t_shell *shell, t_tok **lexer);
-void		lex_start(t_shell *shell, t_tok **lexer);
+void		lex_piper(char **inputs);
+
+
+/* void		lex_start(t_shell *shell, t_tok **lexer);
 // 2
 int			quotes_end(char *s, int i, char quote);
 int			lex_wordscount(char *s);
@@ -76,7 +84,7 @@ int			lex_type(char *s);
 void		lex_tokenizer(const char *input);
 void		state_normal(char c, t_lex *lex);
 void		state_quotes(char c, t_lex *lex);
-void		state_dollar(char c, t_lex *lex);
+void		state_dollar(char c, t_lex *lex); */
 
 void		lex_add(t_shell *shell, t_tok **lexer, char *token);
 void		lex_lstadd_back(t_tok **lexer, t_tok *new);
