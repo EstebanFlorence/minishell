@@ -1,0 +1,96 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe_split.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/17 18:16:49 by adi-nata          #+#    #+#             */
+/*   Updated: 2023/07/17 18:32:28 by adi-nata         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+size_t	pipe_numstr(const char *s, char pipe)
+{
+	size_t	i;
+	size_t	n;
+	size_t	len;
+
+	i = 0;
+	n = 0;
+	len = 0;
+	while (1)
+	{
+		if (s[i] == pipe || s[i] == '\0')
+		{
+			if (len > 0)
+				n++;
+			len = 0;
+		}
+		else if (s[i] == DOUBLE_QUOTE)
+		{
+			i++;
+			while (s[i] && s[i] != DOUBLE_QUOTE)
+				i++;
+		}
+		else
+			len++;
+		if (s[i] == '\0')
+			break ;
+		i++;
+	}
+	return (n);
+}
+
+void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
+{
+	size_t	i;
+	size_t	j;
+	size_t	len;
+	char	*tok;
+
+	i = 0;
+	j = 0;
+	len = 1;
+	while (j < n)
+	{
+		if (s[i] == pipe || s[i] == '\0')
+		{
+			if (len != 1)
+			{
+				tok = ft_substr(s, (unsigned int)(i - len), len);
+				split[j] = tok;
+				j++;
+			}
+			len = 1;
+		}
+		else if (s[i] == DOUBLE_QUOTE)
+		{
+			i++;
+			len++;
+			while (s[i] && s[i] != DOUBLE_QUOTE)
+			{
+				i++;
+				len++;
+			}
+		}
+		else
+			len++;
+		i++;
+	}
+}
+
+char	**pipe_split(const char *s, char pipe)
+{
+	char	**split;
+	size_t	n;
+
+	n = pipe_numstr(s, pipe);
+	split = malloc(sizeof(*split) * (n + 1));
+	pipe_splitta(s,pipe, split, n);
+	split[n] = NULL;
+	return (split);
+}
+
