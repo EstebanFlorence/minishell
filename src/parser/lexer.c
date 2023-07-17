@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/17 18:37:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/18 01:03:59 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ void	shell_lexer(t_shell *shell, t_tok **lexer)
 {
 	char	**piped;
 
-	piped = shell_split(shell->input, '|');
-	if (piped != NULL)
-		lex_piper(piped);
-
+	(void)lexer;
+	piped = pipe_split(shell->input, '|');
+	//if (piped != NULL)
+	//	lex_piper(piped);
+	for (int i = 0; piped[i]; i++)
+		printf("piped word: %s\n", piped[i]);
 
 /* 	t_tok *tmp = *lexer;
 	while (tmp)

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/17 18:37:23 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/18 01:10:36 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int			ft_isvalid(char *s);
 int			check_builtins(char *s);
 int			strchr_index(char *s, char c);
 
-char		**shell_split(const char *s, char c);
-void		shell_splitta(const char *s, char c, char **split, size_t n);
-size_t		shell_numstr(const char *s, char c);
+char		**pipe_split(const char *s, char pipe);
+void		pipe_splitta(const char *s, char pipe, char **split, size_t n);
+size_t		pipe_numstr(const char *s, char pipe);
 
 
 //	Lexer

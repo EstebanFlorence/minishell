@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/17 18:02:36 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/18 01:11:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 void	shell_loop(t_shell *shell, char **env)
 {
-	t_pars	*parser;
+	t_tok	*lexer;
+	//t_pars	*parser;
 
-	parser = NULL;
+	lexer = NULL;
+	//parser = NULL;
 	(void)env;
 	while (42)
 	{
@@ -27,6 +29,7 @@ void	shell_loop(t_shell *shell, char **env)
 
 		if (!ft_isvalid(shell->input))
 		{
+			shell_lexer(shell, &lexer);
 			//shell_parser(shell, &parser);
 			//ft_exec(shell, &parser, env);
 		}
