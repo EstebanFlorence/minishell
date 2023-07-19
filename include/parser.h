@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/18 19:49:30 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 20:08:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define HEREDOC	6
 # define PIPE		7
 # define EXPAND		8
+# define FILE		9
 
 typedef struct	s_parser
 {

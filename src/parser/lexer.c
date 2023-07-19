@@ -6,11 +6,79 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 19:18:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 21:08:13 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	state_dollarquotes(char c, t_lex *lex)
+{
+	int	i;
+
+	i = lex->len;
+	if (c == ' ')
+	{
+		if (lex->in_quotes)
+		{
+			// End of variable name, append expaded value to current word
+
+			lex->word[i] = '\0';
+			lex->len = 0;
+			lex->state = STATE_DOUBLE_QUOTE;
+		}
+		else
+		{
+			// Append space to current word inside quotes
+
+			lex->word[lex->len] = c;
+			lex->len++;
+		}
+	}
+	else if (c == DOUBLE_QUOTE)
+	{
+		// End of double quoted sequence
+
+		lex->in_quotes = false;
+		lex->state = STATE_NORMAL;
+	}
+	else/*  if (c == '$') */
+	{
+		// Escaped $ sign (and others) = treat it as regular char
+
+		lex->word[lex->len] = c;
+		lex->len++;
+	}
+}
+
+void	state_dollar(char c, t_lex *lex)
+{
+	if (c == ' ')
+	{
+		if (!lex->in_quotes)
+		{
+			// End of variable name, append expanded value to current word
+
+			lex->word[lex->len] = '\0';
+			lex->len = 0;
+			lex->state = STATE_NORMAL;
+		}
+		else
+		{
+			// Append space to current word inside quotes
+
+			lex->word[lex->len] = c;
+			lex->len++;
+		}
+	}
+	else/*  if (c == '$') */
+	{
+		// Escaped $ sign (and others) = treat it as regular char
+
+		lex->word[lex->len] = c;
+		lex->len++;
+	}
+}
 
 void	state_normal(char c, t_lex *lex, t_tok **token)
 {
@@ -25,6 +93,23 @@ void	state_normal(char c, t_lex *lex, t_tok **token)
 	else if (c == SINGLE_QUOTE)
 	{
 		state_normal_squote(lex);
+	}
+	else if (c == '$')
+	{
+		// lex_expander()? sia dentro che fuori quotes
+		if (!lex->in_quotes)
+		{
+			// Start expansion
+
+			lex->state = STATE_DOLLAR_SIGN;
+		}
+		else
+		{
+			// Append $ sign to current word inside quotes
+
+			lex->word[lex->len] = c;
+			lex->len++;
+		}
 	}
 	else
 	{
@@ -53,6 +138,10 @@ void	lex_tokenizer(char *input, t_tok **token)
 			state_normal(input[i], lex, token);
 		else if (lex->state == STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
 			state_quotes(input[i], lex);
+		else if (lex->state == STATE_DOLLAR_SIGN)
+			state_dollar(input[i], lex);
+		else if (lex->state == STATE_DOLLAR_SIGN_DOUBLE_QUOTE)
+			state_dollarquotes(input[i], lex);
 		i++;
 	}
 	if (lex->len)

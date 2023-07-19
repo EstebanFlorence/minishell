@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 16:57:08 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 20:12:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,14 @@ size_t		pipe_numstr(const char *s, char pipe);
 void		shell_lexer(t_shell *shell);
 void		lex_free_inputs(char **inputs);
 void		lex_tokenizer(char *input, t_tok **token);
+
 void		state_normal(char c, t_lex *lex, t_tok **token);
 void		state_normal_space(char c, t_lex *lex, t_tok **token);
 void		state_normal_dquote(t_lex *lex);
 void		state_normal_squote(t_lex *lex);
 void		state_quotes(char c, t_lex *lex);
+void		state_dollar(char c, t_lex *lex);
+void		state_dollarquotes(char c, t_lex *lex);
 
 
 /* void		lex_start(t_shell *shell, t_tok **lexer);
