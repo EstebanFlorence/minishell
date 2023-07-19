@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/18 20:26:56 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:23:02 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	state_normal_space(char c, t_lex *lex, t_tok **token)
 			lex->word[lex->len] = '\0';
 			//if (lex->len < ft_strlen(lex->word))
 			lex->start = lex->len;
-			lex->token = ft_substr(lex->word, lex->start, lex->len);
+			//lex->token = ft_substr(lex->word, lex->start, lex->len);
 			lex_lstadd(token, lex);
 			lex->len = 0;
 		}

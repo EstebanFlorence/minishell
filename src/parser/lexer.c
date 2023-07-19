@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 00:22:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 19:18:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	lex_tokenizer(char *input, t_tok **token)
 	{
 		if (lex->state == STATE_NORMAL)
 			state_normal(input[i], lex, token);
-		else if (lex->state ==  STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
+		else if (lex->state == STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
 			state_quotes(input[i], lex);
 		i++;
 	}
@@ -60,7 +60,6 @@ void	lex_tokenizer(char *input, t_tok **token)
 		lex->word[lex->len] = '\0';
 		lex_lstadd(token, lex);
 	}
-	printf("lex word: %s", lex->word);
 	lex_free(lex);
 
 }
@@ -87,15 +86,12 @@ void	shell_lexer(t_shell *shell)
 		i++;
 	}
 
-	//for (int i = 0; piped[i]; i++)
-		//printf("piped word: %s|\n", piped[i]);
-
-/* 	t_tok *tmp = *lexer;
+	t_tok *tmp = token;
 	while (tmp)
 	{
-		printf("lexer id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
+		printf("token id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
 		tmp = tmp->next;
-	} */
+	}
 
 	lex_free_inputs(inputs);
 	tok_free(token);

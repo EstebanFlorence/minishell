@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 00:36:03 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 17:01:11 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_tok	*lex_lstnew(int i, t_lex *lexer)
 		return (NULL);
 	new->id = i + 1;
 	new->type = lex_type(lexer->word);
-	new->token = ft_strdup(lexer->token);
+	new->token = ft_strdup(lexer->word);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

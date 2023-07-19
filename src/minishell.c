@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/18 16:06:57 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 18:52:03 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 void	shell_loop(t_shell *shell, char **env)
 {
-	//t_tok	*lexer;
-	//t_pars	*parser;
-
-	//lexer = NULL;
-	//parser = NULL;
 	(void)env;
 	while (42)
 	{
@@ -30,8 +25,7 @@ void	shell_loop(t_shell *shell, char **env)
 		if (!ft_isvalid(shell->input))
 		{
 			shell_lexer(shell);
-			//shell_parser(shell, &parser);
-			//ft_exec(shell, &parser, env);
+
 		}
 
 		free(shell->input);
@@ -42,13 +36,14 @@ void	shell_innit(t_shell *shell)
 {
 	char	*user;
 
+	shell->inputs = NULL;
+
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 
 	user = ft_strjoin(PURPLE, getenv("USER"));
 	shell->prompt = ft_strjoin(user, "@zeShell" CLR_RMV " > ");
 	free (user);
-
 	//shell_env(env, &shell);
 }
 

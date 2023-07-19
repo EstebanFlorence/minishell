@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/03 15:50:56 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/03/04 16:43:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 19:00:35 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_checkneg(int n, t_format *flag)
 		{
 			write(1, "-", 1);
 			flag->len += 1;
-		}		
+		}
 	}
 }
 
@@ -46,7 +46,7 @@ void	ft_checkmeno(int n, t_format *flag)
 		{
 			write(1, "-", 1);
 			flag->len += 1;
-		}		
+		}
 	}
 }
 

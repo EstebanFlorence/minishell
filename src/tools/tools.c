@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/15 01:44:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 18:48:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,13 @@ void	shell_exit(t_shell *shell)
 
 	free(shell->input);
 	free(shell->prompt);
-	i = -1;
-	while (shell->inputs[++i])
-		free(shell->inputs[i]);
-	free(shell->inputs);
-
-
+	i = 0;
+	if (shell->inputs)
+	{	
+		while (shell->inputs[i])
+			free(shell->inputs[i++]);
+		free(shell->inputs);
+	}
 	exit (EXIT_SUCCESS);
 }
 
