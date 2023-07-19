@@ -53,18 +53,18 @@ void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
 
 	i = 0;
 	j = 0;
-	len = 1;
+	len = 0;
 	while (j < n)
 	{
 		if (s[i] == pipe || s[i] == '\0')
 		{
-			if (len != 1)
+			if (len > 0)
 			{
 				tok = ft_substr(s, (unsigned int)(i - len), len);
 				split[j] = tok;
 				j++;
 			}
-			len = 1;
+			len = 0;
 		}
 		else if (s[i] == DOUBLE_QUOTE)
 		{
@@ -75,6 +75,7 @@ void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
 				i++;
 				len++;
 			}
+			len++;
 		}
 		else
 			len++;

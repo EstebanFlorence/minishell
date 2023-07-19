@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 18:17:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:49:30 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PARSER_H
 
 # include "minishell.h"
+# include "../libft/include/libft.h"
 
 # include <stdbool.h>
 
@@ -61,9 +62,12 @@ typedef struct	s_token
 typedef struct	s_lexer
 {
 	int		state;
-	int		len;
+	int		type;
+	size_t	start;
+	size_t	len;
 	bool	in_quotes;
 	char	*word;
+	char	*token;
 
 }	t_lex;
 

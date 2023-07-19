@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 17:43:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 00:36:03 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ int	lex_type(char *s)
 	}
 	else if (ft_strncmp(s, "$", 2) == 0)
 		return (EXPAND);
-	return (EMPTY);
+	return (CMD);
 }
 
-t_tok	*lex_lstnew(int i, char *s, int type)
+t_tok	*lex_lstnew(int i, t_lex *lexer)
 {
 	t_tok	*new;
 
@@ -51,20 +51,20 @@ t_tok	*lex_lstnew(int i, char *s, int type)
 	if (new == NULL)
 		return (NULL);
 	new->id = i + 1;
-	new->type = type;
-	new->token = s;
+	new->type = lex_type(lexer->word);
+	new->token = ft_strdup(lexer->token);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
 }
 
-t_tok	*lex_lstlast(t_tok *lexer)
+t_tok	*lex_lstlast(t_tok *token)
 {
 	t_tok	*next;
 
-	if (lexer != NULL)
+	if (token != NULL)
 	{
-		next = lexer;
+		next = token;
 		while (1)
 		{
 			if (next->next == NULL)
@@ -75,17 +75,17 @@ t_tok	*lex_lstlast(t_tok *lexer)
 	return (NULL);
 }
 
-void	lex_lstadd_back(t_tok **lexer, t_tok *new)
+void	lex_lstadd_back(t_tok **token, t_tok *new)
 {
 	t_tok	*last;
 
-	if (!lexer)
+	if (!token)
 		return ;
-	if (*lexer == NULL)
-		*lexer = new;
+	if (*token == NULL)
+		*token = new;
 	else
 	{
-		last = lex_lstlast(*lexer);
+		last = lex_lstlast(*token);
 		if (last != NULL)
 		{
 			last->next = new;
@@ -94,10 +94,10 @@ void	lex_lstadd_back(t_tok **lexer, t_tok *new)
 	}
 }
 
-void	lex_add(t_shell *shell, t_tok **lexer, char *token)
+void	lex_lstadd(t_tok **token, t_lex *lexer)
 {
 	static int	i = 0;
 
-	lex_lstadd_back(lexer, lex_lstnew(i, token, lex_type(shell->inputs[i])));
+	lex_lstadd_back(token, lex_lstnew(i, lexer));
 	i++;
 }

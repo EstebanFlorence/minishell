@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/18 01:10:36 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/19 00:35:46 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,14 @@ size_t		pipe_numstr(const char *s, char pipe);
 
 
 //	Lexer
-void		shell_lexer(t_shell *shell, t_tok **lexer);
-void		lex_piper(char **inputs);
+void		shell_lexer(t_shell *shell);
+void		lex_free_inputs(char **inputs);
+void		lex_tokenizer(char *input, t_tok **token);
+void		state_normal(char c, t_lex *lex, t_tok **token);
+void		state_normal_space(char c, t_lex *lex, t_tok **token);
+void		state_normal_dquote(t_lex *lex);
+void		state_normal_squote(t_lex *lex);
+void		state_quotes(char c, t_lex *lex);
 
 
 /* void		lex_start(t_shell *shell, t_tok **lexer);
@@ -81,17 +87,15 @@ int			quotes_end(char *s, int i, char quote);
 int			lex_wordscount(char *s);
 int			lex_type(char *s);
 // 1
-void		lex_tokenizer(const char *input);
-void		state_normal(char c, t_lex *lex);
-void		state_quotes(char c, t_lex *lex);
 void		state_dollar(char c, t_lex *lex); */
 
-void		lex_add(t_shell *shell, t_tok **lexer, char *token);
-void		lex_lstadd_back(t_tok **lexer, t_tok *new);
+void		lex_lstadd(t_tok **token, t_lex *lexer);
+void		lex_lstadd_back(t_tok **token, t_tok *new);
 void		lex_remove(t_tok *end, t_tok *start);
-void		lex_free(t_tok *lexer);
-t_tok		*lex_lstlast(t_tok *lexer);
-t_tok		*lex_lstnew(int i, char *s, int type);
+void		lex_free(t_lex *lexer);
+t_tok		*lex_lstlast(t_tok *token);
+t_tok		*lex_lstnew(int i, t_lex *lexer);
+void		tok_free(t_tok *token);
 
 //	Parser
 void		shell_parser(t_shell *shell, t_pars **parser);

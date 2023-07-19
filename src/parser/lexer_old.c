@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 19:00:46 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 17:43:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/18 19:40:45 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,14 @@ void	lex_remove(t_tok *start, t_tok *end)
 	}
 }
 
-void	lex_free(t_tok *lexer)
+void	tok_free(t_tok *token)
 {
 	t_tok	*tmp;
 
 	while (lexer)
 	{
-		tmp = lexer;
-		lexer = lexer->next;
+		tmp = token;
+		token = token->next;
 		free (tmp);
 	}
 }
