@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 17:10:30 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/18 19:20:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/21 00:00:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	state_quotes_double(char c, t_lex *lex)
 
 } */
 
-void	state_quotes(char c, t_lex *lex)
+void	state_quotes(char c, t_lex *lex, t_tok **token)
 {
 	if (lex->state == STATE_DOUBLE_QUOTE)
 	{
@@ -30,12 +30,25 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// End of double quoted sequence
 
-			lex->in_quotes = false;
+			if (lex->len > 0)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_lstadd(token, lex);
+				lex->len = 0;
+			}
+
 			lex->state = STATE_NORMAL;
 		}
 		else if (c == '$')
 		{
 			// Start expansion
+
+			if (lex->len > 0)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_lstadd(token, lex);
+				lex->len = 0;
+			}
 
 			lex->state = STATE_DOLLAR_SIGN_DOUBLE_QUOTE;
 		}
@@ -43,7 +56,7 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// Append char to current word inside double quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -53,14 +66,20 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// End of single quoted sequence
 
-			lex->in_quotes = false;
+			if (lex->len > 0)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_lstadd(token, lex);
+				lex->len = 0;
+			}
+
 			lex->state = STATE_NORMAL;
 		}
 		else
 		{
 			// Append char to current word inside single quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}	
 	}

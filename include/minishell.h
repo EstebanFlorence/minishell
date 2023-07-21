@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 20:12:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/21 14:34:21 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/time.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+//# define BUFFER_SIZE 1000	 in libft for gnl
 
 # define HEREPATH	"./.heredoc"
 
@@ -76,12 +78,20 @@ void		lex_free_inputs(char **inputs);
 void		lex_tokenizer(char *input, t_tok **token);
 
 void		state_normal(char c, t_lex *lex, t_tok **token);
-void		state_normal_space(char c, t_lex *lex, t_tok **token);
-void		state_normal_dquote(t_lex *lex);
-void		state_normal_squote(t_lex *lex);
-void		state_quotes(char c, t_lex *lex);
-void		state_dollar(char c, t_lex *lex);
-void		state_dollarquotes(char c, t_lex *lex);
+void		state_normal_space(t_lex *lex, t_tok **token);
+void		state_normal_dquote(t_lex *lex, t_tok **token);
+void		state_normal_squote(t_lex *lex, t_tok **token);
+void		state_quotes(char c, t_lex *lex, t_tok **token);
+void		state_dollar(char c, t_lex *lex, t_tok **token);
+void		state_dollarquotes(char c, t_lex *lex, t_tok **token);
+
+void		lex_expand(char *s);
+
+int			is_expandable(char *s);
+char		*lex_expander_newtok(char *s);
+char		*lex_expander_reass(char **s);
+void		lex_expander(t_tok *token);
+
 
 
 /* void		lex_start(t_shell *shell, t_tok **lexer);

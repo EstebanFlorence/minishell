@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   lexer_old2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 17:18:44 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/17 17:05:10 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/20 22:48:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	state_dollarquotes(char c, t_lex *lex)
 		{
 			// End of variable name, append expaded value to current word
 
-			lex->word[i] = '\0';
+			lex->buffer[i] = '\0';
 			lex->len = 0;
 			lex->state = STATE_DOUBLE_QUOTE;
 		}
@@ -31,7 +31,7 @@ void	state_dollarquotes(char c, t_lex *lex)
 		{
 			// Append space to current word inside quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -46,7 +46,7 @@ void	state_dollarquotes(char c, t_lex *lex)
 	{
 		// Escaped $ sign (and others) = treat it as regular char
 
-		lex->word[lex->len] = c;
+		lex->buffer[lex->len] = c;
 		lex->len++;
 	}
 }
@@ -59,7 +59,7 @@ void	state_dollar(char c, t_lex *lex)
 		{
 			// End of variable name, append expanded value to current word
 
-			lex->word[lex->len] = '\0';
+			lex->buffer[lex->len] = '\0';
 			lex->len = 0;
 			lex->state = STATE_NORMAL;
 		}
@@ -67,7 +67,7 @@ void	state_dollar(char c, t_lex *lex)
 		{
 			// Append space to current word inside quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -75,7 +75,7 @@ void	state_dollar(char c, t_lex *lex)
 	{
 		// Escaped $ sign (and others) = treat it as regular char
 
-		lex->word[lex->len] = c;
+		lex->buffer[lex->len] = c;
 		lex->len++;
 	}
 }
@@ -109,7 +109,7 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// Append char to current word inside double quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -132,7 +132,7 @@ void	state_quotes(char c, t_lex *lex)
 		{
 			// Append char to current word inside single quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -148,7 +148,7 @@ void	state_normal(char c, t_lex *lex)
 
 			if (lex->len > 0)
 			{
-				lex->word[lex->len] = '\0';
+				lex->buffer[lex->len] = '\0';
 				
 				lex->len = 0;
 			}
@@ -157,7 +157,7 @@ void	state_normal(char c, t_lex *lex)
 		{
 			// Append space in quoted sequence
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -191,7 +191,7 @@ void	state_normal(char c, t_lex *lex)
 		{
 			// Append single quote to current word inside quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 
@@ -209,7 +209,7 @@ void	state_normal(char c, t_lex *lex)
 		{
 			// Append $ sign to current word inside quotes
 
-			lex->word[lex->len] = c;
+			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 	}
@@ -217,7 +217,7 @@ void	state_normal(char c, t_lex *lex)
 	{
 		// Append char to current word
 
-		lex->word[lex->len] = c;
+		lex->buffer[lex->len] = c;
 		lex->len++;
 	}		
 }

@@ -29,10 +29,10 @@ size_t	pipe_numstr(const char *s, char pipe)
 				n++;
 			len = 0;
 		}
-		else if (s[i] == DOUBLE_QUOTE)
+		else if (s[i] == DOUBLE_QUOTE && s[i] == SINGLE_QUOTE)
 		{
 			i++;
-			while (s[i] && s[i] != DOUBLE_QUOTE)
+			while (s[i] && s[i] != DOUBLE_QUOTE && s[i] != SINGLE_QUOTE)
 				i++;
 		}
 		else

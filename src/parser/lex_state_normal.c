@@ -6,55 +6,91 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 17:23:02 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/21 00:27:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	state_normal_squote(t_lex *lex)
+void	state_normal_squote(t_lex *lex, t_tok **token)
 {
-	if (!lex->in_quotes)
-	{
 		// Start of single quoted sequence
 
-		lex->state = STATE_SINGLE_QUOTE;
-		lex->in_quotes = true;
+	if (lex->len > 0)
+	{
+		lex->buffer[lex->len] = '\0';
+		lex_lstadd(token, lex);
+		lex->len = 0;
 	}
+
+	lex->state = STATE_SINGLE_QUOTE;
+
 }
 
-void	state_normal_dquote(t_lex *lex)
+void	state_normal_dquote(t_lex *lex, t_tok **token)
 {
- 	if (!lex->in_quotes)
-	{
-		// Start of double quoted sequence
+	// Start of double quoted sequence
 
-		lex->state = STATE_DOUBLE_QUOTE;
-		lex->in_quotes = true;
+	if (lex->len > 0)
+	{
+		lex->buffer[lex->len] = '\0';
+		lex_lstadd(token, lex);
+		lex->len = 0;
 	}
+
+	lex->state = STATE_DOUBLE_QUOTE;
+
 }
 
-void	state_normal_space(char c, t_lex *lex, t_tok **token)
+void	state_normal_space(t_lex *lex, t_tok **token)
 {
-	if (!lex->in_quotes)
-	{
-		// End of word
 
-		if (lex->len > 0)
-		{
-			lex->word[lex->len] = '\0';
-			//if (lex->len < ft_strlen(lex->word))
-			lex->start = lex->len;
-			//lex->token = ft_substr(lex->word, lex->start, lex->len);
-			lex_lstadd(token, lex);
-			lex->len = 0;
-		}
+	// End of word
+
+	if (lex->len > 0)
+	{
+		lex->buffer[lex->len] = '\0';
+		lex_lstadd(token, lex);
+		lex->len = 0;
+	}
+
+
+}
+
+void	state_normal(char c, t_lex *lex, t_tok **token)
+{
+	if (c == ' ')
+	{
+		state_normal_space(lex, token);
+	}
+	else if (c == DOUBLE_QUOTE)
+	{
+		state_normal_dquote(lex, token);
+	}
+	else if (c == SINGLE_QUOTE)
+	{
+		state_normal_squote(lex, token);
+	}
+	else if (c == '$')
+	{
+		// lex_expander()? sia dentro che fuori quotes
+			// End eventual word and start expansion
+
+			if (lex->len > 0)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_lstadd(token, lex);
+				lex->len = 0;
+				lex->state = STATE_DOLLAR_SIGN;
+			}
+			else
+				lex->state = STATE_DOLLAR_SIGN;
 	}
 	else
 	{
-		// Append space in quoted sequence
+		// Append char to current word
 
-		lex->word[lex->len] = c;
+		lex->buffer[lex->len] = c;
 		lex->len++;
-	}
+	}		
 }

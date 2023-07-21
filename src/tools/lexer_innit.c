@@ -6,42 +6,11 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 17:01:11 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/21 14:28:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	lex_type(char *s)
-{
-	if (ft_strncmp(s, ">", 2) == 0)
-	{
-		return (TRUNC);
-	
-	}
-	else if (ft_strncmp(s, ">>", 3 == 0))
-	{
-		return (APPEND);
-
-	}	
-	else if (ft_strncmp(s, "<", 2) == 0)
-	{
-		return (INPUT);
-	
-	}
-	else if (ft_strncmp(s, "<<", 3) == 0)
-	{
-		return (HEREDOC);
-	
-	}
-	else if (ft_strncmp(s, "|", 2) == 0)
-	{
-		return (PIPE);
-	}
-	else if (ft_strncmp(s, "$", 2) == 0)
-		return (EXPAND);
-	return (CMD);
-}
 
 t_tok	*lex_lstnew(int i, t_lex *lexer)
 {
@@ -51,8 +20,8 @@ t_tok	*lex_lstnew(int i, t_lex *lexer)
 	if (new == NULL)
 		return (NULL);
 	new->id = i + 1;
-	new->type = lex_type(lexer->word);
-	new->token = ft_strdup(lexer->word);
+	new->type = lexer->type;
+	new->token = ft_strdup(lexer->buffer);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
