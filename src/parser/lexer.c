@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 16:19:19 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/21 19:07:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,46 +109,47 @@ void	state_dollar(char c, t_lex *lex, t_tok **token)
 			lex->len = 0;
 			lex->state = STATE_NORMAL;
 		}
-
-		// 	Escaped '\$' sign: expand previous variable and append 
-		//	es. $U\$ER -> $ER | $USER\$ER -> esteban$ER
-		//	 $\$USER\$ ->  $$USER$
-
-		else if (c == '$')
-		{
-			if (lex->len > 0 && lex->buffer[lex->len - 1] == '\\')
-			{
-				lex->buffer[lex->len - 1] = '\0';
-				lex_expand(lex->buffer);
-				lex->len = ft_strlen(lex->buffer + 1);
-				lex->buffer[lex->len] = '$';
-				lex->len++;
-				//lex->buffer[lex->len] = '\0';
-
-			}
-
-			// '$' in var name, keep appending
-
-			else
-			{
-				lex->buffer[lex->len] = c;
-				lex->len++;
-			}
-		}
-
-		else
-		{
-			lex->buffer[lex->len] = '$';
-			lex->buffer[lex->len + 1] = '\0';
-			lex_lstadd(token, lex);
-			lex->len = 0;
-			lex->state = STATE_NORMAL;
-
-		}
 			
 	}
 
-	else/*  if (c == '$') */
+	//	Not interpret unclosed quotes or special characters which are not required by the
+	//	subject such as \ (backslash) or ; (semicolon).
+	// 	Escaped '\$' sign: expand previous variable and append
+	//	es. $USER\$ER -> esteban$ER |
+	//		$U\$ER -> $ER | $\$USER\$ ->  $$USER$
+
+	else if (c == '$')
+	{
+		if (lex->len > 0 && lex->buffer[lex->len - 1] == '\\')
+		{
+
+/* 			lex->buffer[lex->len - 1] = '$';
+			lex->buffer[lex->len] = '\0';
+			lex_lstadd(token, lex);
+			lex->len = 0;
+			lex->state = STATE_NORMAL; */
+
+			lex->buffer[lex->len - 1] = '\0';
+			lex_expand(lex->buffer);
+			
+			lex->len = ft_strlen(lex->buffer);
+			lex->buffer[lex->len] = '$';
+			lex->len++;
+			lex->state = STATE_NORMAL;
+			//lex->buffer[lex->len] = '\0';
+
+		}
+
+		// '$' in var name, keep appending
+
+		else
+		{
+			lex->buffer[lex->len] = c;
+			lex->len++;
+		}
+	}
+
+	else
 	{
 		// Escaped $ sign (and others) = treat it as regular char
 
@@ -183,6 +184,8 @@ void	lex_tokenizer(char *input, t_tok **token)
 	if (lex->len)
 	{
 		lex->buffer[lex->len] = '\0';
+		if (lex->state == STATE_DOLLAR_SIGN)
+			lex_expand(lex->buffer);
 		lex_lstadd(token, lex);
 	}
 	lex_free(lex);
