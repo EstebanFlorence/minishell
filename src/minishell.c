@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 18:52:03 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 19:17:36 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	shell_loop(t_shell *shell, char **env)
 void	shell_innit(t_shell *shell)
 {
 	char	*user;
-
-	shell->inputs = NULL;
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);

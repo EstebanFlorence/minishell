@@ -6,20 +6,20 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 14:28:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:16:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_tok	*lex_lstnew(int i, t_lex *lexer)
+t_tok	*lex_lstnew(t_lex *lexer, int *id)
 {
 	t_tok	*new;
 
 	new = (t_tok *)malloc(sizeof(t_tok) * 1);
 	if (new == NULL)
 		return (NULL);
-	new->id = i + 1;
+	new->id = ++(*id);
 	new->type = lexer->type;
 	new->token = ft_strdup(lexer->buffer);
 	new->next = NULL;
@@ -63,10 +63,9 @@ void	lex_lstadd_back(t_tok **token, t_tok *new)
 	}
 }
 
-void	lex_lstadd(t_tok **token, t_lex *lexer)
+void	lex_lstadd(t_tok **token, t_lex *lexer, int *id)
 {
-	static int	i = 0;
 
-	lex_lstadd_back(token, lex_lstnew(i, lexer));
-	i++;
+	lex_lstadd_back(token, lex_lstnew(lexer, id));
+	
 }

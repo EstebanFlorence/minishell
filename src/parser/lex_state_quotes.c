@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 17:10:30 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 00:00:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:11:08 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	state_quotes_double(char c, t_lex *lex)
 
 } */
 
-void	state_quotes(char c, t_lex *lex, t_tok **token)
+void	state_quotes(char c, t_lex *lex, t_tok **token, int *id)
 {
 	if (lex->state == STATE_DOUBLE_QUOTE)
 	{
@@ -33,7 +33,7 @@ void	state_quotes(char c, t_lex *lex, t_tok **token)
 			if (lex->len > 0)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_lstadd(token, lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 
@@ -46,7 +46,7 @@ void	state_quotes(char c, t_lex *lex, t_tok **token)
 			if (lex->len > 0)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_lstadd(token, lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 
@@ -69,7 +69,7 @@ void	state_quotes(char c, t_lex *lex, t_tok **token)
 			if (lex->len > 0)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_lstadd(token, lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 18:04:20 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 20:15:48 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,29 @@ int	lex_type(char *s)
 }
 
 
-void	state_dollarquotes(char c, t_lex *lex, t_tok **token)
+void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 {
 	if (c == ' ')
 	{
 			// End of variable name, append expanded value to current word
 			if (lex->len > 0)
 			{
+			//	Sequence of multiple expandable variables without spaces
+			if (numstr(lex->buffer, '$') > 1)
+			{
 				lex->buffer[lex->len] = '\0';
-				// Expand
-				lex_expand(lex->buffer);
-				lex_lstadd(token, lex);
+				lex_multiexpand(lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;
-				lex->state = STATE_DOUBLE_QUOTE;
+			}
+			else
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_expand(lex->buffer);
+				lex_lstadd(token, lex, id);
+				lex->len = 0;				
+			}
+			lex->state = STATE_DOUBLE_QUOTE;
 			}
 
 			// Append space to quoted sequence
@@ -79,7 +89,7 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token)
 			lex->len = 0;
 			// Expand
 			lex_expand(lex->buffer);
-			lex_lstadd(token, lex);
+			lex_lstadd(token, lex, id);
 			lex->state = STATE_NORMAL;
 		}
 		else
@@ -94,7 +104,7 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token)
 	}
 }
 
-void	state_dollar(char c, t_lex *lex, t_tok **token)
+void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 {
 	if (c == ' ')
 	{
@@ -102,19 +112,19 @@ void	state_dollar(char c, t_lex *lex, t_tok **token)
 
 		if (lex->len > 0)
 		{
-			//	Sequence of multiple expandable variables withput spaces
+			//	Sequence of multiple expandable variables without spaces
 			if (numstr(lex->buffer, '$') > 1)
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_multiexpand(lex);
-				lex_lstadd(token, lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_expand(lex->buffer);
-				lex_lstadd(token, lex);
+				lex_lstadd(token, lex, id);
 				lex->len = 0;				
 			}
 			lex->state = STATE_NORMAL;
@@ -169,7 +179,7 @@ void	state_dollar(char c, t_lex *lex, t_tok **token)
 }
 
 
-void	lex_tokenizer(char *input, t_tok **token)
+void	lex_tokenizer(char *input, t_tok **token, int *id)
 {
 	t_lex	*lex;
 	int		i;
@@ -182,13 +192,13 @@ void	lex_tokenizer(char *input, t_tok **token)
 	while(input[i])
 	{
 		if (lex->state == STATE_NORMAL)
-			state_normal(input[i], lex, token);
+			state_normal(input[i], lex, token, id);
 		else if (lex->state == STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
-			state_quotes(input[i], lex, token);
+			state_quotes(input[i], lex, token, id);
 		else if (lex->state == STATE_DOLLAR_SIGN)
-			state_dollar(input[i], lex, token);
+			state_dollar(input[i], lex, token, id);
 		else if (lex->state == STATE_DOLLAR_SIGN_DOUBLE_QUOTE)
-			state_dollarquotes(input[i], lex, token);
+			state_dollarquotes(input[i], lex, token, id);
 		i++;
 	}
 	if (lex->len)
@@ -201,7 +211,7 @@ void	lex_tokenizer(char *input, t_tok **token)
 			else
 				lex_expand(lex->buffer);
 		}
-		lex_lstadd(token, lex);
+		lex_lstadd(token, lex, id);
 	}
 	lex_free(lex);
 
@@ -209,12 +219,12 @@ void	lex_tokenizer(char *input, t_tok **token)
 
 void	shell_lexer(t_shell *shell)
 {
-	t_tok	*token;
-	int		i;
-	char	**inputs;
+	static int	id;
+	int			i;
+	char		**inputs;
+	t_tok		*token;
 
 	token = NULL;
-	i = 0;
 	if (pipe_numstr(shell->input, '|') > 1)
 		inputs = pipe_split(shell->input, '|');
 	else
@@ -223,9 +233,11 @@ void	shell_lexer(t_shell *shell)
 		inputs[0] = ft_strdup(shell->input);
 		inputs[1] = NULL;
 	}
+	id = 0;
+	i = 0;
 	while (inputs[i])
 	{
-		lex_tokenizer(inputs[i], &token);
+		lex_tokenizer(inputs[i], &token, &id);
 		i++;
 	}
 

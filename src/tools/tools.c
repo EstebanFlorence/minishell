@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/19 18:48:54 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 19:15:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,10 @@ int	check_builtins(char *s)
 
 void	shell_exit(t_shell *shell)
 {
-	int	i;
 
 	free(shell->input);
 	free(shell->prompt);
-	i = 0;
-	if (shell->inputs)
-	{	
-		while (shell->inputs[i])
-			free(shell->inputs[i++]);
-		free(shell->inputs);
-	}
+
 	exit (EXIT_SUCCESS);
 }
 
