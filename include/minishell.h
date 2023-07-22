@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 14:34:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 16:51:35 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void		state_dollar(char c, t_lex *lex, t_tok **token);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token);
 
 void		lex_expand(char *s);
+void		lex_multiexpand(t_lex *lexer);
 
 int			is_expandable(char *s);
 char		*lex_expander_newtok(char *s);

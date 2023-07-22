@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 19:07:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 18:04:20 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,21 @@ void	state_dollar(char c, t_lex *lex, t_tok **token)
 
 		if (lex->len > 0)
 		{
-			lex->buffer[lex->len] = '\0';
-			// Expand
-			lex_expand(lex->buffer);
-			lex_lstadd(token, lex);
-			lex->len = 0;
+			//	Sequence of multiple expandable variables withput spaces
+			if (numstr(lex->buffer, '$') > 1)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_multiexpand(lex);
+				lex_lstadd(token, lex);
+				lex->len = 0;
+			}
+			else
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_expand(lex->buffer);
+				lex_lstadd(token, lex);
+				lex->len = 0;				
+			}
 			lex->state = STATE_NORMAL;
 		}
 			
@@ -118,25 +128,25 @@ void	state_dollar(char c, t_lex *lex, t_tok **token)
 	//	es. $USER\$ER -> esteban$ER |
 	//		$U\$ER -> $ER | $\$USER\$ ->  $$USER$
 
+	//	other expandable value attached without space
+
 	else if (c == '$')
 	{
-		if (lex->len > 0 && lex->buffer[lex->len - 1] == '\\')
+		if (lex->len > 0/*  && lex->buffer[lex->len - 1] == '\\' */)
 		{
+			lex->buffer[lex->len] = c;
+			lex->len++;
 
-/* 			lex->buffer[lex->len - 1] = '$';
-			lex->buffer[lex->len] = '\0';
+/* 			lex->buffer[lex->len] = '\0';
+			lex_expand(lex->buffer);
+			lex->len = ft_strlen(lex->buffer); */
+
+/* 			lex->buffer[lex->len] = '\0';
+			lex_expand(lex->buffer);
 			lex_lstadd(token, lex);
 			lex->len = 0;
-			lex->state = STATE_NORMAL; */
-
-			lex->buffer[lex->len - 1] = '\0';
-			lex_expand(lex->buffer);
-			
-			lex->len = ft_strlen(lex->buffer);
-			lex->buffer[lex->len] = '$';
-			lex->len++;
-			lex->state = STATE_NORMAL;
-			//lex->buffer[lex->len] = '\0';
+			//lex->buffer[lex->len] = '$';
+			//lex->len++; */
 
 		}
 
@@ -185,7 +195,12 @@ void	lex_tokenizer(char *input, t_tok **token)
 	{
 		lex->buffer[lex->len] = '\0';
 		if (lex->state == STATE_DOLLAR_SIGN)
-			lex_expand(lex->buffer);
+		{
+			if (numstr(lex->buffer, '$') > 1)
+				lex_multiexpand(lex);
+			else
+				lex_expand(lex->buffer);
+		}
 		lex_lstadd(token, lex);
 	}
 	lex_free(lex);

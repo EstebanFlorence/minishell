@@ -6,13 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/21 16:07:13 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 17:55:17 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//	When found $ in token, if expandable, modify token of the node
+//	When found $ in token, if expandables, modify token of the node
 
 char	*lex_expander_reass(char **s)
 {
@@ -63,6 +63,36 @@ void	lex_expander(t_tok *token)
 	}
 }
 
+void	lex_multiexpand(t_lex *lexer)
+{
+	int		i;
+	char	**expandables;
+	char	*var;
+	char	*tmp_expanded;
+	char	*expanded;
+
+	i = 0;
+	expandables = ft_split(lexer->buffer, '$');
+	expanded = ft_strdup("");
+	while (expandables[i])
+	{
+		var = getenv(expandables[i]);
+		if (var != NULL)
+		{
+			tmp_expanded = expanded;
+			expanded = ft_strjoin(tmp_expanded, var);
+			free(tmp_expanded);
+		}
+		i++;
+	}
+	ft_strlcpy(lexer->buffer, expanded, ft_strlen(expanded) + 1);
+	i = 0;
+	while (expandables[i])
+		free(expandables[i++]);
+	free(expandables);
+	free(expanded);
+}
+
 void	lex_expand(char *s)
 {
 	char	*var;
@@ -77,7 +107,7 @@ void	lex_expand(char *s)
 
 }
 
-int	is_expandable(char *s)
+int	is_expandables(char *s)
 {
 	int	i;
 	int	j;
