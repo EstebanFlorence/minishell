@@ -6,11 +6,20 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 19:15:07 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/23 02:36:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	lex_bzero(void *s, unsigned int start, size_t n)
+{
+	size_t			i;
+
+	i = (size_t)start;
+	while (i < n)
+		((unsigned char *)s)[i++] = '\0';
+}
 
 int	strchr_index(char *s, char c)
 {

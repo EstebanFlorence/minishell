@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/20 23:18:19 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/24 22:04:34 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ SRCS		=   ${SRC_DIR}/minishell.c\
 \
 				${SRC_DIR}/parser/lexer.c				${SRC_DIR}/parser/parser.c\
 				${SRC_DIR}/parser/lex_state_normal.c	${SRC_DIR}/parser/lex_state_quotes.c\
-				${SRC_DIR}/parser/expander.c\
+				${SRC_DIR}/parser/lex_state_dollar.c	${SRC_DIR}/parser/expander.c\
 #\
 				${SRC_DIR}/executer/start.c
 
@@ -34,7 +34,7 @@ CC			=	gcc
 
 RM			=	rm -rf
 
-FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
+FLAGS		=	-g -Iinclude/ -Ilibft/include/ #-Wall -Wextra -Werror
 
 MAKEFLAGS	+=	--silent
 

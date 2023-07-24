@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 17:55:17 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/24 23:22:21 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,18 @@
 
 //	When found $ in token, if expandables, modify token of the node
 
-char	*lex_expander_reass(char **s)
-{
-	int		i;
-	//char	*tmp1;
-	//char	*tmp2;
-	
-	i = 0;
-	while (s[i])
-	{
-
-
-		i++;
-	}
-	return (NULL);
-}
-
-/* char	*lex_expander_newtok(char *s)
-{
-
-} */
-
-void	lex_expander(t_tok *token)
-{
-	t_tok	*tmp;
-	char	**dollars;
-	char	*new_token;
-	int		i;
-
-	tmp = token;
-	dollars = ft_split(tmp->token, '$');
-	i = 0;
-	while (dollars[i])
-	{
-		new_token = NULL; //lex_expander_newtok(dollars[i]);
-
-		if (new_token)
-		{
-			free(dollars[i]);
-			dollars[i] = ft_strdup(new_token);
-			free(new_token);
-		}
-		i++;
-	}
-	if (i > 1)
-	{
-		new_token = lex_expander_reass(dollars);
-	}
-}
-
 void	lex_multiexpand(t_lex *lexer)
 {
 	int		i;
 	char	**expandables;
+	char	*names;
 	char	*var;
 	char	*tmp_expanded;
 	char	*expanded;
 
 	i = 0;
-	expandables = ft_split(lexer->buffer, '$');
+	names = ft_substr(lexer->buffer, lexer->start, lexer->len);
+	expandables = ft_split(names, '$');
 	expanded = ft_strdup("");
 	while (expandables[i])
 	{
@@ -85,26 +38,43 @@ void	lex_multiexpand(t_lex *lexer)
 		}
 		i++;
 	}
-	ft_strlcpy(lexer->buffer, expanded, ft_strlen(expanded) + 1);
+	lex_bzero(lexer->buffer, lexer->start, (lexer->len - lexer->start));
+	lexer->len = lexer->start;
+	i = 0;
+	while (expanded[i])
+	{
+		lexer->buffer[lexer->len] = expanded[i];
+		lexer->len++;
+		i++;
+	}
 	i = 0;
 	while (expandables[i])
 		free(expandables[i++]);
 	free(expandables);
 	free(expanded);
+	free(names);
 }
 
-void	lex_expand(char *s)
+void	lex_expand(t_lex *lexer)
 {
+	char	*name;
 	char	*var;
+	int		i;
 
-	if (!s)
+	name = ft_substr(lexer->buffer, lexer->start, lexer->len);
+	lex_bzero(lexer->buffer, lexer->start - 1, (lexer->len - lexer->start));
+	lexer->len = lexer->start;
+	var = getenv(name);
+	if (var == NULL)
 		return ;
-	var = getenv(s);
-	if (var != NULL)
+	i = 0;
+	while (var[i])
 	{
-		ft_strlcpy(s, var, ft_strlen(var) + 1);
+		lexer->buffer[lexer->len] = var[i];
+		lexer->len++;
+		i++;
 	}
-
+	free(name);
 }
 
 int	is_expandables(char *s)

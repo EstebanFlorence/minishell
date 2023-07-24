@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 20:15:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/23 04:01:02 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,150 +34,10 @@ int	lex_type(char *s)
 		return (HEREDOC);
 	
 	}
-	else if (ft_strncmp(s, "|", 2) == 0)
-	{
-		return (PIPE);
-	}
-/* 	else if (ft_strchr(s, '$') && is_expandable(s) == 1)
-	{
-		return (EXPAND);
-	} */
-	return (CMD);
+	//	Check command too
+
+	return (ARG);
 }
-
-
-void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
-{
-	if (c == ' ')
-	{
-			// End of variable name, append expanded value to current word
-			if (lex->len > 0)
-			{
-			//	Sequence of multiple expandable variables without spaces
-			if (numstr(lex->buffer, '$') > 1)
-			{
-				lex->buffer[lex->len] = '\0';
-				lex_multiexpand(lex);
-				lex_lstadd(token, lex, id);
-				lex->len = 0;
-			}
-			else
-			{
-				lex->buffer[lex->len] = '\0';
-				lex_expand(lex->buffer);
-				lex_lstadd(token, lex, id);
-				lex->len = 0;				
-			}
-			lex->state = STATE_DOUBLE_QUOTE;
-			}
-
-			// Append space to quoted sequence
-			else
-			{
-				lex->buffer[lex->len] = c;
-				lex->len++;
-				lex->state = STATE_DOUBLE_QUOTE;
-			}
-	}
-	else if (c == DOUBLE_QUOTE)
-	{
-		// End of double quoted sequence and variable name, append expanded value to current word
-
-		if (lex->len > 0)
-		{
-			lex->buffer[lex->len] = '\0';
-			lex->len = 0;
-			// Expand
-			lex_expand(lex->buffer);
-			lex_lstadd(token, lex, id);
-			lex->state = STATE_NORMAL;
-		}
-		else
-			lex->state = STATE_NORMAL;
-	}
-	else/*  if (c == '$') */
-	{
-		// Escaped $ sign (and others) = treat it as regular char
-
-		lex->buffer[lex->len] = c;
-		lex->len++;
-	}
-}
-
-void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
-{
-	if (c == ' ')
-	{
-		// End of variable name, append expanded value to current word
-
-		if (lex->len > 0)
-		{
-			//	Sequence of multiple expandable variables without spaces
-			if (numstr(lex->buffer, '$') > 1)
-			{
-				lex->buffer[lex->len] = '\0';
-				lex_multiexpand(lex);
-				lex_lstadd(token, lex, id);
-				lex->len = 0;
-			}
-			else
-			{
-				lex->buffer[lex->len] = '\0';
-				lex_expand(lex->buffer);
-				lex_lstadd(token, lex, id);
-				lex->len = 0;				
-			}
-			lex->state = STATE_NORMAL;
-		}
-			
-	}
-
-	//	Not interpret unclosed quotes or special characters which are not required by the
-	//	subject such as \ (backslash) or ; (semicolon).
-	// 	Escaped '\$' sign: expand previous variable and append
-	//	es. $USER\$ER -> esteban$ER |
-	//		$U\$ER -> $ER | $\$USER\$ ->  $$USER$
-
-	//	other expandable value attached without space
-
-	else if (c == '$')
-	{
-		if (lex->len > 0/*  && lex->buffer[lex->len - 1] == '\\' */)
-		{
-			lex->buffer[lex->len] = c;
-			lex->len++;
-
-/* 			lex->buffer[lex->len] = '\0';
-			lex_expand(lex->buffer);
-			lex->len = ft_strlen(lex->buffer); */
-
-/* 			lex->buffer[lex->len] = '\0';
-			lex_expand(lex->buffer);
-			lex_lstadd(token, lex);
-			lex->len = 0;
-			//lex->buffer[lex->len] = '$';
-			//lex->len++; */
-
-		}
-
-		// '$' in var name, keep appending
-
-		else
-		{
-			lex->buffer[lex->len] = c;
-			lex->len++;
-		}
-	}
-
-	else
-	{
-		// Escaped $ sign (and others) = treat it as regular char
-
-		lex->buffer[lex->len] = c;
-		lex->len++;
-	}
-}
-
 
 void	lex_tokenizer(char *input, t_tok **token, int *id)
 {
@@ -187,7 +47,6 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 	lex = (t_lex *)ft_calloc(1, sizeof(t_lex));
 	lex->state = STATE_NORMAL;
 	lex->len = 0;
-	//lex->buffer = ft_calloc(ft_strlen(input), sizeof(char));
 	i = 0;
 	while(input[i])
 	{
@@ -209,12 +68,12 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 			if (numstr(lex->buffer, '$') > 1)
 				lex_multiexpand(lex);
 			else
-				lex_expand(lex->buffer);
+				lex_expand(lex);
 		}
+		lex->buffer[lex->len] = '\0';
 		lex_lstadd(token, lex, id);
 	}
 	lex_free(lex);
-
 }
 
 void	shell_lexer(t_shell *shell)
@@ -249,9 +108,6 @@ void	shell_lexer(t_shell *shell)
 	}
 
 	lex_free_inputs(inputs);
-
-	//lex_dollar(&token);
-
 	tok_free(token);
 }
 

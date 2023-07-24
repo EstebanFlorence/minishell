@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 20:16:29 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/22 22:01:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_tok	*lex_lstnew(t_lex *lexer, int *id)
 	if (new == NULL)
 		return (NULL);
 	new->id = ++(*id);
-	new->type = lexer->type;
+	new->type = lex_type(lexer->buffer);
 	new->token = ft_strdup(lexer->buffer);
 	new->next = NULL;
 	new->prev = NULL;

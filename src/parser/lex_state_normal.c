@@ -6,55 +6,61 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 20:10:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/24 23:21:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	state_normal_dollar(t_lex *lex)
+{
+	lex->buffer[lex->len] = '$';
+	lex->len++;
+//	if (lex->len > 0)
+//	{
+		lex->start = lex->len;
+		lex->state = STATE_DOLLAR_SIGN;
+//	}
+/* 	else
+	{
+		lex->start = 0;
+		lex->state = STATE_DOLLAR_SIGN;
+	} */
+}
+
 void	state_normal_squote(t_lex *lex, t_tok **token, int *id)
 {
-		// Start of single quoted sequence
-
-	if (lex->len > 0)
+	// Start of single quoted sequence
+/* 	if (lex->len > 0)
 	{
 		lex->buffer[lex->len] = '\0';
 		lex_lstadd(token, lex, id);
 		lex->len = 0;
-	}
-
+	} */
 	lex->state = STATE_SINGLE_QUOTE;
-
 }
 
 void	state_normal_dquote(t_lex *lex, t_tok **token, int *id)
 {
 	// Start of double quoted sequence
-
-	if (lex->len > 0)
+/* 	if (lex->len > 0)
 	{
 		lex->buffer[lex->len] = '\0';
 		lex_lstadd(token, lex, id);
 		lex->len = 0;
-	}
-
+	} */
 	lex->state = STATE_DOUBLE_QUOTE;
-
 }
 
 void	state_normal_space(t_lex *lex, t_tok **token, int *id)
 {
-
 	// End of word
-
 	if (lex->len > 0)
 	{
 		lex->buffer[lex->len] = '\0';
 		lex_lstadd(token, lex, id);
 		lex->len = 0;
 	}
-
-
 }
 
 void	state_normal(char c, t_lex *lex, t_tok **token, int *id)
@@ -73,23 +79,11 @@ void	state_normal(char c, t_lex *lex, t_tok **token, int *id)
 	}
 	else if (c == '$')
 	{
-		// lex_expander()? sia dentro che fuori quotes
-			// End eventual word and start expansion
-
-			if (lex->len > 0)
-			{
-				lex->buffer[lex->len] = '\0';
-				lex_lstadd(token, lex, id);
-				lex->len = 0;
-				lex->state = STATE_DOLLAR_SIGN;
-			}
-			else
-				lex->state = STATE_DOLLAR_SIGN;
+		state_normal_dollar(lex);
 	}
 	else
 	{
 		// Append char to current word
-
 		lex->buffer[lex->len] = c;
 		lex->len++;
 	}		

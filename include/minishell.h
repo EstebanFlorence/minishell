@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 20:13:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/23 04:19:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,31 +77,25 @@ size_t		pipe_numstr(const char *s, char pipe);
 void		shell_lexer(t_shell *shell);
 void		lex_free_inputs(char **inputs);
 void		lex_tokenizer(char *input, t_tok **token, int *id);
+int			lex_type(char *s);
+
 void		state_normal(char c, t_lex *lex, t_tok **token, int *id);
 void		state_normal_space(t_lex *lex, t_tok **token, int *id);
 void		state_normal_dquote(t_lex *lex, t_tok **token, int *id);
 void		state_normal_squote(t_lex *lex, t_tok **token, int *id);
+void		state_normal_dollar(t_lex *lex);
 void		state_quotes(char c, t_lex *lex, t_tok **token, int *id);
+void		state_quotes_double(char c, t_lex *lex, t_tok **token, int *id);
+void		state_quotes_single(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollar(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
 
-void		lex_expand(char *s);
+void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
+void		lex_bzero(void *s, unsigned int start, size_t n);
 
-int			is_expandable(char *s);
-char		*lex_expander_newtok(char *s);
 char		*lex_expander_reass(char **s);
 void		lex_expander(t_tok *token);
-
-
-
-/* void		lex_start(t_shell *shell, t_tok **lexer);
-// 2
-int			quotes_end(char *s, int i, char quote);
-int			lex_wordscount(char *s);
-int			lex_type(char *s);
-// 1
-void		state_dollar(char c, t_lex *lex); */
 
 void		lex_lstadd(t_tok **token, t_lex *lexer, int *id);
 void		lex_lstadd_back(t_tok **token, t_tok *new);

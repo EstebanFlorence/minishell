@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/22 19:57:10 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/23 02:26:49 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 # include <stdbool.h>
 
-# define INPUT_SIZE 1000
+# define INPUT_SIZE 4095
 
 # define SINGLE_QUOTE '\''
 # define DOUBLE_QUOTE '\"'
@@ -36,8 +36,6 @@
 # define APPEND		4
 # define INPUT		5
 # define HEREDOC	6
-# define PIPE		7
-//# define EXPAND		8
 
 typedef struct	s_parser
 {
@@ -65,6 +63,7 @@ typedef struct	s_lexer
 {
 	int		state;
 	int		type;
+	int		start;
 	size_t	len;
 	char	buffer[INPUT_SIZE];
 
