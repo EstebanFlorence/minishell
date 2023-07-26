@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/24 22:04:34 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/26 13:23:33 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ CC			=	gcc
 
 RM			=	rm -rf
 
-FLAGS		=	-g -Iinclude/ -Ilibft/include/ #-Wall -Wextra -Werror
+FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
 
 MAKEFLAGS	+=	--silent
 

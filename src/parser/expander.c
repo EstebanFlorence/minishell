@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/24 23:22:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:29:00 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	lex_multiexpand(t_lex *lexer)
 		}
 		i++;
 	}
-	lex_bzero(lexer->buffer, lexer->start, (lexer->len - lexer->start));
-	lexer->len = lexer->start;
+	lex_bzero(lexer->buffer, lexer->start - 1, (lexer->len - lexer->start));
+	lexer->len = lexer->start - 1;
 	i = 0;
 	while (expanded[i])
 	{
@@ -61,12 +61,17 @@ void	lex_expand(t_lex *lexer)
 	char	*var;
 	int		i;
 
-	name = ft_substr(lexer->buffer, lexer->start, lexer->len);
-	lex_bzero(lexer->buffer, lexer->start - 1, (lexer->len - lexer->start));
-	lexer->len = lexer->start;
+	if (lexer->len == 1)
+		return ;
+	name = ft_substr(lexer->buffer, lexer->start, (lexer->len - lexer->start));
+	lex_bzero(lexer->buffer, lexer->start - 1, lexer->len);
+	lexer->len = lexer->start - 1;
 	var = getenv(name);
 	if (var == NULL)
+	{
+		free(name);
 		return ;
+	}
 	i = 0;
 	while (var[i])
 	{

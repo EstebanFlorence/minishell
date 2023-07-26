@@ -6,18 +6,18 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/23 02:36:52 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:29:33 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	lex_bzero(void *s, unsigned int start, size_t n)
+void	lex_bzero(void *s, unsigned int start, int end)
 {
-	size_t			i;
+	int	i;
 
-	i = (size_t)start;
-	while (i < n)
+	i = start;
+	while (i < end)
 		((unsigned char *)s)[i++] = '\0';
 }
 
@@ -71,9 +71,18 @@ int	check_builtins(char *s)
 
 void	shell_exit(t_shell *shell)
 {
+	int	i;
 
 	free(shell->input);
 	free(shell->prompt);
+	i = 0;
+	while (shell->env[i])
+		free(shell->env[i++]);
+	free(shell->env);
+	i = 0;
+	while (shell->paths[i])
+		free(shell->paths[i++]);
+	free(shell->paths);
 
 	exit (EXIT_SUCCESS);
 }

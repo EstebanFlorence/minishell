@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/23 04:19:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:29:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct	s_shell
 	char	*input;
 
 	char	**env;
-	char	**path;
+	char	**paths;
 
 	int		in;
 	int		out;
@@ -52,11 +52,15 @@ typedef struct	s_shell
 
 	pid_t	pid;
 
+	t_lex	*lexer;
+	t_tok	*token;
+	t_pars	*parser;
+
 }	t_shell;
 
 
-void		shell_innit(t_shell *shell);
-void		shell_loop(t_shell *shell, char **env);
+void		shell_innit(t_shell *shell, char **env);
+void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
 
@@ -74,28 +78,26 @@ size_t		pipe_numstr(const char *s, char pipe);
 
 
 //	Lexer
-void		shell_lexer(t_shell *shell);
+void		shell_lexer(t_shell *shell, t_tok **token);
 void		lex_free_inputs(char **inputs);
 void		lex_tokenizer(char *input, t_tok **token, int *id);
-int			lex_type(char *s);
+int			lex_type(const char *s, t_shell *shell);
+int			is_command(const char *cmd, t_shell *shell);
 
 void		state_normal(char c, t_lex *lex, t_tok **token, int *id);
 void		state_normal_space(t_lex *lex, t_tok **token, int *id);
-void		state_normal_dquote(t_lex *lex, t_tok **token, int *id);
-void		state_normal_squote(t_lex *lex, t_tok **token, int *id);
+void		state_normal_dquote(t_lex *lex);
+void		state_normal_squote(t_lex *lex);
 void		state_normal_dollar(t_lex *lex);
-void		state_quotes(char c, t_lex *lex, t_tok **token, int *id);
-void		state_quotes_double(char c, t_lex *lex, t_tok **token, int *id);
-void		state_quotes_single(char c, t_lex *lex, t_tok **token, int *id);
+void		state_quotes(char c, t_lex *lex);
+void		state_quotes_double(char c, t_lex *lex);
+void		state_quotes_single(char c, t_lex *lex);
 void		state_dollar(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
-void		lex_bzero(void *s, unsigned int start, size_t n);
-
-char		*lex_expander_reass(char **s);
-void		lex_expander(t_tok *token);
+void		lex_bzero(void *s, unsigned int start, int end);
 
 void		lex_lstadd(t_tok **token, t_lex *lexer, int *id);
 void		lex_lstadd_back(t_tok **token, t_tok *new);

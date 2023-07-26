@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 23:13:24 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/24 22:53:43 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:33:13 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 //	Tokenize (lex_lstadd) buffer only at the end of quoted sequence
 void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 {
-	//char	*metachar;
-
-	//metachar = " \\\'\"";
-	if (c == ' ' || c == '\\')
+	// Expand variable and keep appending
+	if (c == ' ' || c == '\\' || c == SINGLE_QUOTE)
 	{
 		// End of variable name, append expanded value to current word
 		if (lex->len > 0)
@@ -41,7 +39,7 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 		}
 		lex->state = STATE_DOUBLE_QUOTE;
 		}
-		// Append space to quoted sequence
+		// Only append metachar to quoted sequence
 		else
 		{
 			lex->buffer[lex->len] = c;
@@ -54,7 +52,7 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 		// End of double quoted sequence and variable name, append expanded value to current word
 		if (lex->len > 0)
 		{
-			if (numstr(lex->buffer, '$') > 1)
+			if (numstr(lex->buffer, '$') > 2)
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_multiexpand(lex);
@@ -82,9 +80,6 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 
 void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 {
-	//char	*metachar;
-
-	//metachar = " \\";
 	if (c == ' ')
 	{
 		// End of variable name, append expanded value to current word
@@ -137,7 +132,6 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 	else if (c == '\\')
 	{
 		//	Metachar -> expand variable and append char to expanded variable
-
 			if (lex->len > 0)
 		{
 			if (numstr(lex->buffer, '$') > 1)

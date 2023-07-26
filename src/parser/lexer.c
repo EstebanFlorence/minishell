@@ -6,13 +6,32 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/23 04:01:02 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:51:40 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	lex_type(char *s)
+int	is_command(const char *cmd, t_shell *shell)
+{
+	int		i;
+	char	*cmd_path;
+
+	if (ft_strlen(cmd) < 1)
+		return (0);
+	i = 0;
+	while (shell->paths[i])
+	{
+		cmd_path = ft_strjoin(shell->paths[i], cmd);
+		if (access(cmd_path, X_OK) == 0)
+			return (1);
+		free(cmd_path);
+		i++;
+	}
+	return (0);
+}
+
+int	lex_type(const char *s, t_shell *shell)
 {
 	if (ft_strncmp(s, ">", 2) == 0)
 	{
@@ -34,7 +53,10 @@ int	lex_type(char *s)
 		return (HEREDOC);
 	
 	}
-	//	Check command too
+	else if (is_command(s, shell))
+	{
+		return (CMD);
+	}
 
 	return (ARG);
 }
@@ -53,7 +75,7 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 		if (lex->state == STATE_NORMAL)
 			state_normal(input[i], lex, token, id);
 		else if (lex->state == STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
-			state_quotes(input[i], lex, token, id);
+			state_quotes(input[i], lex);
 		else if (lex->state == STATE_DOLLAR_SIGN)
 			state_dollar(input[i], lex, token, id);
 		else if (lex->state == STATE_DOLLAR_SIGN_DOUBLE_QUOTE)
@@ -76,14 +98,12 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 	lex_free(lex);
 }
 
-void	shell_lexer(t_shell *shell)
+void	shell_lexer(t_shell *shell, t_tok **token)
 {
 	static int	id;
 	int			i;
 	char		**inputs;
-	t_tok		*token;
 
-	token = NULL;
 	if (pipe_numstr(shell->input, '|') > 1)
 		inputs = pipe_split(shell->input, '|');
 	else
@@ -96,11 +116,18 @@ void	shell_lexer(t_shell *shell)
 	i = 0;
 	while (inputs[i])
 	{
-		lex_tokenizer(inputs[i], &token, &id);
+		lex_tokenizer(inputs[i], token, &id);
 		i++;
 	}
 
-	t_tok *tmp = token;
+	t_tok *tmp = (*token);	
+	while (tmp)
+	{
+		tmp->type = lex_type(tmp->token, shell);
+		tmp = tmp->next;
+	}
+
+	tmp = (*token);
 	while (tmp)
 	{
 		printf("token id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
@@ -108,7 +135,7 @@ void	shell_lexer(t_shell *shell)
 	}
 
 	lex_free_inputs(inputs);
-	tok_free(token);
+	//tok_free(token);
 }
 
 void	lex_free_inputs(char **inputs)
