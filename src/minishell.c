@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 13:25:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 14:07:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void	shell_innit(t_shell *shell, char **env)
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
 
-	shell->lexer = NULL;
-	shell->token = NULL;
+	//shell->token = NULL;
 	shell->parser = NULL;
 
 	user = ft_strjoin(PURPLE, getenv("USER"));

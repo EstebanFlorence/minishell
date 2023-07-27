@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:29:42 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 13:42:59 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,7 @@ typedef struct	s_shell
 
 	pid_t	pid;
 
-	t_lex	*lexer;
-	t_tok	*token;
+	//t_tok	*token;
 	t_pars	*parser;
 
 }	t_shell;
@@ -109,7 +108,7 @@ void		tok_free(t_tok *token);
 
 //	Parser
 void		shell_parser(t_shell *shell, t_pars **parser);
-void		pars_commander(t_tok *start, t_tok *end, t_pars **parser);
+void		pars_commander(t_shell *shell, t_pars **parser, t_tok *token);
 
 void		pars_lstadd(t_pars **parser, char *s);
 void		pars_lstadd_back(t_pars **parser, t_pars *new);

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 13:23:18 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 18:10:26 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@
 # define APPEND		4
 # define INPUT		5
 # define HEREDOC	6
+# define PIPE		7
 
 typedef struct	s_parser
 {
 	int				id;
-	char			*token;
+	char			*cmd;
 
 	int				in;
 	int				out;

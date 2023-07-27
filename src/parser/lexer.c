@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 14:51:40 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 13:31:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	lex_type(const char *s, t_shell *shell)
 		return (TRUNC);
 	
 	}
-	else if (ft_strncmp(s, ">>", 3 == 0))
+	else if (ft_strncmp(s, ">>", 3) == 0)
 	{
 		return (APPEND);
 
@@ -53,6 +53,11 @@ int	lex_type(const char *s, t_shell *shell)
 		return (HEREDOC);
 	
 	}
+/* 	else if (ft_strncmp(s, "|", 3) == 0)
+	{
+		return (PIPE);
+	
+	} */
 	else if (is_command(s, shell))
 	{
 		return (CMD);
