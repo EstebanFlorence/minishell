@@ -6,14 +6,14 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 23:13:24 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:33:13 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //	Metacharacters in the same if statement
-//	Tokenize (lex_lstadd) buffer only at the end of quoted sequence
+//	Tokenize (tok_lstadd) buffer only at the end of quoted sequence
 void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 {
 	// Expand variable and keep appending
@@ -56,14 +56,14 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_multiexpand(lex);
-				lex_lstadd(token, lex, id);
+				tok_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_expand(lex);
-				lex_lstadd(token, lex, id);
+				tok_lstadd(token, lex, id);
 				lex->len = 0;				
 			}
 			lex->state = STATE_NORMAL;
@@ -90,14 +90,14 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_multiexpand(lex);
-				lex_lstadd(token, lex, id);
+				tok_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_expand(lex);
-				lex_lstadd(token, lex, id);
+				tok_lstadd(token, lex, id);
 				lex->len = 0;				
 			}
 			lex->state = STATE_NORMAL;
@@ -113,14 +113,14 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_multiexpand(lex);
-				//lex_lstadd(token, lex, id);
+				//tok_lstadd(token, lex, id);
 				//lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
 				lex_expand(lex);
-				//lex_lstadd(token, lex, id);
+				//tok_lstadd(token, lex, id);
 				//lex->len = 0;
 			}
 			if (c == SINGLE_QUOTE)

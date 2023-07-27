@@ -6,21 +6,36 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/11 23:39:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 00:50:28 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_pars	*pars_lstnew(char *s, int id)
+t_pars	*pars_lstnew(char **s, int id)
 {
+	int		n;
 	t_pars	*new;
 
+	if (!s)
+		return (NULL);
+	n = 0;
+	while (s[n])
+		n++;
 	new = (t_pars *)malloc(sizeof(t_pars) * 1);
 	if (new == NULL)
 		return (NULL);
 	new->id = id + 1;
-	new->token = ft_strdup(s);
+
+	new->cmd = (char **)ft_calloc(n + 1, sizeof(char *));
+	n = 0;
+	while (s[n])
+	{
+		new->cmd[n] = ft_strdup(s[n]);
+		n++;
+	}
+
+
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -60,4 +75,12 @@ void	pars_lstadd_back(t_pars **parser, t_pars *new)
 			new->prev = last;
 		}
 	}
+}
+
+void	pars_lstadd(t_pars **parser, char **s)
+{
+	static int	i = 0;
+
+	pars_lstadd_back(parser, pars_lstnew(s, i));
+	i++;
 }

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:33:42 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	state_normal_space(t_lex *lex, t_tok **token, int *id)
 	if (lex->len > 0)
 	{
 		lex->buffer[lex->len] = '\0';
-		lex_lstadd(token, lex, id);
+		tok_lstadd(token, lex, id);
 		lex->len = 0;
 	}
 }

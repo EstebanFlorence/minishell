@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 13:31:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ int	lex_type(const char *s, t_shell *shell)
 		return (CMD);
 	}
 
-	return (ARG);
+	return (WORD);
 }
 
-void	lex_tokenizer(char *input, t_tok **token, int *id)
+void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 {
 	t_lex	*lex;
 	int		i;
@@ -74,6 +74,7 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 	lex = (t_lex *)ft_calloc(1, sizeof(t_lex));
 	lex->state = STATE_NORMAL;
 	lex->len = 0;
+	lex->shell = shell;
 	i = 0;
 	while(input[i])
 	{
@@ -98,49 +99,9 @@ void	lex_tokenizer(char *input, t_tok **token, int *id)
 				lex_expand(lex);
 		}
 		lex->buffer[lex->len] = '\0';
-		lex_lstadd(token, lex, id);
+		tok_lstadd(token, lex, id);
 	}
 	lex_free(lex);
-}
-
-void	shell_lexer(t_shell *shell, t_tok **token)
-{
-	static int	id;
-	int			i;
-	char		**inputs;
-
-	if (pipe_numstr(shell->input, '|') > 1)
-		inputs = pipe_split(shell->input, '|');
-	else
-	{
-		inputs = (char **)ft_calloc(2, sizeof(char *));
-		inputs[0] = ft_strdup(shell->input);
-		inputs[1] = NULL;
-	}
-	id = 0;
-	i = 0;
-	while (inputs[i])
-	{
-		lex_tokenizer(inputs[i], token, &id);
-		i++;
-	}
-
-	t_tok *tmp = (*token);	
-	while (tmp)
-	{
-		tmp->type = lex_type(tmp->token, shell);
-		tmp = tmp->next;
-	}
-
-	tmp = (*token);
-	while (tmp)
-	{
-		printf("token id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
-		tmp = tmp->next;
-	}
-
-	lex_free_inputs(inputs);
-	//tok_free(token);
 }
 
 void	lex_free_inputs(char **inputs)

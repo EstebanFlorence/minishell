@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 13:42:59 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 00:52:06 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,29 @@ typedef struct	s_shell
 	pid_t	pid;
 
 	//t_tok	*token;
-	t_pars	*parser;
+	//t_pars	*parser;
 
 }	t_shell;
 
+typedef struct	s_lexer
+{
+	int		state;
+	int		type;
+	int		start;
+	size_t	len;
+	char	buffer[INPUT_SIZE];
+
+	t_shell	*shell;
+
+}	t_lex;
 
 void		shell_innit(t_shell *shell, char **env);
+void		shell_env(char **env, t_shell *shell);
 void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
-
-void		shell_env(char **env, t_shell *shell);
+void		shell_commander(t_shell *shell, t_pars **parser);
+void		shell_parser(t_shell *shell, t_tok **token, t_pars **parser);
 
 //	Tools
 void		ft_error(int n);
@@ -77,9 +89,8 @@ size_t		pipe_numstr(const char *s, char pipe);
 
 
 //	Lexer
-void		shell_lexer(t_shell *shell, t_tok **token);
+void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);
 void		lex_free_inputs(char **inputs);
-void		lex_tokenizer(char *input, t_tok **token, int *id);
 int			lex_type(const char *s, t_shell *shell);
 int			is_command(const char *cmd, t_shell *shell);
 
@@ -98,23 +109,23 @@ void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
 void		lex_bzero(void *s, unsigned int start, int end);
 
-void		lex_lstadd(t_tok **token, t_lex *lexer, int *id);
-void		lex_lstadd_back(t_tok **token, t_tok *new);
+void		tok_lstadd(t_tok **token, t_lex *lexer, int *id);
+void		tok_lstadd_back(t_tok **token, t_tok *new);
+t_tok		*tok_lstlast(t_tok *token);
+t_tok		*tok_lstnew(t_lex *lexer, int *id);
+
+void		tok_free(t_tok *token);
 void		lex_remove(t_tok *end, t_tok *start);
 void		lex_free(t_lex *lexer);
-t_tok		*lex_lstlast(t_tok *token);
-t_tok		*lex_lstnew(t_lex *lexer, int *id);
-void		tok_free(t_tok *token);
 
 //	Parser
-void		shell_parser(t_shell *shell, t_pars **parser);
-void		pars_commander(t_shell *shell, t_pars **parser, t_tok *token);
-
-void		pars_lstadd(t_pars **parser, char *s);
-void		pars_lstadd_back(t_pars **parser, t_pars *new);
+void		pars_commander(t_tok *token, t_pars **parser);
 void		pars_free(t_pars *parser);
+
+void		pars_lstadd(t_pars **parser, char **s);
+void		pars_lstadd_back(t_pars **parser, t_pars *new);
 t_pars		*pars_lstlast(t_pars *parser);
-t_pars		*pars_lstnew(char *s, int id);
+t_pars		*pars_lstnew(char **s, int id);
 
 //	Environment
 void		env_freepaths(char **paths);

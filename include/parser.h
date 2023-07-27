@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 18:10:26 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/27 22:29:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 
 # define EMPTY		0
 # define CMD		1
-# define ARG		2
+# define WORD		2
 # define TRUNC		3
 # define APPEND		4
 # define INPUT		5
@@ -41,7 +41,7 @@
 typedef struct	s_parser
 {
 	int				id;
-	char			*cmd;
+	char			**cmd;
 
 	int				in;
 	int				out;
@@ -59,16 +59,6 @@ typedef struct	s_token
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_tok;
-
-typedef struct	s_lexer
-{
-	int		state;
-	int		type;
-	int		start;
-	size_t	len;
-	char	buffer[INPUT_SIZE];
-
-}	t_lex;
 
 
 #endif

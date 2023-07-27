@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_old.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 17:51:23 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/16 18:16:14 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 00:54:22 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,7 @@ void	shell_parser(t_shell *shell, t_pars **parser)
 	//pars_free(*parser);
 }
 
-void	pars_free(t_pars *parser)
-{
-	t_pars	*tmp;
 
-	while (parser)
-	{
-		tmp = parser;
-		parser = parser->next;
-		free(tmp->token);
-		free (tmp);
-	}
-}
-
-void	pars_lstadd(t_pars **parser, char *s)
-{
-	static int	i = 0;
-
-	pars_lstadd_back(parser, pars_lstnew(s, i));
-	i++;
-}
 
 
 
