@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 19:49:18 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ int	is_command(const char *cmd, t_shell *shell)
 	{
 		cmd_path = ft_strjoin(shell->paths[i], cmd);
 		if (access(cmd_path, X_OK) == 0)
+		{
+			free(cmd_path);
 			return (1);
+		}
 		free(cmd_path);
 		i++;
 	}
@@ -58,10 +61,11 @@ int	lex_type(const char *s, t_shell *shell)
 		return (PIPE);
 	
 	} */
-	else if (is_command(s, shell))
+/* 	else if (is_command(s, shell))
 	{
 		return (CMD);
-	}
+	} */
+	(void)shell;
 
 	return (WORD);
 }
@@ -102,6 +106,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 		tok_lstadd(token, lex, id);
 	}
 	lex_free(lex);
+
 }
 
 void	lex_free_inputs(char **inputs)

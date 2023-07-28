@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 01:51:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 19:37:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	pars_commander(t_tok *token, t_pars **parser, int id)
 	while (cmds[i])
 		free(cmds[i++]);
 	free(cmds);
+
 }
 
 void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
@@ -60,15 +61,9 @@ void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
 	{
 		lex_tokenizer(shell, inputs[i], token, &id);
 		pars_commander(*token, parser, i);
+		tok_free(*token);
+		*token = NULL;
 		i++;
-	}
-
-
-	t_tok *tmp = (*token);
-	while (tmp)
-	{
-		printf("token id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
-		tmp = tmp->next;
 	}
 
 	lex_free_inputs(inputs);
@@ -85,13 +80,13 @@ void	shell_command(t_shell *shell, t_pars **parser)
 	shell_parser(shell, &token, parser);
 
 	int i = 0;
-	t_pars *tmp = *parser;
-	while (tmp)
+	t_pars *tmpp = *parser;
+	while (tmpp)
 	{
-		while (tmp && tmp->cmd[i])
-			printf("parser id: %d	command: %s\n", tmp->id, tmp->cmd[i++]);
+		while (tmpp && tmpp->cmd[i])
+			printf("parser id: %d	command: %s\n", tmpp->id, tmpp->cmd[i++]);
 		i = 0;
-		tmp = tmp->next;
+		tmpp = tmpp->next;
 	}
 
 	tok_free(token);
@@ -110,7 +105,19 @@ void	pars_free(t_pars *parser)
 		parser = parser->next;
 		while (tmp->cmd[i])
 			free(tmp->cmd[i++]);
+		i = 0;
 		free(tmp->cmd);
 		free(tmp);
 	}
 }
+
+/*	Test:
+
+	t_tok *tmp = *token;
+	while (tmp)
+	{
+		printf("token id: %d type: %d token: %s\n", tmp->id, tmp->type, tmp->token);
+		tmp = tmp->next;
+	}
+
+ */
