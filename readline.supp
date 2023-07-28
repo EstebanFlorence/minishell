@@ -1,0 +1,18 @@
+{  
+   readline
+   Memcheck:Leak
+   ...
+   ...
+   fun:readline
+   fun:shell_loop
+   fun:main
+}
+
+{  
+   readline
+   Memcheck:Leak
+   ...
+   ...
+   fun:rl_initialize
+   fun:readline
+}
