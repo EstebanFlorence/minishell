@@ -6,13 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 01:01:25 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 01:51:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pars_commander(t_tok *token, t_pars **parser)
+void	pars_commander(t_tok *token, t_pars **parser, int id)
 {
 	int		i;
 	int		n;
@@ -32,7 +32,7 @@ void	pars_commander(t_tok *token, t_pars **parser)
 		i++;
 		tmp = tmp->next;
 	}
-	pars_lstadd(parser, cmds);
+	pars_lstadd(parser, cmds, id);
 
 	i = 0;
 	while (cmds[i])
@@ -59,7 +59,7 @@ void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], token, &id);
-		pars_commander(*token, parser);
+		pars_commander(*token, parser, i);
 		i++;
 	}
 
@@ -75,7 +75,7 @@ void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
 	//tok_free(token);
 }
 
-void	shell_commander(t_shell *shell, t_pars **parser)
+void	shell_command(t_shell *shell, t_pars **parser)
 {
 	t_tok	*token;
 

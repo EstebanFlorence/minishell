@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 00:50:28 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 01:13:58 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_pars	*pars_lstnew(char **s, int id)
 	new = (t_pars *)malloc(sizeof(t_pars) * 1);
 	if (new == NULL)
 		return (NULL);
-	new->id = id + 1;
+	new->id = id;
 
 	new->cmd = (char **)ft_calloc(n + 1, sizeof(char *));
 	n = 0;
@@ -77,10 +77,7 @@ void	pars_lstadd_back(t_pars **parser, t_pars *new)
 	}
 }
 
-void	pars_lstadd(t_pars **parser, char **s)
+void	pars_lstadd(t_pars **parser, char **s, int id)
 {
-	static int	i = 0;
-
-	pars_lstadd_back(parser, pars_lstnew(s, i));
-	i++;
+	pars_lstadd_back(parser, pars_lstnew(s, id));
 }

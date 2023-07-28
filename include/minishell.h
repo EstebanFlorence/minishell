@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 00:52:06 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 01:51:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void		shell_env(char **env, t_shell *shell);
 void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
-void		shell_commander(t_shell *shell, t_pars **parser);
+void		shell_command(t_shell *shell, t_pars **parser);
 void		shell_parser(t_shell *shell, t_tok **token, t_pars **parser);
 
 //	Tools
@@ -119,10 +119,10 @@ void		lex_remove(t_tok *end, t_tok *start);
 void		lex_free(t_lex *lexer);
 
 //	Parser
-void		pars_commander(t_tok *token, t_pars **parser);
+void		pars_commander(t_tok *token, t_pars **parser, int id);
 void		pars_free(t_pars *parser);
 
-void		pars_lstadd(t_pars **parser, char **s);
+void		pars_lstadd(t_pars **parser, char **s, int id);
 void		pars_lstadd_back(t_pars **parser, t_pars *new);
 t_pars		*pars_lstlast(t_pars *parser);
 t_pars		*pars_lstnew(char **s, int id);

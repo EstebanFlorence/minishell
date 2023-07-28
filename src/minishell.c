@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 00:51:46 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/28 01:51:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	shell_loop(t_shell *shell)
 
 		if (!ft_isvalid(shell->input))
 		{
-			shell_commander(shell, &command);
+			shell_command(shell, &command);
 		}
 
 		free(shell->input);
