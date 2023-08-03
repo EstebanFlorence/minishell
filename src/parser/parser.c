@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 17:21:42 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 19:31:18 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,29 @@ int	here_doc(t_tok *token)
 
 void	pars_redirect(t_tok *token, t_pars *parser)
 {
-	if (ft_strncmp(token->token, ">", 2) == 0)
+	while (token)
 	{
-		parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	}
-	else if (ft_strncmp(token->token, ">>", 3) == 0)
-	{
-		parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	}	
-	else if (ft_strncmp(token->token, "<", 2) == 0)
-	{
-		parser->in = open(token->next->token, O_RDONLY);
-	}
-	else if (ft_strncmp(token->token, "<<", 3) == 0)
-	{
-		parser->in = here_doc(token);
+		if (ft_strncmp(token->token, ">", 2) == 0)
+		{
+			parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			// token = token->next;
+		}
+		else if (ft_strncmp(token->token, ">>", 3) == 0)
+		{
+			parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
+
+		}	
+		else if (ft_strncmp(token->token, "<", 2) == 0)
+		{
+			parser->in = open(token->next->token, O_RDONLY);
+
+		}
+		else if (ft_strncmp(token->token, "<<", 3) == 0)
+		{
+			parser->in = here_doc(token);
+
+		}
+		token = token->next;
 	}
 }
 
@@ -77,6 +85,7 @@ void	pars_commander(t_tok *token, t_pars *parser)
 		if (tmp->type == REDIRECT)
 		{
 			pars_redirect(tmp, parser);
+			break ;
 		}
 		else
 		{
@@ -129,7 +138,7 @@ void	shell_command(t_shell *shell, t_pars **parser)
 	while (tmpp)
 	{
 		while (tmpp && tmpp->cmd[i])
-			printf("parser id: %d	command: %s\n", tmpp->id, tmpp->cmd[i++]);
+			printf("parser id: %d\tcommand: %s\t in: %d  out: %d\n", tmpp->id, tmpp->cmd[i++], tmpp->in, tmpp->out);
 		i = 0;
 		tmpp = tmpp->next;
 	}
@@ -155,34 +164,6 @@ void	pars_free(t_pars *parser)
 	}
 }
 
-/* void	pars_commander(t_tok *token, t_pars **parser, int id)
-{
-	int		i;
-	int		n;
-	char	**cmds;
-	t_tok	*tmp;
-
-	tmp = token;
-	while (tmp->next)
-		tmp = tmp->next;
-	n = tmp->id;
-	cmds = (char **)ft_calloc(n + 1, sizeof(char *));
-	i = 0;
-	tmp = token;
-	while (tmp)
-	{
-		cmds[i] = ft_strdup(tmp->token);
-		i++;
-		tmp = tmp->next;
-	}
-	pars_lstadd(parser, cmds, id);
-
-	i = 0;
-	while (cmds[i])
-		free(cmds[i++]);
-	free(cmds);
-
-} */
 /*	Test:
 
 	t_tok *tmp = *token;
