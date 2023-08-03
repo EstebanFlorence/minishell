@@ -6,11 +6,31 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 19:37:52 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:37:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	pars_redirect(t_tok *token, t_pars **parser)
+{
+	if (ft_strncmp(token->token, ">", 2) == 0)
+	{
+		
+	}
+	else if (ft_strncmp(token->token, ">>", 3) == 0)
+	{
+
+	}	
+	else if (ft_strncmp(token->token, "<", 2) == 0)
+	{
+	
+	}
+	else if (ft_strncmp(token->token, "<<", 3) == 0)
+	{
+	
+	}
+}
 
 void	pars_commander(t_tok *token, t_pars **parser, int id)
 {
@@ -19,34 +39,38 @@ void	pars_commander(t_tok *token, t_pars **parser, int id)
 	char	**cmds;
 	t_tok	*tmp;
 
+	pars_lstadd(parser, id);
 	tmp = token;
-	while (tmp->next)
+	while (tmp->next && tmp->type != REDIRECT)
 		tmp = tmp->next;
 	n = tmp->id;
 	cmds = (char **)ft_calloc(n + 1, sizeof(char *));
 	i = 0;
 	tmp = token;
-	while (tmp)
+	while (tmp->next)
 	{
+		if (tmp->type == REDIRECT)
+		{
+
+			pars_redirect(token, parser);
+		}
 		cmds[i] = ft_strdup(tmp->token);
 		i++;
 		tmp = tmp->next;
 	}
-	pars_lstadd(parser, cmds, id);
-
-	i = 0;
-	while (cmds[i])
-		free(cmds[i++]);
-	free(cmds);
+	
 
 }
 
-void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
+void	shell_parser(t_shell *shell, t_pars **parser)
 {
-	static int	id;
+	t_tok		*token;
+	static int	n;
 	int			i;
 	char		**inputs;
 
+	*parser = NULL;
+	token = NULL;
 	if (pipe_numstr(shell->input, '|') > 1)
 		inputs = pipe_split(shell->input, '|');
 	else
@@ -55,29 +79,22 @@ void	shell_parser(t_shell *shell, t_tok **token, t_pars **parser)
 		inputs[0] = ft_strdup(shell->input);
 		inputs[1] = NULL;
 	}
-	id = 0;
+	n = 0;
 	i = 0;
 	while (inputs[i])
 	{
-		lex_tokenizer(shell, inputs[i], token, &id);
-		pars_commander(*token, parser, i);
-		tok_free(*token);
-		*token = NULL;
+		lex_tokenizer(shell, inputs[i], &token, &n);
+		pars_commander(token, parser, i + 1);
+		tok_free(token);
 		i++;
 	}
 
 	lex_free_inputs(inputs);
-	//tok_free(token);
 }
 
 void	shell_command(t_shell *shell, t_pars **parser)
 {
-	t_tok	*token;
-
-	(void)parser;
-	token = NULL;
-
-	shell_parser(shell, &token, parser);
+	shell_parser(shell, parser);
 
 	int i = 0;
 	t_pars *tmpp = *parser;
@@ -111,6 +128,34 @@ void	pars_free(t_pars *parser)
 	}
 }
 
+/* void	pars_commander(t_tok *token, t_pars **parser, int id)
+{
+	int		i;
+	int		n;
+	char	**cmds;
+	t_tok	*tmp;
+
+	tmp = token;
+	while (tmp->next)
+		tmp = tmp->next;
+	n = tmp->id;
+	cmds = (char **)ft_calloc(n + 1, sizeof(char *));
+	i = 0;
+	tmp = token;
+	while (tmp)
+	{
+		cmds[i] = ft_strdup(tmp->token);
+		i++;
+		tmp = tmp->next;
+	}
+	pars_lstadd(parser, cmds, id);
+
+	i = 0;
+	while (cmds[i])
+		free(cmds[i++]);
+	free(cmds);
+
+} */
 /*	Test:
 
 	t_tok *tmp = *token;

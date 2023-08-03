@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 19:49:18 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:20:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,13 @@ int	is_command(const char *cmd, t_shell *shell)
 
 int	lex_type(const char *s, t_shell *shell)
 {
-	if (ft_strncmp(s, ">", 2) == 0)
+	if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
+		ft_strncmp(s, "<", 2) == 0 || ft_strncmp(s, "<<", 3) == 0)
+	{
+		return (REDIRECT);
+	
+	}
+/* 	else if (ft_strncmp(s, ">", 2) == 0)
 	{
 		return (TRUNC);
 	
@@ -55,7 +61,7 @@ int	lex_type(const char *s, t_shell *shell)
 	{
 		return (HEREDOC);
 	
-	}
+	} */
 /* 	else if (ft_strncmp(s, "|", 3) == 0)
 	{
 		return (PIPE);
@@ -140,4 +146,5 @@ void	tok_free(t_tok *token)
 		free(tmp->token); 
 		free(tmp);
 	}
+	token = NULL;
 }

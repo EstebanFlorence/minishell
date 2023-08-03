@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/28 01:51:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:24:35 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	shell_loop(t_shell *shell)
 {
 	t_pars	*command;
 
-	command = NULL;
 	while (42)
 	{
 		shell->input = readline(shell->prompt);

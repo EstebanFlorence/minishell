@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 22:29:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/07/31 19:01:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define INPUT		5
 # define HEREDOC	6
 # define PIPE		7
+# define REDIRECT	8
 
 typedef struct	s_parser
 {

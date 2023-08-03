@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/07/26 13:23:33 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/07/31 18:22:31 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS		=   ${SRC_DIR}/minishell.c\
 				${SRC_DIR}/parser/lexer.c				${SRC_DIR}/parser/parser.c\
 				${SRC_DIR}/parser/lex_state_normal.c	${SRC_DIR}/parser/lex_state_quotes.c\
 				${SRC_DIR}/parser/lex_state_dollar.c	${SRC_DIR}/parser/expander.c\
+				${SRC_DIR}/parser/executor.c\
 #\
 				${SRC_DIR}/executer/start.c
 
