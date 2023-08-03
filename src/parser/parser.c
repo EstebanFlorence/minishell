@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 15:35:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 17:21:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	here_doc(t_tok *token)
 			close(heredoc);
 			free(tmplimiter);
 			free(line);
+			get_next_line(-42);
 			heredoc = open(HEREPATH, O_RDONLY, 0666);
 			return (heredoc);
 		}
@@ -109,12 +110,13 @@ void	shell_parser(t_shell *shell, t_pars **parser)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
+		if (token == NULL)
+			break ;
 		pars_lstadd_back(parser, pars_lstnew(i + 1));
 		pars_commander(token, pars_lstlast(*parser));
 		tok_free(token);
 		i++;
 	}
-
 	lex_free_inputs(inputs);
 }
 
