@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 02:34:28 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 12:12:37 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,10 @@ void		lex_remove(t_tok *end, t_tok *start);
 void		lex_free(t_lex *lexer);
 
 //	Parser
-void		pars_commander(t_tok *token, t_pars **parser, int id);
+void		pars_commander(t_tok *token, t_pars *parser);
 void		pars_free(t_pars *parser);
 
-void		pars_redirect(t_tok *token, t_pars **parser);
+void		pars_redirect(t_tok *token, t_pars *parser);
 
 
 void		pars_lstadd(t_pars **parser, int id);

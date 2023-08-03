@@ -6,59 +6,59 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 02:37:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 14:33:38 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pars_redirect(t_tok *token, t_pars **parser)
+void	pars_redirect(t_tok *token, t_pars *parser)
 {
 	if (ft_strncmp(token->token, ">", 2) == 0)
 	{
-		
+		parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	}
 	else if (ft_strncmp(token->token, ">>", 3) == 0)
 	{
-
+		parser->out = open(token->next->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	}	
 	else if (ft_strncmp(token->token, "<", 2) == 0)
 	{
-	
+		parser->in = open(token->next->token, O_RDONLY);
 	}
 	else if (ft_strncmp(token->token, "<<", 3) == 0)
 	{
-	
+		// Heredoc
 	}
 }
 
-void	pars_commander(t_tok *token, t_pars **parser, int id)
+void	pars_commander(t_tok *token, t_pars *parser)
 {
 	int		i;
 	int		n;
-	char	**cmds;
 	t_tok	*tmp;
 
-	pars_lstadd(parser, id);
 	tmp = token;
 	while (tmp->next && tmp->type != REDIRECT)
 		tmp = tmp->next;
 	n = tmp->id;
-	cmds = (char **)ft_calloc(n + 1, sizeof(char *));
+	parser->cmd = (char **)ft_calloc(n + 1, sizeof(char *));
 	i = 0;
 	tmp = token;
-	while (tmp->next)
+	while (tmp)
 	{
 		if (tmp->type == REDIRECT)
 		{
-
 			pars_redirect(token, parser);
+			break ;
 		}
-		cmds[i] = ft_strdup(tmp->token);
-		i++;
-		tmp = tmp->next;
+		else
+		{
+			parser->cmd[i] = ft_strdup(tmp->token);
+			i++;
+			tmp = tmp->next;
+		}
 	}
-	
 
 }
 
@@ -84,7 +84,8 @@ void	shell_parser(t_shell *shell, t_pars **parser)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
-		pars_commander(token, parser, i + 1);
+		pars_lstadd_back(parser, pars_lstnew(i + 1));
+		pars_commander(token, pars_lstlast(*parser));
 		tok_free(token);
 		i++;
 	}
@@ -106,7 +107,6 @@ void	shell_command(t_shell *shell, t_pars **parser)
 		tmpp = tmpp->next;
 	}
 
-	tok_free(token);
 	pars_free(*parser);
 }
 
