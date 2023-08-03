@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 02:20:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/04 00:24:14 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,5 +146,4 @@ void	tok_free(t_tok *token)
 		free(tmp->token); 
 		free(tmp);
 	}
-	token = NULL;
 }

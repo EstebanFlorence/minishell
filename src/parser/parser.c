@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 19:31:18 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/04 01:21:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void	shell_parser(t_shell *shell, t_pars **parser)
 		pars_lstadd_back(parser, pars_lstnew(i + 1));
 		pars_commander(token, pars_lstlast(*parser));
 		tok_free(token);
+		token = NULL;
 		i++;
 	}
 	lex_free_inputs(inputs);
