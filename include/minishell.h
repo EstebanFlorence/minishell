@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 12:12:37 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:35:28 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # include <sys/time.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-
-//# define BUFFER_SIZE 1000	 in libft for gnl
 
 # define HEREPATH	"./.heredoc"
 
@@ -123,6 +121,7 @@ void		pars_commander(t_tok *token, t_pars *parser);
 void		pars_free(t_pars *parser);
 
 void		pars_redirect(t_tok *token, t_pars *parser);
+int	 		here_doc(t_tok *token);
 
 
 void		pars_lstadd(t_pars **parser, int id);

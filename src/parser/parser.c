@@ -6,11 +6,37 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 14:33:38 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:35:48 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	here_doc(t_tok *token)
+{
+	char	*tmplimiter;
+	char	*line;
+	int		heredoc;
+
+	tmplimiter = ft_strjoin(token->next->token, "\n");
+	line = get_next_line(STDIN_FILENO);
+	heredoc = open(HEREPATH, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	while (line)
+	{
+		if (!ft_strncmp(line, tmplimiter, ft_strlen(tmplimiter) + 1))
+		{
+			close(heredoc);
+			free(tmplimiter);
+			free(line);
+			heredoc = open(HEREPATH, O_RDONLY, 0666);
+			return (heredoc);
+		}
+		ft_putstr_fd(line, heredoc);
+		free(line);
+		line = get_next_line(STDIN_FILENO);
+	}
+	return (-1);
+}
 
 void	pars_redirect(t_tok *token, t_pars *parser)
 {
@@ -28,7 +54,7 @@ void	pars_redirect(t_tok *token, t_pars *parser)
 	}
 	else if (ft_strncmp(token->token, "<<", 3) == 0)
 	{
-		// Heredoc
+		parser->in = here_doc(token);
 	}
 }
 
@@ -49,15 +75,14 @@ void	pars_commander(t_tok *token, t_pars *parser)
 	{
 		if (tmp->type == REDIRECT)
 		{
-			pars_redirect(token, parser);
-			break ;
+			pars_redirect(tmp, parser);
 		}
 		else
 		{
 			parser->cmd[i] = ft_strdup(tmp->token);
 			i++;
-			tmp = tmp->next;
 		}
+		tmp = tmp->next;
 	}
 
 }
