@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/31 19:01:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/04 17:42:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 
 # include <stdbool.h>
 
-# define INPUT_SIZE 4095
-
 # define SINGLE_QUOTE '\''
 # define DOUBLE_QUOTE '\"'
 
@@ -29,14 +27,9 @@
 # define STATE_DOLLAR_SIGN 3
 # define STATE_DOLLAR_SIGN_DOUBLE_QUOTE 4
 
-# define EMPTY		0
-# define CMD		1
-# define WORD		2
-# define TRUNC		3
-# define APPEND		4
-# define INPUT		5
-# define HEREDOC	6
-# define PIPE		7
+# define EMPTY		5
+# define CMD		6
+# define ARG		7
 # define REDIRECT	8
 
 typedef struct	s_parser

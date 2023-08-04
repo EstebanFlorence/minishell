@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 17:38:49 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/04 17:49:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define INPUT_SIZE 4095
+
 # define HEREPATH	"./.heredoc"
+# define FILESPATH	"./.files/"
 
 # define CLR_RMV	"\033[0m"
 # define RED		"\033[1;31m"
@@ -49,9 +52,6 @@ typedef struct	s_shell
 	bool	history;
 
 	pid_t	pid;
-
-	//t_tok	*token;
-	//t_pars	*parser;
 
 }	t_shell;
 
@@ -112,9 +112,8 @@ void		tok_lstadd_back(t_tok **token, t_tok *new);
 t_tok		*tok_lstlast(t_tok *token);
 t_tok		*tok_lstnew(t_lex *lexer, int *id);
 
-void		tok_free(t_tok *token);
 void		lex_remove(t_tok *end, t_tok *start);
-void		lex_free(t_lex *lexer);
+void		tok_free(t_tok *token);
 
 //	Parser
 void		pars_commander(t_tok *token, t_pars *parser);

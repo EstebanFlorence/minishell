@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/04 00:24:14 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/04 17:49:01 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	is_command(const char *cmd, t_shell *shell)
 	int		i;
 	char	*cmd_path;
 
-	if (ft_strlen(cmd) < 1)
-		return (0);
 	i = 0;
 	while (shell->paths[i])
 	{
@@ -36,44 +34,14 @@ int	is_command(const char *cmd, t_shell *shell)
 
 int	lex_type(const char *s, t_shell *shell)
 {
-	if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
-		ft_strncmp(s, "<", 2) == 0 || ft_strncmp(s, "<<", 3) == 0)
-	{
+	if (ft_strlen(s) < 1)
+		return (EMPTY);
+	else if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
+			ft_strncmp(s, "<", 2) == 0 || ft_strncmp(s, "<<", 3) == 0)
 		return (REDIRECT);
-	
-	}
-/* 	else if (ft_strncmp(s, ">", 2) == 0)
-	{
-		return (TRUNC);
-	
-	}
-	else if (ft_strncmp(s, ">>", 3) == 0)
-	{
-		return (APPEND);
-
-	}	
-	else if (ft_strncmp(s, "<", 2) == 0)
-	{
-		return (INPUT);
-	
-	}
-	else if (ft_strncmp(s, "<<", 3) == 0)
-	{
-		return (HEREDOC);
-	
-	} */
-/* 	else if (ft_strncmp(s, "|", 3) == 0)
-	{
-		return (PIPE);
-	
-	} */
-/* 	else if (is_command(s, shell))
-	{
+ 	else if (is_command(s, shell))
 		return (CMD);
-	} */
-	(void)shell;
-
-	return (WORD);
+	return (ARG);
 }
 
 void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
@@ -111,8 +79,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 		lex->buffer[lex->len] = '\0';
 		tok_lstadd(token, lex, id);
 	}
-	lex_free(lex);
-
+	free(lex);
 }
 
 void	lex_free_inputs(char **inputs)
@@ -127,12 +94,6 @@ void	lex_free_inputs(char **inputs)
 		i++;
 	}
 	free(inputs);
-}
-
-void	lex_free(t_lex *lexer)
-{
-
-	free(lexer);
 }
 
 void	tok_free(t_tok *token)
