@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:29:33 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 09:51:35 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	shell_exit(t_shell *shell)
 {
 	int	i;
 
+	rl_clear_history();
 	free(shell->input);
 	free(shell->prompt);
 	i = 0;
@@ -92,6 +93,8 @@ int	ft_isvalid(char *s)
 	int	i;
 
 	i = 0;
+	if (ft_strlen(s) > INPUT_SIZE)
+		return (0);
 	while (s[i])
 	{
 		if (s[i] < 32 && s[i] == 127)

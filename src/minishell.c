@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 02:24:35 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 09:10:01 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	shell_loop(t_shell *shell)
 
 		if (!ft_isvalid(shell->input))
 		{
+			add_history(shell->input);
 			shell_command(shell, &command);
 		}
 

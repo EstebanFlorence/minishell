@@ -16,3 +16,13 @@
    fun:rl_initialize
    fun:readline
 }
+
+{  
+   readline
+   Memcheck:Leak
+   ...
+   ...
+   fun:add_history
+   fun:shell_loop
+   fun:main
+}

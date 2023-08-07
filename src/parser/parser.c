@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/04 16:57:01 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:15:55 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ int	here_doc(t_tok *token)
 	char	*line;
 	int		heredoc;
 
-	tmplimiter = ft_strjoin(token->token, "\n");
+	tmplimiter = ft_strjoin(token->next->token, "\n");
 	line = get_next_line(STDIN_FILENO);
 	heredoc = open(HEREPATH, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+	if (heredoc < 0)
+		perror("heredoc");
 	while (line)
 	{
 		if (!ft_strncmp(line, tmplimiter, ft_strlen(tmplimiter) + 1))
@@ -47,21 +49,21 @@ void	pars_redirect(t_tok *token, t_pars *parser)
 	file = ft_strjoin(FILESPATH, token->next->token);
 	if (ft_strncmp(token->token, ">", 2) == 0)
 	{
-		parser->out = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+		parser->out = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 		if (parser->out < 0)
-			perror("file");
+			perror(token->next->token);
 	}
 	else if (ft_strncmp(token->token, ">>", 3) == 0)
 	{
-		parser->out = open(file, O_WRONLY | O_CREAT | O_APPEND, 0666);
+		parser->out = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		if (parser->out < 0)
-			perror("file");
+			perror(token->next->token);
 	}	
 	else if (ft_strncmp(token->token, "<", 2) == 0)
 	{
 		parser->in = open(file, O_RDONLY);
 		if (parser->in < 0)
-			perror("file");
+			perror(token->next->token);
 	}
 	else if (ft_strncmp(token->token, "<<", 3) == 0)
 	{
@@ -97,7 +99,8 @@ void	pars_commander(t_tok *token, t_pars *parser)
 		if (tmp->type == REDIRECT)
 		{
 			pars_redirect(tmp, parser);
-			tmp = tmp->next;
+			if (tmp->next)
+				tmp = tmp->next;
 		}
 		else
 		{
