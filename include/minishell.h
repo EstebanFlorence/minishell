@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/04 17:49:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 11:39:41 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/time.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <signal.h>
 
 # define INPUT_SIZE 4095
 
@@ -85,6 +86,7 @@ char		**pipe_split(const char *s, char pipe);
 void		pipe_splitta(const char *s, char pipe, char **split, size_t n);
 size_t		pipe_numstr(const char *s, char pipe);
 
+void		signal_handler(int sig);
 
 //	Lexer
 void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);

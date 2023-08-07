@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/07 09:51:35 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 10:24:38 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	ft_isvalid(char *s)
 	int	i;
 
 	i = 0;
-	if (ft_strlen(s) > INPUT_SIZE)
+	if (ft_strlen(s) < 1 || ft_strlen(s) > INPUT_SIZE)
 		return (0);
 	while (s[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 16:05:42 by adi-nata          #+#    #+#             */
-/*   Updated: 2022/10/21 00:41:38 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 11:09:45 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	unsigned char	*ss1;
 	unsigned char	*ss2;
 
+	if (!s1 || !s2)
+		return (-1);
 	ss1 = (unsigned char *)s1;
 	ss2 = (unsigned char *)s2;
 	i = 0;

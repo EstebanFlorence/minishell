@@ -6,11 +6,20 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/07 09:10:01 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/07 11:47:01 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	signal_handler(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+}
 
 void	shell_loop(t_shell *shell)
 {
@@ -18,9 +27,12 @@ void	shell_loop(t_shell *shell)
 
 	while (42)
 	{
+		signal(SIGQUIT, SIG_IGN);
+		signal(SIGINT, signal_handler);
+
 		shell->input = readline(shell->prompt);
 
-		if (!ft_strncmp(shell->input, "exit", 5))
+		if (!ft_strncmp(shell->input, "exit", 5) || shell->input == NULL)
 			shell_exit(shell);
 
 		if (!ft_isvalid(shell->input))
