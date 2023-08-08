@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/05 01:15:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/08 23:33:17 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ void	shell_command(t_shell *shell, t_pars **parser)
 {
 	shell_parser(shell, parser);
 
-	int i = 0;
+/* 	int i = 0;
 	t_pars *tmpp = *parser;
 	while (tmpp)
 	{
@@ -160,8 +160,8 @@ void	shell_command(t_shell *shell, t_pars **parser)
 		}
 		i = 0;
 		tmpp = tmpp->next;
-	}
-	pars_free(*parser);
+	} */
+	//pars_free(*parser);
 }
 
 void	pars_free(t_pars *parser)
