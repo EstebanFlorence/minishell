@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:28:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/07/15 01:52:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/10 23:56:34 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	env_freepaths(char **paths)
 }
 
 
-int	exec_check(t_shell *shell, t_pars **parser, char **env)
+int	exec_check(t_shell *shell, t_pars **command, char **env)
 {
 	int	i;
 
 	i = 0;
-	if (access((*parser)->token[i], X_OK) == 0)
+	if (access((*command)->token[i], X_OK) == 0)
 	{
 		printf ("SUCCESS :D\n");
 		return (0);
@@ -66,7 +66,7 @@ int	exec_check(t_shell *shell, t_pars **parser, char **env)
 	
 }
 
-void	ft_exec(t_shell *shell, t_pars **parser, char **env)
+void	ft_exec(t_shell *shell, t_pars **command, char **env)
 {
 	//char	*path;
 

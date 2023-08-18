@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 02:18:30 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/10 23:59:34 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ t_pars	*pars_lstnew(int id)
 	return (new);
 }
 
-t_pars	*pars_lstlast(t_pars *parser)
+t_pars	*pars_lstlast(t_pars *command)
 {
 	t_pars	*next;
 
-	if (parser != NULL)
+	if (command != NULL)
 	{
-		next = parser;
+		next = command;
 		while (1)
 		{
 			if (next->next == NULL)
@@ -47,17 +47,17 @@ t_pars	*pars_lstlast(t_pars *parser)
 	return (NULL);
 }
 
-void	pars_lstadd_back(t_pars **parser, t_pars *new)
+void	pars_lstadd_back(t_pars **command, t_pars *new)
 {
 	t_pars	*last;
 
-	if (!parser)
+	if (!command)
 		return ;
-	if (*parser == NULL)
-		*parser = new;
+	if (*command == NULL)
+		*command = new;
 	else
 	{
-		last = pars_lstlast(*parser);
+		last = pars_lstlast(*command);
 		if (last != NULL)
 		{
 			last->next = new;
@@ -66,7 +66,7 @@ void	pars_lstadd_back(t_pars **parser, t_pars *new)
 	}
 }
 
-void	pars_lstadd(t_pars **parser, int id)
+void	pars_lstadd(t_pars **command, int id)
 {
-	pars_lstadd_back(parser, pars_lstnew(id));
+	pars_lstadd_back(command, pars_lstnew(id));
 }

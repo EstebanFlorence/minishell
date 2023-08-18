@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/08 18:20:40 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/18 00:05:30 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,15 @@ typedef struct	s_shell
 	char	**env;
 	char	**paths;
 
+	int		pipe[2];
 	int		in;
 	int		out;
 	int		status;
 
+	pid_t	pid;
+
 	int		exit;
 	bool	history;
-
-	pid_t	pid;
 
 }	t_shell;
 
@@ -73,12 +74,12 @@ void		shell_env(char **env, t_shell *shell);
 void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
-void		shell_command(t_shell *shell, t_pars **parser);
-void		shell_parser(t_shell *shell, t_pars **parser);
+void		shell_command(t_shell *shell, t_pars **command);
+void		shell_parser(t_shell *shell, t_pars **command);
 
 //	Test
-void		shell_executor(t_pars **parser, t_shell *shell);
-void		execute(t_pars **parser, t_shell *shell);
+void		shell_executor(t_pars **command, t_shell *shell);
+void		execute(t_pars **command, t_shell *shell);
 
 
 //	Tools
@@ -123,16 +124,16 @@ void		lex_remove(t_tok *end, t_tok *start);
 void		tok_free(t_tok *token);
 
 //	Parser
-void		pars_commander(t_tok *token, t_pars *parser);
-void		pars_free(t_pars *parser);
+void		pars_commander(t_tok *token, t_pars *command);
+void		pars_free(t_pars *command);
 
-void		pars_redirect(t_tok *token, t_pars *parser);
+void		pars_redirect(t_tok *token, t_pars *command);
 int	 		here_doc(t_tok *token);
 
 
-void		pars_lstadd(t_pars **parser, int id);
-void		pars_lstadd_back(t_pars **parser, t_pars *new);
-t_pars		*pars_lstlast(t_pars *parser);
+void		pars_lstadd(t_pars **command, int id);
+void		pars_lstadd_back(t_pars **command, t_pars *new);
+t_pars		*pars_lstlast(t_pars *command);
 t_pars		*pars_lstnew(int id);
 
 //	Environment
@@ -140,8 +141,8 @@ void		env_freepaths(char **paths);
 
 
 //	Executer
-void		ft_exec(t_shell *shell, t_pars *parser, char **env);
-int			exec_check(t_shell *shell, t_pars **parser, char **env);
+void		ft_exec(t_shell *shell, t_pars *command, char **env);
+int			exec_check(t_shell *shell, t_pars **command, char **env);
 char		*exec_path(char *cmd, char **env);
 
 #endif

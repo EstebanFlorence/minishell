@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/08 23:32:50 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/18 13:13:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //	Iterate through the parser's commands 
 
-void	execute(t_pars **parser, t_shell *shell)
+void	execute(t_pars **command, t_shell *shell)
 {
 	int		i;
 	int		j;
@@ -23,7 +23,7 @@ void	execute(t_pars **parser, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	tmp = (*parser);
+	tmp = (*command);
 	while (tmp->cmd[i])
 	{
 		while (shell->paths[j])
@@ -43,26 +43,99 @@ void	execute(t_pars **parser, t_shell *shell)
 	}
 }
 
-void	shell_executor(t_pars **parser, t_shell *shell)
+void	shell_executor(t_pars **command, t_shell *shell)
 {
-	pid_t	pid;
 	int		status;
+	t_pars	*cmd;
 
-	pid = fork();
-	if (pid < 0)
+	cmd = *command;
+	while (cmd)
+	{
+		//	Pipe
+		if (pipe(shell->pipe) < 0)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+
+		//	Process
+		shell->pid = fork();
+		if (shell->pid < 0)
+		{
+			perror("fork");
+			exit(EXIT_FAILURE);
+		}
+		//	Child
+		if (shell->pid == 0)
+		{
+
+			if ((cmd)->prev)
+			{
+				dup2((cmd)->prev->out, STDIN_FILENO);
+				close((cmd)->prev->out);
+			}
+
+			if ((cmd)->next)
+			{
+				dup2(shell->pipe[1], STDOUT_FILENO);
+				close(shell->pipe[0]);
+				close(shell->pipe[1]);
+			}
+			printf("command in: %d	out: %d\n", (cmd)->in, (cmd)->out);
+
+			//	Handle redirection
+			if ((cmd)->in != STDIN_FILENO)
+			{
+				dup2((cmd)->in, STDIN_FILENO);
+				close((cmd)->in);
+				printf("in duppato");
+			}
+			if ((cmd)->out != STDOUT_FILENO)
+			{
+				dup2((cmd)->out, STDOUT_FILENO);
+				close((cmd)->out);
+				printf("out duppato");
+			}
+
+			execute(command, shell);
+
+		}
+		//	Father
+		else
+		{
+			if ((cmd)->prev)
+				close((cmd)->prev->out);
+			if ((cmd)->next)
+			{
+				close(shell->pipe[1]);
+				dup2(shell->pipe[0], STDIN_FILENO);
+				close(shell->pipe[0]);
+			}
+		}	
+
+		waitpid(shell->pid, &status, 0);
+
+		(cmd) = (cmd)->next;
+	}
+
+
+
+/* 	shell->pid = fork();
+	if (shell->pid < 0)
 	{
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	if (!pid)
+	if (!shell->pid)
 	{
-		execute(parser, shell);
+		execute(command, shell);
 
 	}
 	else
 	{
-		waitpid(pid, &status, 0);
-	}
+		waitpid(shell->pid, &status, 0);
+	} 
+	*/
 
 	
 }
