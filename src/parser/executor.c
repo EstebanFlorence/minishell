@@ -6,15 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/18 13:13:15 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/22 15:28:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//	Iterate through the parser's commands 
-
-void	execute(t_pars **command, t_shell *shell)
+void	execute(t_pars *command, t_shell *shell)
 {
 	int		i;
 	int		j;
@@ -23,7 +21,7 @@ void	execute(t_pars **command, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	tmp = (*command);
+	tmp = command;
 	while (tmp->cmd[i])
 	{
 		while (shell->paths[j])
@@ -43,6 +41,22 @@ void	execute(t_pars **command, t_shell *shell)
 	}
 }
 
+/* 
+	Each cmd needs a stdin (input) and returns an output (to stdout)
+   
+	 stdin				                                  stdout         
+       |                        PIPE                        ↑
+       |           |---------------------------|            |
+       ↓             |                       |              |
+      cmd1   -->    end[1]       ↔       end[0]   -->     cmd2           
+                     |                       |
+            cmd1   |---------------------------|  end[0]
+           output                             reads end[1]
+         is written                          and sends cmd1
+          to end[1]                          output to cmd2
+       (end[1] becomes                      (end[0] becomes 
+        cmd1 stdout)                           cmd2 stdin)
+ */
 void	shell_executor(t_pars **command, t_shell *shell)
 {
 	int		status;
@@ -51,11 +65,20 @@ void	shell_executor(t_pars **command, t_shell *shell)
 	cmd = *command;
 	while (cmd)
 	{
-		//	Pipe
-		if (pipe(shell->pipe) < 0)
+		if (cmd->in == -1 || cmd->out == -1)
 		{
-			perror("pipe");
-			exit(EXIT_FAILURE);
+			//cmd = cmd->next;
+			//continue ;
+			break ;
+		}
+		//	Pipe
+		if (cmd->next)
+		{
+			if (pipe(shell->pipe) < 0)
+			{
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}			
 		}
 
 		//	Process
@@ -69,74 +92,46 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		if (shell->pid == 0)
 		{
 
-			if ((cmd)->prev)
+			//	Handle redirection
+/* 			if (!cmd->next && cmd->in != STDIN_FILENO)
 			{
-				dup2((cmd)->prev->out, STDIN_FILENO);
-				close((cmd)->prev->out);
+				dup2(cmd->in, STDIN_FILENO);
+				close(cmd->in);
 			}
-
-			if ((cmd)->next)
+			if (!cmd->next && cmd->out != STDOUT_FILENO)
 			{
-				dup2(shell->pipe[1], STDOUT_FILENO);
+				dup2(cmd->out, STDOUT_FILENO);
+				close(cmd->out);
+			} */
+
+
+			if (cmd->next)
+			{
 				close(shell->pipe[0]);
+				dup2(shell->pipe[1], STDOUT_FILENO);
 				close(shell->pipe[1]);
 			}
-			printf("command in: %d	out: %d\n", (cmd)->in, (cmd)->out);
+			//else
 
-			//	Handle redirection
-			if ((cmd)->in != STDIN_FILENO)
-			{
-				dup2((cmd)->in, STDIN_FILENO);
-				close((cmd)->in);
-				printf("in duppato");
-			}
-			if ((cmd)->out != STDOUT_FILENO)
-			{
-				dup2((cmd)->out, STDOUT_FILENO);
-				close((cmd)->out);
-				printf("out duppato");
-			}
-
-			execute(command, shell);
+			execute(cmd, shell);
 
 		}
 		//	Father
 		else
 		{
-			if ((cmd)->prev)
-				close((cmd)->prev->out);
-			if ((cmd)->next)
+
+			if (cmd->next)
 			{
 				close(shell->pipe[1]);
 				dup2(shell->pipe[0], STDIN_FILENO);
 				close(shell->pipe[0]);
 			}
-		}	
+			waitpid(shell->pid, &status, 0);
 
-		waitpid(shell->pid, &status, 0);
+		}
 
-		(cmd) = (cmd)->next;
+		cmd = cmd->next;
 	}
-
-
-
-/* 	shell->pid = fork();
-	if (shell->pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (!shell->pid)
-	{
-		execute(command, shell);
-
-	}
-	else
-	{
-		waitpid(shell->pid, &status, 0);
-	} 
-	*/
-
 	
 }
 

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/10 23:59:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/22 02:12:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ t_pars	*pars_lstnew(int id)
 
 	new->id = id;
 
-	new->in = STDIN_FILENO;
-	new->out = STDOUT_FILENO;
+	new->in = dup(STDIN_FILENO);
+	new->out = dup(STDOUT_FILENO);
 
 	new->next = NULL;
 	new->prev = NULL;

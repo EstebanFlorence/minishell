@@ -17,6 +17,7 @@ size_t	pipe_numstr(const char *s, char pipe)
 	size_t	i;
 	size_t	n;
 	size_t	len;
+	char	quote;
 
 	i = 0;
 	n = 0;
@@ -31,9 +32,12 @@ size_t	pipe_numstr(const char *s, char pipe)
 		}
 		else if (s[i] == DOUBLE_QUOTE || s[i] == SINGLE_QUOTE)
 		{
+			quote = s[i];
 			i++;
-			while (s[i] && (s[i] != DOUBLE_QUOTE || s[i] != SINGLE_QUOTE))
+			while (s[i] && s[i] != quote)
 				i++;
+			if (s[i] == '\0')
+				break;
 		}
 		else
 			len++;
@@ -49,6 +53,7 @@ void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
 	size_t	i;
 	size_t	j;
 	size_t	len;
+	char	quote;
 	char	*tok;
 
 	i = 0;
@@ -68,9 +73,10 @@ void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
 		}
 		else if (s[i] == DOUBLE_QUOTE || s[i] == SINGLE_QUOTE)
 		{
+			quote = s[i];
 			i++;
 			len++;
-			while (s[i] && (s[i] != DOUBLE_QUOTE || s[i] != SINGLE_QUOTE))
+			while (s[i] && s[i] != quote)
 			{
 				i++;
 				len++;

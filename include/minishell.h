@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/18 00:05:30 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/22 12:17:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void		shell_parser(t_shell *shell, t_pars **command);
 
 //	Test
 void		shell_executor(t_pars **command, t_shell *shell);
-void		execute(t_pars **command, t_shell *shell);
+void		execute(t_pars *command, t_shell *shell);
 
 
 //	Tools
