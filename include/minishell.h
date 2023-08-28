@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/22 12:17:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/28 17:55:51 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void		pipe_splitta(const char *s, char pipe, char **split, size_t n);
 size_t		pipe_numstr(const char *s, char pipe);
 
 void		signal_handler(int sig);
+void		signal_print(int sig);
+
 
 //	Lexer
 void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);

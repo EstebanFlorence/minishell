@@ -6,11 +6,17 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/22 15:28:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/28 17:56:26 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	signal_print(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+}
 
 void	execute(t_pars *command, t_shell *shell)
 {
@@ -91,6 +97,8 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		//	Child
 		if (shell->pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 
 			//	Handle redirection
 /* 			if (!cmd->next && cmd->in != STDIN_FILENO)
@@ -119,6 +127,8 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		//	Father
 		else
 		{
+			signal(SIGINT, signal_print);
+			signal(SIGQUIT, signal_print);
 
 			if (cmd->next)
 			{
@@ -126,12 +136,13 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				dup2(shell->pipe[0], STDIN_FILENO);
 				close(shell->pipe[0]);
 			}
+			close(cmd->in);
+			close(cmd->out);
 			waitpid(shell->pid, &status, 0);
 
 		}
-
 		cmd = cmd->next;
 	}
-	
+	dup2(shell->in, STDIN_FILENO);
 }
 
