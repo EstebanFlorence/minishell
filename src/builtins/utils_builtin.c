@@ -6,7 +6,7 @@
 /*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/08/30 11:31:16 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/08/30 16:22:47 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,31 @@ int   ft_setenv(t_shell *shell, char *name, char *value)
   env = ft_realloc(env, sizeof(char *) * (i + 2));
   env[i] = ft_strjoin(ft_strjoin(name, "="), value);
   env[i + 1] = NULL;
+  return (0);
+}
+
+int   ft_unsetenv(t_shell *shell, char *name)
+{
+  int i;
+  int j;
+  char **env;
+
+  i = 0;
+  j = 0;
+  env = shell->env;
+  while (env && env[i])
+  {
+    if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
+    {
+      free(env[i]);
+      while (env[i + j])
+      {
+        env[i + j] = env[i + j + 1];
+        j++;
+      }
+      return (0);
+    }
+    i++;
+  }
   return (0);
 }
