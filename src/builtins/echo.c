@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:18:53 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/08/28 17:34:30 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/30 09:52:43 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 int     ft_echo(char **str)
 {
     int i;
-    int flag;
+    int no_newline;
 
     i = 1;
-    flag = 0;
+    no_newline = 0;
 
     if (str[1] && ft_strncmp(str[1], "-n", 2) == 0)
     {
-        flag = 1;
+        no_newline = 1;
         i++;
     }
     while (str && str[0] && str[i])
@@ -32,7 +32,7 @@ int     ft_echo(char **str)
             ft_printf(" ");
         i++;
     }
-    if (flag == 0)
+    if (no_newline == 0)
         ft_printf("\n");
     return (0);
 }
