@@ -6,13 +6,63 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:29:00 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/31 22:50:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //	When found $ in token, if expandables, modify token of the node
+
+char	*lex_expand_status(char *s, t_lex *lexer)
+{
+	int		i;
+	int		j;
+	char	*exp;
+	char	*status;
+
+	i = 0;
+	j = is_status(s);
+	status = ft_itoa(lexer->shell->status);
+	if (ft_strlen(s) > 1)
+	{
+		if (j == 0)
+		{
+			exp = ft_calloc((ft_strlen(s) + ft_strlen(status) + 1), sizeof(char));
+			while (status[i])
+			{
+				exp[i] = status[i];
+				i++;
+			}
+			i++;
+		}
+		else
+			exp = ft_calloc((ft_strlen(s) - j + 1), sizeof(char));
+		while (s[j])
+		{
+			exp[i] = s[j];
+			i++;
+			j++;
+		}
+		free(status);
+		return (exp);
+	}
+	return (status);
+}
+
+int	is_status(char *s)
+{
+	int	i;
+
+	i = 0;
+	while(s[i])
+	{
+		if (s[i] == '?')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 
 void	lex_multiexpand(t_lex *lexer)
 {
@@ -22,6 +72,7 @@ void	lex_multiexpand(t_lex *lexer)
 	char	*var;
 	char	*tmp_expanded;
 	char	*expanded;
+	char	*status;
 
 	i = 0;
 	names = ft_substr(lexer->buffer, lexer->start, lexer->len);
@@ -30,7 +81,15 @@ void	lex_multiexpand(t_lex *lexer)
 	while (expandables[i])
 	{
 		var = getenv(expandables[i]);
-		if (var != NULL)
+		if (is_status(expandables[i]) >= 0)
+		{
+			status = lex_expand_status(expandables[i], lexer);
+			tmp_expanded = expanded;
+			expanded = ft_strjoin(tmp_expanded, status);
+			free(status);
+			free(tmp_expanded);
+		}
+		else if (var != NULL)
 		{
 			tmp_expanded = expanded;
 			expanded = ft_strjoin(tmp_expanded, var);
@@ -57,29 +116,44 @@ void	lex_multiexpand(t_lex *lexer)
 
 void	lex_expand(t_lex *lexer)
 {
+	int		i;
 	char	*name;
 	char	*var;
-	int		i;
 
 	if (lexer->len == 1)
 		return ;
 	name = ft_substr(lexer->buffer, lexer->start, (lexer->len - lexer->start));
 	lex_bzero(lexer->buffer, lexer->start - 1, lexer->len);
 	lexer->len = lexer->start - 1;
-	var = getenv(name);
-	if (var == NULL)
-	{
-		free(name);
-		return ;
-	}
 	i = 0;
-	while (var[i])
+	if (is_status(name)>= 0)
 	{
-		lexer->buffer[lexer->len] = var[i];
-		lexer->len++;
-		i++;
+		var = lex_expand_status(name, lexer);
+		free(name);
+		while (var[i])
+		{
+			lexer->buffer[lexer->len] = var[i];
+			lexer->len++;
+			i++;
+		}
+		free(var);
 	}
-	free(name);
+	else
+	{
+		var = getenv(name);
+		if (var == NULL)
+		{
+			free(name);
+			return ;
+		}
+		free(name);		
+		while (var[i])
+		{
+			lexer->buffer[lexer->len] = var[i];
+			lexer->len++;
+			i++;
+		}
+	}
 }
 
 int	is_expandables(char *s)

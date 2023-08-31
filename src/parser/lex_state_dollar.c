@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 23:13:24 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/31 02:34:00 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@ void	state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id)
 		// End of variable name, append expanded value to current word
 		if (lex->len > 0)
 		{
-		//	Sequence of multiple expandable variables without spaces
-		if (numstr(lex->buffer, '$') > 1)
-		{
-			lex->buffer[lex->len] = '\0';
-			lex_multiexpand(lex);
-			lex->buffer[lex->len] = c;
-			lex->len++;
-		}
-		else
-		{
-			lex->buffer[lex->len] = '\0';
-			lex_expand(lex);
-			lex->buffer[lex->len] = c;
-			lex->len++;
-		}
-		lex->state = STATE_DOUBLE_QUOTE;
+			//	Sequence of multiple expandable variables without spaces
+			if (numstr(lex->buffer, '$') > 1)
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_multiexpand(lex);
+				lex->buffer[lex->len] = c;
+				lex->len++;
+			}
+			else
+			{
+				lex->buffer[lex->len] = '\0';
+				lex_expand(lex);
+				lex->buffer[lex->len] = c;
+				lex->len++;
+			}
+			lex->state = STATE_DOUBLE_QUOTE;
 		}
 		// Only append metachar to quoted sequence
 		else
@@ -132,7 +132,7 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 	else if (c == '\\')
 	{
 		//	Metachar -> expand variable and append char to expanded variable
-			if (lex->len > 0)
+		if (lex->len > 0)
 		{
 			if (numstr(lex->buffer, '$') > 1)
 			{

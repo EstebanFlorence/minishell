@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/28 17:55:51 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/08/31 03:00:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void		signal_print(int sig);
 //	Lexer
 void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);
 void		lex_free_inputs(char **inputs);
+void		lex_bzero(void *s, unsigned int start, int end);
 int			lex_type(const char *s, t_shell *shell);
 int			is_command(const char *cmd, t_shell *shell);
 
@@ -115,7 +116,8 @@ void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
-void		lex_bzero(void *s, unsigned int start, int end);
+char		*lex_expand_status(char *s, t_lex *lexer);
+int			is_status(char *s);
 
 void		tok_lstadd(t_tok **token, t_lex *lexer, int *id);
 void		tok_lstadd_back(t_tok **token, t_tok *new);
