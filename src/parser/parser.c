@@ -57,7 +57,7 @@ void	pars_redirect(t_tok *token, t_pars *command)
 		command->out = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		if (command->out < 0)
 			perror(token->next->token);
-	}	
+	}
 	else if (ft_strncmp(token->token, "<", 2) == 0)
 	{
 		command->in = open(file, O_RDONLY);

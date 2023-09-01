@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/04 17:49:01 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:09:34 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 			state_dollar(input[i], lex, token, id);
 		else if (lex->state == STATE_DOLLAR_SIGN_DOUBLE_QUOTE)
 			state_dollarquotes(input[i], lex, token, id);
+		else if (lex->state == STATE_REDIRECT)
+			state_redirect(input[i], lex, token, id);
 		i++;
 	}
 	if (lex->len)

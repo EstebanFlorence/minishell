@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/27 23:24:53 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/01 22:04:45 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,6 @@ void	state_normal_dollar(t_lex *lex)
 	lex->len++;
 	lex->start = lex->len;
 	lex->state = STATE_DOLLAR_SIGN;
-}
-
-void	state_normal_squote(t_lex *lex)
-{
-	// Start of single quoted sequence
-	lex->state = STATE_SINGLE_QUOTE;
-}
-
-void	state_normal_dquote(t_lex *lex)
-{
-	// Start of double quoted sequence
-	lex->state = STATE_DOUBLE_QUOTE;
 }
 
 void	state_normal_space(t_lex *lex, t_tok **token, int *id)
@@ -60,6 +48,19 @@ void	state_normal(char c, t_lex *lex, t_tok **token, int *id)
 	else if (c == '$')
 	{
 		state_normal_dollar(lex);
+	}
+	else if (c == '>' || c == '<')
+	{
+		//	Check redirection (ex. >text without spaces)
+		if (lex->len > 0)
+		{
+			lex->buffer[lex->len] = '\0';
+			tok_lstadd(token, lex, id);
+			lex->len = 0;
+		}
+		lex->buffer[lex->len] = c;
+		lex->len++;
+		lex->state = STATE_REDIRECT;
 	}
 	else
 	{

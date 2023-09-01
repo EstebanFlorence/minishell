@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 19:38:13 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/01 21:31:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,14 +105,13 @@ int			is_command(const char *cmd, t_shell *shell);
 
 void		state_normal(char c, t_lex *lex, t_tok **token, int *id);
 void		state_normal_space(t_lex *lex, t_tok **token, int *id);
-void		state_normal_dquote(t_lex *lex);
-void		state_normal_squote(t_lex *lex);
 void		state_normal_dollar(t_lex *lex);
 void		state_quotes(char c, t_lex *lex);
 void		state_quotes_double(char c, t_lex *lex);
 void		state_quotes_single(char c, t_lex *lex);
 void		state_dollar(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
+void		state_redirect(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
