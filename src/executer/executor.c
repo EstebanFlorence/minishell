@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/28 17:56:26 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/01 19:45:44 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	execute(t_pars *command, t_shell *shell)
        (end[1] becomes                      (end[0] becomes 
         cmd1 stdout)                           cmd2 stdin)
  */
+
 void	shell_executor(t_pars **command, t_shell *shell)
 {
 	int		status;
@@ -86,7 +87,6 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				exit(EXIT_FAILURE);
 			}			
 		}
-
 		//	Process
 		shell->pid = fork();
 		if (shell->pid < 0)
@@ -100,26 +100,26 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 
-			//	Handle redirection
-/* 			if (!cmd->next && cmd->in != STDIN_FILENO)
-			{
-				dup2(cmd->in, STDIN_FILENO);
-				close(cmd->in);
-			}
-			if (!cmd->next && cmd->out != STDOUT_FILENO)
-			{
-				dup2(cmd->out, STDOUT_FILENO);
-				close(cmd->out);
-			} */
-
-
 			if (cmd->next)
 			{
 				close(shell->pipe[0]);
 				dup2(shell->pipe[1], STDOUT_FILENO);
 				close(shell->pipe[1]);
 			}
-			//else
+			else
+			{
+				//	Handle redirection
+				if (cmd->in != STDIN_FILENO)
+				{
+					dup2(cmd->in, STDIN_FILENO);
+					//close(cmd->in);
+				}
+				if (cmd->out != STDOUT_FILENO)
+				{
+					dup2(cmd->out, STDOUT_FILENO);
+					//close(cmd->out);
+				}				
+			}
 
 			execute(cmd, shell);
 
@@ -144,5 +144,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);
+	dup2(shell->out, STDOUT_FILENO);
+
 }
 
