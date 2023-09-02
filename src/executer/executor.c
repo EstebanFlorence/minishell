@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 19:45:44 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/02 19:49:51 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,13 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			else
 			{
 				//	Handle redirection
-				if (cmd->in != STDIN_FILENO)
+				printf("in %i out %i\n", cmd->in, cmd->out);
+				if (cmd->in != -2)
 				{
 					dup2(cmd->in, STDIN_FILENO);
 					//close(cmd->in);
 				}
-				if (cmd->out != STDOUT_FILENO)
+				if (cmd->out != -2)
 				{
 					dup2(cmd->out, STDOUT_FILENO);
 					//close(cmd->out);
