@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/03 19:11:58 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/03 19:50:39 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ void	execute(t_pars *command, t_shell *shell)
 
 	i = 0;
 	j = 0;
+	//cmd_path = ft_strjoin(command->cmd[i], "/");
+	if (access(command->cmd[i], X_OK) == 0)
+	{
+		execve(command->cmd[i], command->cmd, shell->env);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	//free(cmd_path);
 	tmp = command;
 	while (tmp->cmd[i])
 	{
@@ -113,7 +121,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			else
 			{
 				//	Handle redirection
-				printf("in %i out %i\n", cmd->in, cmd->out);
+				//printf("in %i out %i\n", cmd->in, cmd->out);
 				if (cmd->in != -2)
 				{
 					dup2(cmd->in, STDIN_FILENO);
