@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 23:09:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/03 19:10:33 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ int	lex_type(const char *s, t_shell *shell)
 {
 	if (ft_strlen(s) < 1)
 		return (EMPTY);
-	else if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
+/* 	else if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
 			ft_strncmp(s, "<", 2) == 0 || ft_strncmp(s, "<<", 3) == 0)
-		return (REDIRECT);
+		return (REDIRECT); */
  	else if (is_command(s, shell))
 		return (CMD);
 	return (ARG);
@@ -51,6 +51,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 
 	lex = (t_lex *)ft_calloc(1, sizeof(t_lex));
 	lex->state = STATE_NORMAL;
+	lex->type = -1;
 	lex->len = 0;
 	lex->shell = shell;
 	i = 0;

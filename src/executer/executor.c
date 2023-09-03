@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/02 19:49:51 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/03 19:11:58 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,10 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				exit(EXIT_FAILURE);
 			}			
 		}
+		//	Builtin
+		
+
+
 		//	Process
 		shell->pid = fork();
 		if (shell->pid < 0)
@@ -137,8 +141,10 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				dup2(shell->pipe[0], STDIN_FILENO);
 				close(shell->pipe[0]);
 			}
-			close(cmd->in);
-			close(cmd->out);
+			if (cmd->in != -2)
+				close(cmd->in);
+			if (cmd->out != -2)
+				close(cmd->out);
 			waitpid(shell->pid, &status, 0);
 
 		}
