@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/03 19:10:33 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/03 23:37:40 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 	lex->len = 0;
 	lex->shell = shell;
 	i = 0;
-	while(input[i])
+	while(input[i] && lex->type != -2)
 	{
 		if (lex->state == STATE_NORMAL)
 			state_normal(input[i], lex, token, id);
@@ -69,7 +69,11 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 			state_redirect(input[i], lex, token, id);
 		i++;
 	}
-	if (lex->len)
+	if (lex->type == -2)
+	{
+		shell->exit = 1;
+	}
+	else if (lex->len)
 	{
 		lex->buffer[lex->len] = '\0';
 		if (lex->state == STATE_DOLLAR_SIGN)

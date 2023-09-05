@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/18 00:02:47 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/04 01:12:41 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	shell_exit(t_shell *shell)
 		free(shell->paths[i++]);
 	free(shell->paths);
 
-	exit (EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 int	ft_isvalid(char *s)

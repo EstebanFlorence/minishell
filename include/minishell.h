@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 21:31:52 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/04 10:35:49 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int			check_builtins(char *s);
 int			strchr_index(char *s, char c);
 
 char		**pipe_split(const char *s, char pipe);
-void		pipe_splitta(const char *s, char pipe, char **split, size_t n);
+void		pipe_splitter(const char *s, char pipe, char **split, size_t n);
 size_t		pipe_numstr(const char *s, char pipe);
 
 void		signal_handler(int sig);

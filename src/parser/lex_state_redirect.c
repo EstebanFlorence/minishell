@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:28:07 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/03 19:10:10 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/04 10:44:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 
 void	state_redirect(char c, t_lex *lex, t_tok **token, int *id)
 {
-	if ((c == '<' && !ft_strchr(">|$", lex->buffer[lex->len - 1]) && lex->len == 1) ||
-		(c == '>' && !ft_strchr("<|$", lex->buffer[lex->len - 1]) && lex->len == 1))
+	if ((c == '<' && lex->buffer[lex->len - 1] != '>' && lex->len == 1) ||
+		(c == '>' && lex->buffer[lex->len - 1] != '<' && lex->len == 1))
 	{
 		lex->buffer[lex->len] = c;
 		lex->len++;
 		return ;
 	}
-	if (ft_strchr("<>|$", c))
+	else if (ft_strchr("<>|$", c))
 	{
 		//	Syntax error
-		perror("syntax error near unexpected token");
+		write(STDERR_FILENO, "syntax error near unexpected token", 35);
+		ft_printf(" \"%c\"\n", c);
+		lex->type = -2;
+		return ;
 	}
 	//	End of redirect symbol
 	if (lex->len > 0)

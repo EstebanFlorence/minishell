@@ -48,7 +48,7 @@ size_t	pipe_numstr(const char *s, char pipe)
 	return (n);
 }
 
-void	pipe_splitta(const char *s, char pipe, char **split, size_t n)
+void	pipe_splitter(const char *s, char pipe, char **split, size_t n)
 {
 	size_t	i;
 	size_t	j;
@@ -96,7 +96,7 @@ char	**pipe_split(const char *s, char pipe)
 
 	n = pipe_numstr(s, pipe);
 	split = malloc(sizeof(*split) * (n + 1));
-	pipe_splitta(s,pipe, split, n);
+	pipe_splitter(s,pipe, split, n);
 	split[n] = NULL;
 	return (split);
 }

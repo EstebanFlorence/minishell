@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                           :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/10 23:56:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/04 01:32:08 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	shell_parser(t_shell *shell, t_pars **command)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
-		if (token == NULL)
+		if (token == NULL || shell->exit == 1)
 			break ;
 		pars_lstadd_back(command, pars_lstnew(i + 1));
 		pars_commander(token, pars_lstlast(*command));
@@ -141,6 +141,7 @@ void	shell_parser(t_shell *shell, t_pars **command)
 		token = NULL;
 		i++;
 	}
+	tok_free(token);
 	lex_free_inputs(inputs);
 }
 
