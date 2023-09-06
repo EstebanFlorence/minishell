@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/04 01:32:08 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/05 23:15:00 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	pars_redirect(t_tok *token, t_pars *command)
 	}
 	else if (ft_strncmp(token->token, "<", 2) == 0)
 	{
-		command->in = open(file, O_RDONLY);
+		command->in = open(token->next->token, O_RDONLY);
 		if (command->in < 0)
 			perror(token->next->token);
 	}

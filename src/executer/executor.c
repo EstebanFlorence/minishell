@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/03 19:50:39 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/06 00:55:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,12 @@ void	execute(t_pars *command, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	//cmd_path = ft_strjoin(command->cmd[i], "/");
 	if (access(command->cmd[i], X_OK) == 0)
 	{
 		execve(command->cmd[i], command->cmd, shell->env);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
-	//free(cmd_path);
 	tmp = command;
 	while (tmp->cmd[i])
 	{
@@ -53,28 +51,89 @@ void	execute(t_pars *command, t_shell *shell)
 		j = 0;
 		i++;
 	}
+	exit_status = 127;
+	shell->exit = exit_status;
 }
 
-/* 
-	Each cmd needs a stdin (input) and returns an output (to stdout)
-   
-	 stdin				                                  stdout         
-       |                        PIPE                        ↑
-       |           |---------------------------|            |
-       ↓             |                       |              |
-      cmd1   -->    end[1]       ↔       end[0]   -->     cmd2           
-                     |                       |
-            cmd1   |---------------------------|  end[0]
-           output                             reads end[1]
-         is written                          and sends cmd1
-          to end[1]                          output to cmd2
-       (end[1] becomes                      (end[0] becomes 
-        cmd1 stdout)                           cmd2 stdin)
- */
+void	parent_process(t_pars *cmd, t_shell *shell)
+{
+	int	status;
+
+	signal(SIGINT, signal_print);
+	signal(SIGQUIT, signal_print);
+
+	if (cmd->next)
+	{
+		close(shell->pipe[1]);
+		dup2(shell->pipe[0], STDIN_FILENO);
+		close(shell->pipe[0]);
+	}
+	if (cmd->in != -2)
+		close(cmd->in);
+	if (cmd->out != -2)
+		close(cmd->out);
+	waitpid(shell->pid, &status, 0);
+
+	if (WIFEXITED(status))
+	{
+		exit_status = WEXITSTATUS(status);
+		shell->exit = exit_status;
+	}
+}
+
+void	child_process(t_pars *cmd, t_shell *shell)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+
+	if (cmd->next)
+	{
+		close(shell->pipe[0]);
+		dup2(shell->pipe[1], STDOUT_FILENO);
+		close(shell->pipe[1]);
+	}
+/* 	else
+	{
+		//	Handle redirection
+		if (cmd->in != -2)
+		{
+			dup2(cmd->in, STDIN_FILENO);
+			//close(cmd->in);
+		}
+		else
+			dup2(shell->in, STDIN_FILENO);
+		if (cmd->out != -2)
+		{
+			dup2(cmd->out, STDOUT_FILENO);
+			//close(cmd->out);
+		}
+		else
+			dup2(shell->out, STDOUT_FILENO);
+	} */
+	execute(cmd, shell);
+}
+
+void	exec_process(t_pars *cmd, t_shell *shell)
+{	
+	shell->pid = fork();
+	if (shell->pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (shell->pid == 0)
+	{
+		child_process(cmd, shell);
+	}
+	else
+	{
+		parent_process(cmd, shell);
+	}
+
+}
 
 void	shell_executor(t_pars **command, t_shell *shell)
 {
-	int		status;
 	t_pars	*cmd;
 
 	cmd = *command;
@@ -86,7 +145,6 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			//continue ;
 			break ;
 		}
-		//	Pipe
 		if (cmd->next)
 		{
 			if (pipe(shell->pipe) < 0)
@@ -96,70 +154,26 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			}			
 		}
 		//	Builtin
-		
 
+		exec_process(cmd, shell);
 
-		//	Process
-		shell->pid = fork();
-		if (shell->pid < 0)
-		{
-			perror("fork");
-			exit(EXIT_FAILURE);
-		}
-		//	Child
-		if (shell->pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-
-			if (cmd->next)
-			{
-				close(shell->pipe[0]);
-				dup2(shell->pipe[1], STDOUT_FILENO);
-				close(shell->pipe[1]);
-			}
-			else
-			{
-				//	Handle redirection
-				//printf("in %i out %i\n", cmd->in, cmd->out);
-				if (cmd->in != -2)
-				{
-					dup2(cmd->in, STDIN_FILENO);
-					//close(cmd->in);
-				}
-				if (cmd->out != -2)
-				{
-					dup2(cmd->out, STDOUT_FILENO);
-					//close(cmd->out);
-				}				
-			}
-
-			execute(cmd, shell);
-
-		}
-		//	Father
-		else
-		{
-			signal(SIGINT, signal_print);
-			signal(SIGQUIT, signal_print);
-
-			if (cmd->next)
-			{
-				close(shell->pipe[1]);
-				dup2(shell->pipe[0], STDIN_FILENO);
-				close(shell->pipe[0]);
-			}
-			if (cmd->in != -2)
-				close(cmd->in);
-			if (cmd->out != -2)
-				close(cmd->out);
-			waitpid(shell->pid, &status, 0);
-
-		}
 		cmd = cmd->next;
 	}
-	dup2(shell->in, STDIN_FILENO);
-	dup2(shell->out, STDOUT_FILENO);
+	//	Handle redirection
+	if (cmd->in != -2)
+	{
+		dup2(cmd->in, STDIN_FILENO);
+		//close(cmd->in);
+	}
+	else
+		dup2(shell->in, STDIN_FILENO);
+	if (cmd->out != -2)
+	{
+		dup2(cmd->out, STDOUT_FILENO);
+		//close(cmd->out);
+	}
+	else
+		dup2(shell->out, STDOUT_FILENO);
 
 }
 

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/04 10:35:49 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/06 00:54:18 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@
 # define BLUE		"\033[1;34m"
 # define PURPLE		"\033[1;35m"
 # define CYAN		"\033[1;36m"
+
+extern int	exit_status;
 
 typedef struct	s_shell
 {
@@ -77,10 +79,12 @@ void		shell_exit(t_shell *shell);
 void		shell_command(t_shell *shell, t_pars **command);
 void		shell_parser(t_shell *shell, t_pars **command);
 
-//	Test
+//	Exec
 void		shell_executor(t_pars **command, t_shell *shell);
 void		execute(t_pars *command, t_shell *shell);
-
+void		exec_process(t_pars *cmd, t_shell *shell);
+void		child_process(t_pars *cmd, t_shell *shell);
+void		parent_process(t_pars *cmd, t_shell *shell);
 
 //	Tools
 void		ft_error(int n);
@@ -115,7 +119,7 @@ void		state_redirect(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer);
 void		lex_multiexpand(t_lex *lexer);
-char		*lex_expand_status(char *s, t_lex *lexer);
+char		*lex_expand_status(char *s);
 int			is_status(char *s);
 
 void		tok_lstadd(t_tok **token, t_lex *lexer, int *id);

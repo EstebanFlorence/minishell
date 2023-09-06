@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/31 22:50:16 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/05 22:32:06 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //	When found $ in token, if expandables, modify token of the node
 
-char	*lex_expand_status(char *s, t_lex *lexer)
+char	*lex_expand_status(char *s)
 {
 	int		i;
 	int		j;
@@ -23,7 +23,7 @@ char	*lex_expand_status(char *s, t_lex *lexer)
 
 	i = 0;
 	j = is_status(s);
-	status = ft_itoa(lexer->shell->status);
+	status = ft_itoa(exit_status);
 	if (ft_strlen(s) > 1)
 	{
 		if (j == 0)
@@ -83,7 +83,7 @@ void	lex_multiexpand(t_lex *lexer)
 		var = getenv(expandables[i]);
 		if (is_status(expandables[i]) >= 0)
 		{
-			status = lex_expand_status(expandables[i], lexer);
+			status = lex_expand_status(expandables[i]);
 			tmp_expanded = expanded;
 			expanded = ft_strjoin(tmp_expanded, status);
 			free(status);
@@ -128,7 +128,7 @@ void	lex_expand(t_lex *lexer)
 	i = 0;
 	if (is_status(name)>= 0)
 	{
-		var = lex_expand_status(name, lexer);
+		var = lex_expand_status(name);
 		free(name);
 		while (var[i])
 		{
