@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/06 17:45:40 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/06 18:59:45 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,15 @@ void	execute(t_pars *command, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	if (access(command->cmd[i], X_OK) == 0)
+	if (access(command->cmd[i], F_OK) == 0)
 	{
 		execve(command->cmd[i], command->cmd, shell->env);
-		perror("execve");
-		exit(EXIT_FAILURE);
+		perror("execve1");
+
+		exit_status = 126;
+		shell->exit = exit_status;
+		
+		exit(shell->exit);
 	}
 	tmp = command;
 	while (tmp->cmd[i])
@@ -39,11 +43,13 @@ void	execute(t_pars *command, t_shell *shell)
 		while (shell->paths[j])
 		{
 			cmd_path = ft_strjoin(shell->paths[j], tmp->cmd[i]);
-			if (access(cmd_path, X_OK) == 0)
+			if (access(cmd_path, F_OK) == 0)
 			{
 				execve(cmd_path, tmp->cmd, shell->env);
-				perror("execve");
-				exit(EXIT_FAILURE);
+				perror("execve2");
+				exit_status = 126;
+				shell->exit = exit_status;
+				exit(shell->exit);
 			}
 			free(cmd_path);
 			j++;

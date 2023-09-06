@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/05 23:15:00 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/06 19:09:39 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,18 @@ int	here_doc(t_tok *token)
 
 void	pars_redirect(t_tok *token, t_pars *command)
 {
-	char	*file;
+	//char	*file;
 
-	file = ft_strjoin(FILESPATH, token->next->token);
+	//file = ft_strjoin(FILESPATH, token->next->token);
 	if (ft_strncmp(token->token, ">", 2) == 0)
 	{
-		command->out = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+		command->out = open(token->next->token, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 		if (command->out < 0)
 			perror(token->next->token);
 	}
 	else if (ft_strncmp(token->token, ">>", 3) == 0)
 	{
-		command->out = open(file, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		command->out = open(token->next->token, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		if (command->out < 0)
 			perror(token->next->token);
 	}
@@ -68,7 +68,7 @@ void	pars_redirect(t_tok *token, t_pars *command)
 	{
 		command->in = here_doc(token);
 	}
-	free(file);
+	//free(file);
 }
 
 void	pars_commander(t_tok *token, t_pars *command)
