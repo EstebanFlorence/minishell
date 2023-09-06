@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/06 00:55:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:45:40 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	child_process(t_pars *cmd, t_shell *shell)
 		dup2(shell->pipe[1], STDOUT_FILENO);
 		close(shell->pipe[1]);
 	}
-/* 	else
+	else
 	{
 		//	Handle redirection
 		if (cmd->in != -2)
@@ -100,16 +100,16 @@ void	child_process(t_pars *cmd, t_shell *shell)
 			dup2(cmd->in, STDIN_FILENO);
 			//close(cmd->in);
 		}
-		else
-			dup2(shell->in, STDIN_FILENO);
+		//else
+		//	dup2(shell->in, STDIN_FILENO);
 		if (cmd->out != -2)
 		{
 			dup2(cmd->out, STDOUT_FILENO);
 			//close(cmd->out);
 		}
-		else
-			dup2(shell->out, STDOUT_FILENO);
-	} */
+		//else
+		//	dup2(shell->out, STDOUT_FILENO);
+	}
 	execute(cmd, shell);
 }
 
@@ -159,21 +159,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 
 		cmd = cmd->next;
 	}
-	//	Handle redirection
-	if (cmd->in != -2)
-	{
-		dup2(cmd->in, STDIN_FILENO);
-		//close(cmd->in);
-	}
-	else
-		dup2(shell->in, STDIN_FILENO);
-	if (cmd->out != -2)
-	{
-		dup2(cmd->out, STDOUT_FILENO);
-		//close(cmd->out);
-	}
-	else
-		dup2(shell->out, STDOUT_FILENO);
-
+	dup2(shell->in, STDIN_FILENO);
+	dup2(shell->out, STDOUT_FILENO);
 }
 
