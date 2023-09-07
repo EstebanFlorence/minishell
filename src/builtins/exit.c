@@ -6,7 +6,7 @@
 /*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:03:08 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/06 10:58:50 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/07 16:10:18 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,5 @@ void	ft_exit(char **str)
 	else if (i == 2)
 		exit(ft_atoi(str[1]));
 	else
-		ft_printf("exit: too many arguments\n");
+		ft_putchar_fd("exit to many arguments\n", STDERR_FILENO);
 }
