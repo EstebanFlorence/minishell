@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 19:32:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 22:11:55 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct	s_shell
 	pid_t	pid;
 
 	int		exit;
-	bool	exec;
 	bool	history;
 
 }	t_shell;

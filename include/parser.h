@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 19:35:35 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 22:13:01 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct	s_parser
 	int				in;
 	int				out;
 
-	int				status;
+	bool			exec;
 
 	struct s_parser	*next;
 	struct s_parser	*prev;

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 20:35:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 22:38:14 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	child_process(t_pars *cmd, t_shell *shell)
 		shell->exit = exit_status;
 		exit(exit_status);
 	}
-	else
+	else if (cmd->exec == true)
 		execute(cmd, shell);
 }
 
