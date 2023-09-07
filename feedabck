@@ -1,0 +1,23 @@
+exit 0
+TEST 125: KO
+    Input:        [not_existing_command]
+    Bash $?:      [127]
+    Minishell $?: [0]
+
+
+
+
+exit 127
+TEST 127: KO
+    Input:        [> not_existing_file]
+    Bash $?:      [0]
+    Minishell $?: [127]
+
+----------------------------------------------------------------------
+
+TEST 128: KO
+    Input:        [>> not_existing_file]
+    Bash $?:      [0]
+    Minishell $?: [127]
+
+

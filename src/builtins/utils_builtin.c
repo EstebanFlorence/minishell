@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/06 10:49:13 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:08:25 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	**ft_realloc(char **env, size_t size)
 	return (new);
 }
 
-int	ft_setenv(t_shell *shell, char *name, char *value)
+int	ft_setenv(char *name, char *value, t_shell *shell)
 {
 	int		i;
 	char	**env;
@@ -52,7 +52,7 @@ int	ft_setenv(t_shell *shell, char *name, char *value)
 	return (0);
 }
 
-int	ft_unsetenv(t_shell *shell, char *name)
+int	ft_unsetenv(char *name, t_shell *shell)
 {
 	int		i;
 	int		j;

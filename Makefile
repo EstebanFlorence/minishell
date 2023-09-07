@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/09/01 21:29:29 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/09/07 16:51:17 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,9 +27,12 @@ SRCS		=   ${SRC_DIR}/minishell.c\
 				${SRC_DIR}/parser/lex_state_redirect.c\
 \
 				${SRC_DIR}/executer/executor.c\
-#\
-				${SRC_DIR}/builtins/
-
+\
+				${SRC_DIR}/builtins/builtin.c			${SRC_DIR}/builtins/cd.c\
+				${SRC_DIR}/builtins/echo.c				${SRC_DIR}/builtins/env.c\
+				${SRC_DIR}/builtins/exit.c				${SRC_DIR}/builtins/export.c\
+				${SRC_DIR}/builtins/pwd.c				${SRC_DIR}/builtins/unset.c\
+				${SRC_DIR}/builtins/utils_builtin.c\
 
 
 OBJS        =	${patsubst ${SRC_DIR}/%.c,${OBJ_DIR}/%.o,${SRCS}}

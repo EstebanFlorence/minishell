@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 23:08:52 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 19:35:35 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@
 
 # define EMPTY		6
 # define CMD		7
-# define ARG		8
+# define WORD		8
 # define REDIRECT	9
 
 typedef struct	s_parser
 {
 	int				id;
-	char			**cmd;
+	char			**cmds;
 
 	int				in;
 	int				out;

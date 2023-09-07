@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:03:08 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/07 16:10:18 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:05:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_exit(char **str)
+int	ft_exit(char **str)
 {
 	int	i;
 
@@ -24,5 +24,6 @@ void	ft_exit(char **str)
 	else if (i == 2)
 		exit(ft_atoi(str[1]));
 	else
-		ft_putchar_fd("exit to many arguments\n", STDERR_FILENO);
+		write(STDERR_FILENO, "exit to many arguments\n", 24);
+	return (0);
 }

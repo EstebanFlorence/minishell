@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/05 22:40:39 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 19:43:50 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ int	is_command(const char *cmd, t_shell *shell)
 	int		i;
 	char	*cmd_path;
 
+	if (access(cmd, F_OK))
+		return (1);
 	i = 0;
 	while (shell->paths[i])
 	{
 		cmd_path = ft_strjoin(shell->paths[i], cmd);
-		if (access(cmd_path, X_OK) == 0)
+		if (access(cmd_path, F_OK) == 0)
 		{
 			free(cmd_path);
 			return (1);
@@ -36,12 +38,9 @@ int	lex_type(const char *s, t_shell *shell)
 {
 	if (ft_strlen(s) < 1)
 		return (EMPTY);
-/* 	else if (ft_strncmp(s, ">", 2) == 0 || ft_strncmp(s, ">>", 3) == 0 ||
-			ft_strncmp(s, "<", 2) == 0 || ft_strncmp(s, "<<", 3) == 0)
-		return (REDIRECT); */
  	else if (is_command(s, shell))
 		return (CMD);
-	return (ARG);
+	return (WORD);
 }
 
 void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)

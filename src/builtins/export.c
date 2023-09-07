@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 15:43:38 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/06 10:58:15 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:06:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_export(t_shell *shell, char **str)
+int	ft_export(char **str, t_shell *shell)
 {
 	int	i;
 	int	j;
@@ -31,7 +31,7 @@ int	ft_export(t_shell *shell, char **str)
 	{
 		while (str[i])
 		{
-			ft_setenv(&shell, str[i], NULL);
+			ft_setenv(str[i], NULL, shell);
 			i++;
 		}
 	}

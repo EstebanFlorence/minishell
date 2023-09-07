@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/06 18:59:45 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 20:35:48 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,29 +27,23 @@ void	execute(t_pars *command, t_shell *shell)
 
 	i = 0;
 	j = 0;
-	if (access(command->cmd[i], F_OK) == 0)
+	if (access(command->cmds[i], F_OK) == 0)
 	{
-		execve(command->cmd[i], command->cmd, shell->env);
+		execve(command->cmds[i], command->cmds, shell->env);
 		perror("execve1");
-
-		exit_status = 126;
-		shell->exit = exit_status;
-		
-		exit(shell->exit);
+		exit(126);
 	}
 	tmp = command;
-	while (tmp->cmd[i])
+	while (tmp->cmds[i])
 	{
 		while (shell->paths[j])
 		{
-			cmd_path = ft_strjoin(shell->paths[j], tmp->cmd[i]);
+			cmd_path = ft_strjoin(shell->paths[j], tmp->cmds[i]);
 			if (access(cmd_path, F_OK) == 0)
 			{
-				execve(cmd_path, tmp->cmd, shell->env);
+				execve(cmd_path, tmp->cmds, shell->env);
 				perror("execve2");
-				exit_status = 126;
-				shell->exit = exit_status;
-				exit(shell->exit);
+				exit(126);
 			}
 			free(cmd_path);
 			j++;
@@ -57,8 +51,7 @@ void	execute(t_pars *command, t_shell *shell)
 		j = 0;
 		i++;
 	}
-	exit_status = 127;
-	shell->exit = exit_status;
+	exit(127);
 }
 
 void	parent_process(t_pars *cmd, t_shell *shell)
@@ -79,7 +72,6 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	if (cmd->out != -2)
 		close(cmd->out);
 	waitpid(shell->pid, &status, 0);
-
 	if (WIFEXITED(status))
 	{
 		exit_status = WEXITSTATUS(status);
@@ -116,11 +108,18 @@ void	child_process(t_pars *cmd, t_shell *shell)
 		//else
 		//	dup2(shell->out, STDOUT_FILENO);
 	}
-	execute(cmd, shell);
+	if (is_builtin(cmd->cmds[0]))
+	{
+		exit_status = exec_builtin(cmd, shell);
+		shell->exit = exit_status;
+		exit(exit_status);
+	}
+	else
+		execute(cmd, shell);
 }
 
-void	exec_process(t_pars *cmd, t_shell *shell)
-{	
+void	exec_command(t_pars *cmd, t_shell *shell)
+{
 	shell->pid = fork();
 	if (shell->pid < 0)
 	{
@@ -151,17 +150,21 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			//continue ;
 			break ;
 		}
+/* 		if (!cmd->next && is_builtin(cmd->cmds[0]))
+		{
+			exit_status = exec_builtin(cmd, shell);
+			shell->exit = exit_status;
+			continue ;
+		} */
 		if (cmd->next)
 		{
 			if (pipe(shell->pipe) < 0)
 			{
 				perror("pipe");
 				exit(EXIT_FAILURE);
-			}			
+			}
 		}
-		//	Builtin
-
-		exec_process(cmd, shell);
+		exec_command(cmd, shell);
 
 		cmd = cmd->next;
 	}

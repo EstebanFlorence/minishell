@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/06 00:54:18 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/07 19:32:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct	s_shell
 	pid_t	pid;
 
 	int		exit;
+	bool	exec;
 	bool	history;
 
 }	t_shell;
@@ -82,7 +83,7 @@ void		shell_parser(t_shell *shell, t_pars **command);
 //	Exec
 void		shell_executor(t_pars **command, t_shell *shell);
 void		execute(t_pars *command, t_shell *shell);
-void		exec_process(t_pars *cmd, t_shell *shell);
+void		exec_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
 
@@ -131,10 +132,10 @@ void		lex_remove(t_tok *end, t_tok *start);
 void		tok_free(t_tok *token);
 
 //	Parser
-void		pars_commander(t_tok *token, t_pars *command);
+void		pars_commander(t_tok *token, t_pars *command, t_shell *shell);
 void		pars_free(t_pars *command);
 
-void		pars_redirect(t_tok *token, t_pars *command);
+void		pars_redirect(t_tok *token, t_pars *command, t_shell *shell);
 int	 		here_doc(t_tok *token);
 
 
@@ -151,5 +152,20 @@ void		env_freepaths(char **paths);
 void		ft_exec(t_shell *shell, t_pars *command, char **env);
 int			exec_check(t_shell *shell, t_pars **command, char **env);
 char		*exec_path(char *cmd, char **env);
+
+//	Builtin
+int			is_builtin(char *cmd);
+int			exec_builtin(t_pars *cmd, t_shell *shell);
+int			ft_cd(char **str, t_shell *shell);
+int			ft_echo(char **str);
+int			ft_env(t_shell *shell);
+int			ft_export(char **str, t_shell *shell);
+int			ft_pwd();
+int			ft_unset(char **str, t_shell *shell);
+int			ft_unsetenv(char *name, t_shell *shell);
+int			ft_setenv(char *name, char *value, t_shell *shell);
+char		**ft_realloc(char **env, size_t size);
+int			ft_exit(char **str);
+
 
 #endif

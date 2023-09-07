@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:09:44 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/06 10:42:23 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/07 17:04:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(char **str)
+int	ft_cd(char **str, t_shell *shell)
 {
 	char	*pwd;
 	char	*oldpwd;
@@ -27,8 +27,8 @@ int	ft_cd(char **str)
 		chdir(str[1]);
 	free(pwd);
 	pwd = getcwd(NULL, 0);
-	ft_setenv(&shell, "OLDPWD", oldpwd);
-	ft_setenv(&shell, "PWD", pwd);
+	ft_setenv("OLDPWD", oldpwd, shell);
+	ft_setenv("PWD", pwd, shell);
 	free(pwd);
 	free(oldpwd);
 	return (0);
