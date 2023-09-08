@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/05 22:32:06 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:49:26 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ char	*lex_expand_status(char *s)
 	{
 		if (j == 0)
 		{
-			exp = ft_calloc((ft_strlen(s) + ft_strlen(status) + 1), sizeof(char));
+			exp = ft_calloc((ft_strlen(s) + ft_strlen(status) + 1),
+					sizeof(char));
 			while (status[i])
 			{
 				exp[i] = status[i];
@@ -55,7 +56,7 @@ int	is_status(char *s)
 	int	i;
 
 	i = 0;
-	while(s[i])
+	while (s[i])
 	{
 		if (s[i] == '?')
 			return (i);
@@ -126,7 +127,7 @@ void	lex_expand(t_lex *lexer)
 	lex_bzero(lexer->buffer, lexer->start - 1, lexer->len);
 	lexer->len = lexer->start - 1;
 	i = 0;
-	if (is_status(name)>= 0)
+	if (is_status(name) >= 0)
 	{
 		var = lex_expand_status(name);
 		free(name);
@@ -146,7 +147,7 @@ void	lex_expand(t_lex *lexer)
 			free(name);
 			return ;
 		}
-		free(name);		
+		free(name);
 		while (var[i])
 		{
 			lexer->buffer[lexer->len] = var[i];
@@ -183,4 +184,3 @@ int	is_expandables(char *s)
 	}
 	return (-1);
 }
-

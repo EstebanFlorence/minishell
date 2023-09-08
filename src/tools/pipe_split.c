@@ -37,7 +37,7 @@ size_t	pipe_numstr(const char *s, char pipe)
 			while (s[i] && s[i] != quote)
 				i++;
 			if (s[i] == '\0')
-				break;
+				break ;
 		}
 		else
 			len++;
@@ -96,8 +96,7 @@ char	**pipe_split(const char *s, char pipe)
 
 	n = pipe_numstr(s, pipe);
 	split = malloc(sizeof(*split) * (n + 1));
-	pipe_splitter(s,pipe, split, n);
+	pipe_splitter(s, pipe, split, n);
 	split[n] = NULL;
 	return (split);
 }
-

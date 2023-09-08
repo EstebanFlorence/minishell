@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 19:44:11 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:09:55 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,10 @@ void	shell_loop(t_shell *shell)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler);
-
 		shell->exit = 0;
 		shell->input = readline(shell->prompt);
-
 		if (!ft_strncmp(shell->input, "exit", 5) || shell->input == NULL)
 			shell_exit(shell);
-
 		if (!ft_isvalid(shell->input))
 		{
 			add_history(shell->input);
@@ -50,7 +47,7 @@ void	shell_loop(t_shell *shell)
 	}
 }
 
-void		shell_env(char **env, t_shell *shell)
+void	shell_env(char **env, t_shell *shell)
 {
 	int		i;
 	char	**path_env;
@@ -82,10 +79,8 @@ void	shell_innit(t_shell *shell, char **env)
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
-
 	shell->exit = 0;
 	shell->status = 0;
-
 	user = ft_strjoin(PURPLE, getenv("USER"));
 	shell->prompt = ft_strjoin(user, "@zeShell" CLR_RMV " > ");
 	free(user);
@@ -99,12 +94,8 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	//(void)env;
-
 	ft_printf("%sWelcome %s!%s\n", GREEN, getenv("USER"), CLR_RMV);
-
 	shell_innit(&shell, env);
-
 	shell_loop(&shell);
-
 	return (0);
 }

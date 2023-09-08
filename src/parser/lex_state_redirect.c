@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_state_redirect.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:28:07 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/05 22:44:01 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:48:40 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	state_redirect(char c, t_lex *lex, t_tok **token, int *id)
 {
-	if ((c == '<' && lex->buffer[lex->len - 1] != '>' && lex->len == 1) ||
-		(c == '>' && lex->buffer[lex->len - 1] != '<' && lex->len == 1))
+	if ((c == '<' && lex->buffer[lex->len - 1] != '>' && lex->len == 1)
+		|| (c == '>' && lex->buffer[lex->len - 1] != '<' && lex->len == 1))
 	{
 		lex->buffer[lex->len] = c;
 		lex->len++;
@@ -40,7 +40,7 @@ void	state_redirect(char c, t_lex *lex, t_tok **token, int *id)
 	if (c != ' ')
 	{
 		lex->buffer[lex->len] = c;
-		lex->len++;			
+		lex->len++;
 	}
 	lex->state = STATE_NORMAL;
 }

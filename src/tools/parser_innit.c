@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_innit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 22:13:52 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:36:05 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,10 @@ t_pars	*pars_lstnew(int id)
 	new = (t_pars *)malloc(sizeof(t_pars) * 1);
 	if (new == NULL)
 		return (NULL);
-
 	new->id = id;
-
 	new->in = -2;
 	new->out = -2;
-
 	new->exec = true;
-
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);

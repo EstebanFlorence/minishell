@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 22:38:14 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:39:51 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
-
 	if (cmd->next)
 	{
 		close(shell->pipe[1]);
@@ -83,7 +82,6 @@ void	child_process(t_pars *cmd, t_shell *shell)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-
 	if (cmd->next)
 	{
 		close(shell->pipe[0]);
@@ -134,7 +132,6 @@ void	exec_command(t_pars *cmd, t_shell *shell)
 	{
 		parent_process(cmd, shell);
 	}
-
 }
 
 void	shell_executor(t_pars **command, t_shell *shell)
@@ -150,7 +147,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			//continue ;
 			break ;
 		}
-/* 		if (!cmd->next && is_builtin(cmd->cmds[0]))
+		/* 		if (!cmd->next && is_builtin(cmd->cmds[0]))
 		{
 			exit_status = exec_builtin(cmd, shell);
 			shell->exit = exit_status;
@@ -165,10 +162,8 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			}
 		}
 		exec_command(cmd, shell);
-
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);
 	dup2(shell->out, STDOUT_FILENO);
 }
-

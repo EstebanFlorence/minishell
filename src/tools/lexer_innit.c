@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_innit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/09 23:45:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/03 19:09:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:35:21 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,5 @@ void	tok_lstadd_back(t_tok **token, t_tok *new)
 
 void	tok_lstadd(t_tok **token, t_lex *lexer, int *id)
 {
-
 	tok_lstadd_back(token, tok_lstnew(lexer, id));
-	
 }

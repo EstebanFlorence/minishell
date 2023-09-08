@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 19:43:50 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:46:34 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	lex_type(const char *s, t_shell *shell)
 {
 	if (ft_strlen(s) < 1)
 		return (EMPTY);
- 	else if (is_command(s, shell))
+	else if (is_command(s, shell))
 		return (CMD);
 	return (WORD);
 }
@@ -54,11 +54,12 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 	lex->len = 0;
 	lex->shell = shell;
 	i = 0;
-	while(input[i] && lex->type != -2)
+	while (input[i] && lex->type != -2)
 	{
 		if (lex->state == STATE_NORMAL)
 			state_normal(input[i], lex, token, id);
-		else if (lex->state == STATE_DOUBLE_QUOTE || lex->state == STATE_SINGLE_QUOTE)
+		else if (lex->state == STATE_DOUBLE_QUOTE
+				|| lex->state == STATE_SINGLE_QUOTE)
 			state_quotes(input[i], lex);
 		else if (lex->state == STATE_DOLLAR_SIGN)
 			state_dollar(input[i], lex, token, id);
@@ -111,7 +112,7 @@ void	tok_free(t_tok *token)
 	{
 		tmp = token;
 		token = token->next;
-		free(tmp->token); 
+		free(tmp->token);
 		free(tmp);
 	}
 }

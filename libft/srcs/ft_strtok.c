@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 16:50:13 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/15 20:03:57 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:01:53 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ char	*ft_strtok(char *str, const char *delim)
 {
 	static char	*next = NULL;
 	char		*tok;
-	//int			i;
 
 	if (str == NULL)
 		str = next;

@@ -3,43 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 22:11:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:52:57 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "parser.h"
-# include "../libft/include/libft.h"
 # include "../libft/include/ft_printf.h"
-
-# include <stdbool.h>
-# include <sys/wait.h>
-# include <sys/time.h>
-# include <readline/readline.h>
+# include "../libft/include/libft.h"
+# include "parser.h"
 # include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
+# include <sys/time.h>
+# include <sys/wait.h>
 
 # define INPUT_SIZE 4095
 
-# define HEREPATH	"./.heredoc"
-# define FILESPATH	"./.files/"
+# define HEREPATH "./.heredoc"
+# define FILESPATH "./.files/"
 
-# define CLR_RMV	"\033[0m"
-# define RED		"\033[1;31m"
-# define GREEN		"\033[1;32m"
-# define YELLOW		"\033[1;33m"
-# define BLUE		"\033[1;34m"
-# define PURPLE		"\033[1;35m"
-# define CYAN		"\033[1;36m"
+# define CLR_RMV "\033[0m"
+# define RED "\033[1;31m"
+# define GREEN "\033[1;32m"
+# define YELLOW "\033[1;33m"
+# define BLUE "\033[1;34m"
+# define PURPLE "\033[1;35m"
+# define CYAN "\033[1;36m"
 
 extern int	exit_status;
 
-typedef struct	s_shell
+typedef struct s_shell
 {
 	char	*prompt;
 	char	*input;
@@ -57,9 +56,9 @@ typedef struct	s_shell
 	int		exit;
 	bool	history;
 
-}	t_shell;
+}			t_shell;
 
-typedef struct	s_lexer
+typedef struct s_lexer
 {
 	int		state;
 	int		type;
@@ -69,7 +68,7 @@ typedef struct	s_lexer
 
 	t_shell	*shell;
 
-}	t_lex;
+}			t_lex;
 
 void		shell_innit(t_shell *shell, char **env);
 void		shell_env(char **env, t_shell *shell);
@@ -98,7 +97,6 @@ size_t		pipe_numstr(const char *s, char pipe);
 
 void		signal_handler(int sig);
 void		signal_print(int sig);
-
 
 //	Lexer
 void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);
@@ -135,8 +133,7 @@ void		pars_commander(t_tok *token, t_pars *command, t_shell *shell);
 void		pars_free(t_pars *command);
 
 void		pars_redirect(t_tok *token, t_pars *command, t_shell *shell);
-int	 		here_doc(t_tok *token);
-
+int			here_doc(t_tok *token);
 
 void		pars_lstadd(t_pars **command, int id);
 void		pars_lstadd_back(t_pars **command, t_pars *new);
@@ -145,7 +142,6 @@ t_pars		*pars_lstnew(int id);
 
 //	Environment
 void		env_freepaths(char **paths);
-
 
 //	Executer
 void		ft_exec(t_shell *shell, t_pars *command, char **env);
@@ -165,6 +161,5 @@ int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 char		**ft_realloc(char **env, size_t size);
 int			ft_exit(char **str);
-
 
 #endif

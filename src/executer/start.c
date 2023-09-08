@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 17:28:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/08/10 23:56:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:40:53 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*exec_path(char *cmd, char **env)
 	char	*path;
 	int		i;
 	char	*tmp;
-		
+
 	i = 0;
 	while (ft_strnstr(env[i], "PATH", 5) == 0)
 		i++;
@@ -52,7 +52,6 @@ void	env_freepaths(char **paths)
 	free (paths);
 }
 
-
 int	exec_check(t_shell *shell, t_pars **command, char **env)
 {
 	int	i;
@@ -63,15 +62,11 @@ int	exec_check(t_shell *shell, t_pars **command, char **env)
 		printf ("SUCCESS :D\n");
 		return (0);
 	}
-	
 }
 
 void	ft_exec(t_shell *shell, t_pars **command, char **env)
 {
 	//char	*path;
-
 	if (exec_check(shell, parser, env))
 		printf("Error: exec_check\n");
-	
-	
 }

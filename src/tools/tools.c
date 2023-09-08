@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/04 01:12:41 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 12:37:17 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,32 +40,24 @@ void	ft_error(int n)
 	write(STDERR_FILENO, "Error:\n", 8);
 	if (n == 0)
 		write(STDERR_FILENO, "> Invalid input\n", 17);
-	
 }
 
 int	check_builtins(char *s)
 {
 	if (!ft_strncmp(s, "echo", 5))
 		return (0);
-
 	else if (!ft_strncmp(s, "cd", 3))
 		return (0);
-
 	else if (!ft_strncmp(s, "pwd", 4))
 		return (0);
-
 	else if (!ft_strncmp(s, "export", 7))
 		return (0);
-
 	else if (!ft_strncmp(s, "unset", 6))
 		return (0);
-
 	else if (!ft_strncmp(s, "env", 4))
 		return (0);
-
 	//else if (!ft_strncmp(s, "exit", 3))
-		//shell_exit()
-
+	//shell_exit()
 	return (1);
 }
 
@@ -84,7 +76,6 @@ void	shell_exit(t_shell *shell)
 	while (shell->paths[i])
 		free(shell->paths[i++]);
 	free(shell->paths);
-
 	exit(EXIT_SUCCESS);
 }
 
