@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/07 17:08:25 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:52:40 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	ft_setenv(char *name, char *value, t_shell *shell)
 {
 	int		i;
 	char	**env;
+	char	*tmp;
 
 	i = 0;
 	env = shell->env;
@@ -41,7 +42,9 @@ int	ft_setenv(char *name, char *value, t_shell *shell)
 		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
 		{
 			free(env[i]);
-			env[i] = ft_strjoin(ft_strjoin(name, "="), value);
+			tmp = ft_strjoin(name, "=");
+			env[i] = ft_strjoin(tmp, value);
+			free(tmp);
 			return (0);
 		}
 		i++;
