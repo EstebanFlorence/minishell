@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/08 15:52:40 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/09 12:44:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ char	**ft_realloc(char **env, size_t size)
 		i++;
 	}
 	new[i] = NULL;
+	i = 0;
+	while (env[i])
+		free(env[i++]);
 	free(env);
 	return (new);
 }
@@ -32,26 +35,28 @@ char	**ft_realloc(char **env, size_t size)
 int	ft_setenv(char *name, char *value, t_shell *shell)
 {
 	int		i;
-	char	**env;
 	char	*tmp;
 
 	i = 0;
-	env = shell->env;
-	while (env && env[i])
+	while (shell->env[i])
 	{
-		if (ft_strncmp(env[i], name, ft_strlen(name)) == 0)
+		if (ft_strncmp(shell->env[i], name, ft_strlen(name)) == 0)
 		{
-			free(env[i]);
+			free(shell->env[i]);
 			tmp = ft_strjoin(name, "=");
-			env[i] = ft_strjoin(tmp, value);
+			shell->env[i] = ft_strjoin(tmp, value);
 			free(tmp);
 			return (0);
 		}
 		i++;
 	}
-	env = ft_realloc(env, sizeof(char *) * (i + 2));
-	env[i] = ft_strjoin(ft_strjoin(name, "="), value);
-	env[i + 1] = NULL;
+	while (shell->env[i])
+		i++;
+	shell->env = ft_realloc(shell->env, sizeof(char *) * (i + 2));
+	tmp = ft_strjoin(name, "=");
+	shell->env[i] = ft_strjoin(tmp, value);
+	shell->env[i + 1] = NULL;
+	free(tmp);
 	return (0);
 }
 
