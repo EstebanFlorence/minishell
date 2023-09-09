@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:37:17 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/09 05:03:38 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,23 @@ int	check_builtins(char *s)
 	return (1);
 }
 
+void	shell_free(t_shell *shell)
+{
+	int	i;
+
+	rl_clear_history();
+	free(shell->input);
+	free(shell->prompt);
+	i = 0;
+	while (shell->env[i])
+		free(shell->env[i++]);
+	free(shell->env);
+	i = 0;
+	while (shell->paths[i])
+		free(shell->paths[i++]);
+	free(shell->paths);
+}
+
 void	shell_exit(t_shell *shell)
 {
 	int	i;
@@ -76,7 +93,7 @@ void	shell_exit(t_shell *shell)
 	while (shell->paths[i])
 		free(shell->paths[i++]);
 	free(shell->paths);
-	exit(EXIT_SUCCESS);
+	exit(exit_status);
 }
 
 int	ft_isvalid(char *s)

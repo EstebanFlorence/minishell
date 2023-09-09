@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:39:51 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/09 05:02:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	{
 		exit_status = exec_builtin(cmd, shell);
 		shell->exit = exit_status;
+		pars_free(cmd);
+		shell_free(shell);
 		exit(exit_status);
 	}
 	else if (cmd->exec == true)
