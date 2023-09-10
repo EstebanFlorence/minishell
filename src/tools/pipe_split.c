@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-size_t	pipe_numstr(const char *s, char pipe)
+int	pipe_numstr(const char *s, char pipe)
 {
 	size_t	i;
 	size_t	n;
@@ -24,6 +24,8 @@ size_t	pipe_numstr(const char *s, char pipe)
 	len = 0;
 	while (1)
 	{
+		if (s[i] == pipe && n == 0)
+			return (-1);
 		if (s[i] == pipe || s[i] == '\0')
 		{
 			if (len > 0)
@@ -92,10 +94,10 @@ void	pipe_splitter(const char *s, char pipe, char **split, size_t n)
 char	**pipe_split(const char *s, char pipe)
 {
 	char	**split;
-	size_t	n;
+	int		n;
 
 	n = pipe_numstr(s, pipe);
-	split = malloc(sizeof(*split) * (n + 1));
+	split = malloc(sizeof(*split) * ((size_t)n + 1));
 	pipe_splitter(s, pipe, split, n);
 	split[n] = NULL;
 	return (split);

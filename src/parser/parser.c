@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/07 22:28:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 22:25:12 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,22 @@ void	shell_parser(t_shell *shell, t_pars **command)
 {
 	t_tok		*token;
 	static int	n;
+	int			pipes;
 	int			i;
 	char		**inputs;
 
 	*command = NULL;
 	token = NULL;
-	if (pipe_numstr(shell->input, '|') > 1)
+	pipes = pipe_numstr(shell->input, '|');
+	if (pipes == -1)
+	{
+		write(STDERR_FILENO, "syntax error near unexpected token", 35);
+		ft_printf(" \"%c\"\n", '|');
+		exit_status = 1;
+		shell->exit = exit_status;
+		return ;
+	}
+	if (pipes > 1)
 		inputs = pipe_split(shell->input, '|');
 	else
 	{
