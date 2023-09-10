@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:56:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/07 17:03:36 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:12:57 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,6 @@ int	exec_builtin(t_pars *cmd, t_shell *shell)
 	if (ft_strncmp(cmd->cmds[0], "env", 4) == 0)
 		return (ft_env(shell));
 	if (ft_strncmp(cmd->cmds[0], "exit", 5) == 0)
-		return (ft_exit(cmd->cmds));
-	return (0);
+		return (ft_exit(cmd->cmds, shell, cmd));
+	return (1);
 }

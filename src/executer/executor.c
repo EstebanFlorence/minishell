@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/09 05:02:42 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:18:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	execute(t_pars *command, t_shell *shell)
 	{
 		execve(command->cmds[i], command->cmds, shell->env);
 		perror("execve1");
+		pars_free(command);
+		shell_free(shell);
 		exit(126);
 	}
 	tmp = command;
@@ -42,6 +44,8 @@ void	execute(t_pars *command, t_shell *shell)
 			if (access(cmd_path, F_OK) == 0)
 			{
 				execve(cmd_path, tmp->cmds, shell->env);
+				shell_free(shell);
+				pars_free(command);
 				perror("execve2");
 				exit(126);
 			}
@@ -51,6 +55,9 @@ void	execute(t_pars *command, t_shell *shell)
 		j = 0;
 		i++;
 	}
+	printf("Command not found: %s\n", tmp->cmds[0]);
+	pars_free(command);
+	shell_free(shell);
 	exit(127);
 }
 
@@ -88,25 +95,19 @@ void	child_process(t_pars *cmd, t_shell *shell)
 		dup2(shell->pipe[1], STDOUT_FILENO);
 		close(shell->pipe[1]);
 	}
-	else
+	if (cmd->in != -2)
 	{
-		//	Handle redirection
-		if (cmd->in != -2)
-		{
-			dup2(cmd->in, STDIN_FILENO);
-			//close(cmd->in);
-		}
-		//else
-		//	dup2(shell->in, STDIN_FILENO);
-		if (cmd->out != -2)
-		{
-			dup2(cmd->out, STDOUT_FILENO);
-			//close(cmd->out);
-		}
-		//else
-		//	dup2(shell->out, STDOUT_FILENO);
+		close(STDIN_FILENO);
+		dup2(cmd->in, STDIN_FILENO);
+		close(cmd->in);
 	}
-	if (is_builtin(cmd->cmds[0]))
+	if (cmd->out != -2)
+	{
+		close(STDOUT_FILENO);
+		dup2(cmd->out, STDOUT_FILENO);
+		close(cmd->out);
+	}
+ 	if (is_builtin(cmd->cmds[0]))
 	{
 		exit_status = exec_builtin(cmd, shell);
 		shell->exit = exit_status;
@@ -138,8 +139,10 @@ void	exec_command(t_pars *cmd, t_shell *shell)
 
 void	shell_executor(t_pars **command, t_shell *shell)
 {
+	//int		builtout;
 	t_pars	*cmd;
 
+	//builtout = -2;
 	cmd = *command;
 	while (cmd)
 	{
@@ -149,12 +152,6 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			//continue ;
 			break ;
 		}
-		/* 		if (!cmd->next && is_builtin(cmd->cmds[0]))
-		{
-			exit_status = exec_builtin(cmd, shell);
-			shell->exit = exit_status;
-			continue ;
-		} */
 		if (cmd->next)
 		{
 			if (pipe(shell->pipe) < 0)
@@ -164,6 +161,8 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			}
 		}
 		exec_command(cmd, shell);
+		if (is_builtin(cmd->cmds[0]) && strcmp(cmd->cmds[0], "echo") && strcmp(cmd->cmds[0], "pwd"))
+			exec_builtin(cmd, shell);
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);

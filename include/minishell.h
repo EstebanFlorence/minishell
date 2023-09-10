@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:52:57 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:13:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,6 @@ int			ft_unset(char **str, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 char		**ft_realloc(char **env, size_t size);
-int			ft_exit(char **str);
+int			ft_exit(char **str, t_shell *shell, t_pars *cmd);
 
 #endif
