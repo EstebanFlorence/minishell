@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:03:08 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/10 19:15:33 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:40:08 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	ft_exit(char **str, t_shell *shell, t_pars *cmd)
 {
 	int	i;
+	int	nexit;
 
 	i = 0;
 	while (str && str[i])
@@ -27,10 +28,10 @@ int	ft_exit(char **str, t_shell *shell, t_pars *cmd)
 	}
 	else if (i == 2)
 	{
-		int exitNum = ft_atoi(str[1]);
+		nexit = ft_atoi(str[1]);
 		pars_free(cmd);
 		shell_free(shell);
-		exit(exitNum);
+		exit(nexit);
 	}
 	else
 		write(STDERR_FILENO, "exit to many arguments\n", 24);

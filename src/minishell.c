@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:09:55 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:38:08 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	//(void)env;
 	ft_printf("%sWelcome %s!%s\n", GREEN, getenv("USER"), CLR_RMV);
 	shell_innit(&shell, env);
 	shell_loop(&shell);

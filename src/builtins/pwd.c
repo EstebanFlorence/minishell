@@ -3,20 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:06:55 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/08 12:53:11 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:54:42 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_pwd()
+int	ft_pwd(int n)
 {
 	char	*pwd;
 
+	(void)n;
 	pwd = getcwd(NULL, 0);
+	if (pwd == NULL)
+		return (1);
 	ft_printf("%s\n", pwd);
 	free(pwd);
 	return (0);

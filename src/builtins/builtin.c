@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:56:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/10 19:12:57 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:54:10 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	exec_builtin(t_pars *cmd, t_shell *shell)
 	if (ft_strncmp(cmd->cmds[0], "cd", 3) == 0)
 		return (ft_cd(cmd->cmds, shell));
 	if (ft_strncmp(cmd->cmds[0], "pwd", 4) == 0)
-		return (ft_pwd(cmd->cmds));
+		return (ft_pwd(0));
 	if (ft_strncmp(cmd->cmds[0], "export", 7) == 0)
 		return (ft_export(cmd->cmds, shell));
 	if (ft_strncmp(cmd->cmds[0], "unset", 6) == 0)

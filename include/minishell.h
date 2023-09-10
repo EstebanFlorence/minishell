@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/10 19:13:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 20:05:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,12 @@ void		shell_parser(t_shell *shell, t_pars **command);
 //	Exec
 void		shell_executor(t_pars **command, t_shell *shell);
 void		execute(t_pars *command, t_shell *shell);
+void		exec1(t_pars *command, t_shell *shell);
+void		exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell);
 void		exec_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
+void		check_redirect(t_pars *cmd);
 
 //	Tools
 void		ft_error(int n);
@@ -155,11 +158,11 @@ int			ft_cd(char **str, t_shell *shell);
 int			ft_echo(char **str);
 int			ft_env(t_shell *shell);
 int			ft_export(char **str, t_shell *shell);
-int			ft_pwd();
 int			ft_unset(char **str, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
-char		**ft_realloc(char **env, size_t size);
 int			ft_exit(char **str, t_shell *shell, t_pars *cmd);
+int			ft_pwd(int n);
+char		**ft_realloc(char **env, size_t size);
 
 #endif
