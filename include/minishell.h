@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/10 22:07:57 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/11 18:56:27 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,8 @@ void		state_quotes_double(char c, t_lex *lex);
 void		state_quotes_single(char c, t_lex *lex);
 void		state_dollar(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
+void		state_dollarquote_append(char c, t_lex *lex);
+void		state_dollarquote_end(t_lex *lex, t_tok **token, int *id);
 void		state_redirect(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer);

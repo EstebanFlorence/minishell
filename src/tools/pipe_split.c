@@ -50,6 +50,11 @@ int	pipe_numstr(const char *s, char pipe)
 	return (n);
 }
 
+/* void	pipe_splitter_quotes()
+{
+
+} */
+
 void	pipe_splitter(const char *s, char pipe, char **split, size_t n)
 {
 	size_t	i;
