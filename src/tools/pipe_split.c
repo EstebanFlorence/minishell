@@ -24,14 +24,14 @@ int	pipe_numstr(const char *s, char pipe)
 	len = 0;
 	while (1)
 	{
-		if (s[i] == pipe && n == 0)
-			return (-1);
 		if (s[i] == pipe || s[i] == '\0')
 		{
 			if (len > 0)
 				n++;
 			len = 0;
 		}
+		if (s[i] == pipe && n == 0)
+			return (-1);
 		else if (s[i] == DOUBLE_QUOTE || s[i] == SINGLE_QUOTE)
 		{
 			quote = s[i];

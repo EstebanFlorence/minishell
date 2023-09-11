@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/10 20:08:00 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/10 23:42:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,9 +174,10 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				exit(EXIT_FAILURE);
 			}
 		}
-		exec_command(cmd, shell);
-		if (is_builtin(cmd->cmds[0]) && strcmp(cmd->cmds[0], "echo") && strcmp(cmd->cmds[0], "pwd"))
+		if (is_builtin(cmd->cmds[0]) && ft_strncmp(cmd->cmds[0], "echo", 5) && ft_strncmp(cmd->cmds[0], "pwd", 4))
 			exec_builtin(cmd, shell);
+		else
+			exec_command(cmd, shell);
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);
