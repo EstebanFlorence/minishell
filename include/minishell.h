@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/13 00:38:17 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/14 22:10:27 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void		exec_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
 void		exec_redir(t_pars *cmd, t_shell *shell);
+void		close_redir(t_pars *cmd);
+
 
 //	Tools
 void		ft_error(int n);

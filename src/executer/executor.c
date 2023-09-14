@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 03:53:55 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/14 22:11:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,42 +72,26 @@ void	execute(t_pars *command, t_shell *shell)
 	exit(127);
 }
 
-void	parent_process(t_pars *cmd, t_shell *shell)
+void	close_redir(t_pars *cmd)
 {
-	int	status;
-
-	signal(SIGINT, signal_print);
-	signal(SIGQUIT, signal_print);
-	if (cmd->next)
-	{
-		close(shell->pipe[1]);
-		dup2(shell->pipe[0], STDIN_FILENO);
-		close(shell->pipe[0]);
-	}
-	if (cmd->in != -2)
+	if (cmd->in)
 		close(cmd->in);
-	if (cmd->out != -2)
+	if (cmd->out)
 		close(cmd->out);
-	waitpid(shell->pid, &status, 0);
-	if (WIFEXITED(status))
-	{
-		exit_status = WEXITSTATUS(status);
-		shell->exit = exit_status;
-	}
 }
 
 void	exec_redir(t_pars *cmd, t_shell *shell)
 {
 	int	i;
-	int	len;
+	int	n;
 
 	i = 0;
-	len = cmd->numred;
-	while (i < len)
+	n = cmd->numred;
+	while (i < n)
 	{
 		if (cmd->redirs[i] == OUTPUT)
 		{
-			if (cmd->out)
+			if (cmd->out != -2)
 				close(cmd->out);
 			cmd->out = open(cmd->redir_name[i], O_CREAT | O_WRONLY | O_TRUNC, 0666);
 			if (cmd->out < 0)
@@ -119,7 +103,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 		}
 		if (cmd->redirs[i] == APPEND)
 		{
-			if (cmd->out)
+			if (cmd->out != -2)
 				close(cmd->out);
 			cmd->out = open(cmd->redir_name[i], O_CREAT | O_WRONLY | O_APPEND, 0666);
 			if (cmd->out < 0)
@@ -131,7 +115,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 		}
 		if (cmd->redirs[i] == INPUT)
 		{
-			if (cmd->in)
+			if (cmd->in != -2)
 				close(cmd->in);
 			cmd->in = open(cmd->redir_name[i], O_RDONLY);
 			if (cmd->in < 0)
@@ -143,7 +127,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 		}
 		if (cmd->redirs[i] == HEREDOC)
 		{
-			if (cmd->in)
+			if (cmd->in != -2)
 				close(cmd->in);
 			//cmd->in = here_doc();
 			if (cmd->in < 0)
@@ -157,18 +141,68 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 	}
 }
 
+void	parent_process(t_pars *cmd, t_shell *shell)
+{
+	int	status;
+
+	signal(SIGINT, signal_print);
+	signal(SIGQUIT, signal_print);
+
+	if (cmd->out != -2)
+	{
+		close(cmd->out);
+	}
+	if (cmd->in != -2)
+	{
+		close(cmd->in);
+	}
+	else if (cmd->next)
+	{
+		close(shell->pipe[1]);
+		dup2(shell->pipe[0], STDIN_FILENO);
+		close(shell->pipe[0]);
+	}
+	
+	if (cmd->out != -2)
+		close(cmd->out);	
+
+
+	waitpid(shell->pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		exit_status = WEXITSTATUS(status);
+		shell->exit = exit_status;
+	}
+}
+
 void	child_process(t_pars *cmd, t_shell *shell)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-/* 	if (cmd->redirs)
+	if (cmd->numred)
 	{
 		exec_redir(cmd, shell);
-
-	} */
-	if (cmd->next)
+	}
+	if (cmd->in != -2)
 	{
+		//close(shell->pipe[1]);
 		close(shell->pipe[0]);
+		close(STDIN_FILENO);
+		dup2(cmd->in, STDIN_FILENO);
+		close(cmd->in);
+	}
+	if (cmd->out != -2)
+	{
+		//close(shell->pipe[0]);
+		close(shell->pipe[1]);
+		close(STDOUT_FILENO);
+		dup2(cmd->out, STDOUT_FILENO);
+		close(cmd->out);
+	}
+	else if (cmd->next)
+	{
+		if (cmd->in == -2)
+			close(shell->pipe[0]);
 		dup2(shell->pipe[1], STDOUT_FILENO);
 		close(shell->pipe[1]);
 	}
@@ -222,11 +256,29 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				perror("pipe");
 				exit(EXIT_FAILURE);
 			}
+			//close(shell->pipe[0]);
+			//close(shell->pipe[1]);
 		}
-		if (is_builtin(cmd->cmds[0]) && ft_strncmp(cmd->cmds[0], "echo", 5) && ft_strncmp(cmd->cmds[0], "pwd", 4))
-			exec_builtin(cmd, shell);
-		else if (cmd->exec == true)
-			exec_command(cmd, shell);
+
+		if (cmd->exec == false)
+		{
+			if (cmd->numred)
+				exec_redir(cmd, shell);
+			close_redir(cmd);
+		}
+		else
+		{
+			if (is_builtin(cmd->cmds[0]) && ft_strncmp(cmd->cmds[0], "echo", 5) && ft_strncmp(cmd->cmds[0], "pwd", 4))
+			{
+				if (cmd->numred)
+				{
+					exec_redir(cmd, shell);
+				}
+				exec_builtin(cmd, shell);
+			}
+			else
+				exec_command(cmd, shell);
+		}
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);

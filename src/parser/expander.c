@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/12 22:38:41 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/14 18:58:07 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	lex_multiexpand(t_lex *lexer, t_shell *shell)
 	expanded = ft_strdup("");
 	while (expandables[i])
 	{
-		//var = getenv(expandables[i]);
 		var = shell_getenv(expandables[i], shell);
 		if (is_status(expandables[i]) >= 0)
 		{
@@ -115,6 +114,7 @@ void	lex_multiexpand(t_lex *lexer, t_shell *shell)
 			expanded = ft_strjoin(tmp_expanded, var);
 			free(tmp_expanded);
 		}
+		free(var);
 		i++;
 	}
 	lex_bzero(lexer->buffer, lexer->start - 1, (lexer->len - lexer->start));
@@ -173,6 +173,7 @@ void	lex_expand(t_lex *lexer, t_shell *shell)
 			lexer->len++;
 			i++;
 		}
+		free(var);
 	}
 }
 
