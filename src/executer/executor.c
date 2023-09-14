@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 22:11:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/14 22:46:02 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,46 @@ void	close_redir(t_pars *cmd)
 		close(cmd->in);
 	if (cmd->out)
 		close(cmd->out);
+}
+
+void	handle_redir(t_pars *cmd, t_shell *shell)
+{
+	if (cmd->in != -2)
+	{
+		//close(shell->pipe[1]);
+		close(shell->pipe[0]);
+		close(STDIN_FILENO);
+		dup2(cmd->in, STDIN_FILENO);
+		close(cmd->in);
+	}
+	if (cmd->out != -2)
+	{
+		//close(shell->pipe[0]);
+		close(shell->pipe[1]);
+		close(STDOUT_FILENO);
+		dup2(cmd->out, STDOUT_FILENO);
+		close(cmd->out);
+	}
+}
+
+void	child_redir(t_pars *cmd, t_shell *shell)
+{
+	if (cmd->in != -2)
+	{
+		//close(shell->pipe[1]);
+		close(shell->pipe[0]);
+		close(STDIN_FILENO);
+		dup2(cmd->in, STDIN_FILENO);
+		close(cmd->in);
+	}
+	if (cmd->out != -2)
+	{
+		//close(shell->pipe[0]);
+		close(shell->pipe[1]);
+		close(STDOUT_FILENO);
+		dup2(cmd->out, STDOUT_FILENO);
+		close(cmd->out);
+	}
 }
 
 void	exec_redir(t_pars *cmd, t_shell *shell)
@@ -182,22 +222,7 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	if (cmd->numred)
 	{
 		exec_redir(cmd, shell);
-	}
-	if (cmd->in != -2)
-	{
-		//close(shell->pipe[1]);
-		close(shell->pipe[0]);
-		close(STDIN_FILENO);
-		dup2(cmd->in, STDIN_FILENO);
-		close(cmd->in);
-	}
-	if (cmd->out != -2)
-	{
-		//close(shell->pipe[0]);
-		close(shell->pipe[1]);
-		close(STDOUT_FILENO);
-		dup2(cmd->out, STDOUT_FILENO);
-		close(cmd->out);
+		child_redir(cmd, shell);
 	}
 	else if (cmd->next)
 	{
@@ -259,9 +284,13 @@ void	shell_executor(t_pars **command, t_shell *shell)
 			//close(shell->pipe[0]);
 			//close(shell->pipe[1]);
 		}
-
 		if (cmd->exec == false)
 		{
+			if (cmd->next)
+			{
+				close(shell->pipe[0]);
+				close(shell->pipe[1]);
+			}
 			if (cmd->numred)
 				exec_redir(cmd, shell);
 			close_redir(cmd);
@@ -273,8 +302,11 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				if (cmd->numred)
 				{
 					exec_redir(cmd, shell);
+					if (cmd->next)
+						handle_redir(cmd, shell);
 				}
 				exec_builtin(cmd, shell);
+				close_redir(cmd);
 			}
 			else
 				exec_command(cmd, shell);
