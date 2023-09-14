@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/11 18:56:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/13 00:38:17 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell);
 void		exec_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
-void		check_redirect(t_pars *cmd);
+void		exec_redir(t_pars *cmd, t_shell *shell);
 
 //	Tools
 void		ft_error(int n);
@@ -120,8 +120,8 @@ void		state_dollarquote_append(char c, t_lex *lex);
 void		state_dollarquote_end(t_lex *lex, t_tok **token, int *id);
 void		state_redirect(char c, t_lex *lex, t_tok **token, int *id);
 
-void		lex_expand(t_lex *lexer);
-void		lex_multiexpand(t_lex *lexer);
+void		lex_expand(t_lex *lexer, t_shell *shell);
+void		lex_multiexpand(t_lex *lexer, t_shell *shell);
 char		*lex_expand_status(char *s);
 int			is_status(char *s);
 
@@ -134,10 +134,10 @@ void		lex_remove(t_tok *end, t_tok *start);
 void		tok_free(t_tok *token);
 
 //	Parser
-void		pars_commander(t_tok *token, t_pars *command, t_shell *shell);
+void		pars_commander(t_tok *token, t_pars *command);
 void		pars_free(t_pars *command);
 
-void		pars_redirect(t_tok *token, t_pars *command, t_shell *shell);
+void		pars_redir(t_tok *token, int r, t_pars *command);
 int			here_doc(t_tok *token);
 
 void		pars_lstadd(t_pars **command, int id);

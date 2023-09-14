@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_innit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 22:16:16 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:36:05 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/13 00:55:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ t_pars	*pars_lstnew(int id)
 	new->id = id;
 	new->in = -2;
 	new->out = -2;
+	new->numred = 0;
+	new->redirs = NULL;
+	new->redir_name = NULL;
 	new->exec = true;
 	new->next = NULL;
 	new->prev = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:49:26 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/12 22:38:41 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,25 @@ int	is_status(char *s)
 	return (-1);
 }
 
-void	lex_multiexpand(t_lex *lexer)
+char	*shell_getenv(char *var, t_shell *shell)
+{
+	int		i;
+	char	*content;
+
+	i = 0;
+	while (shell->env[i])
+	{
+		if (ft_strnstr(shell->env[i], var, ft_strlen(var)))
+		{
+			content = ft_strdup(shell->env[i] + ft_strlen(var) + 1);
+			return (content);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+void	lex_multiexpand(t_lex *lexer, t_shell *shell)
 {
 	int		i;
 	char	**expandables;
@@ -81,7 +99,8 @@ void	lex_multiexpand(t_lex *lexer)
 	expanded = ft_strdup("");
 	while (expandables[i])
 	{
-		var = getenv(expandables[i]);
+		//var = getenv(expandables[i]);
+		var = shell_getenv(expandables[i], shell);
 		if (is_status(expandables[i]) >= 0)
 		{
 			status = lex_expand_status(expandables[i]);
@@ -115,7 +134,7 @@ void	lex_multiexpand(t_lex *lexer)
 	free(names);
 }
 
-void	lex_expand(t_lex *lexer)
+void	lex_expand(t_lex *lexer, t_shell *shell)
 {
 	int		i;
 	char	*name;
@@ -141,7 +160,7 @@ void	lex_expand(t_lex *lexer)
 	}
 	else
 	{
-		var = getenv(name);
+		var = shell_getenv(name, shell);
 		if (var == NULL)
 		{
 			free(name);

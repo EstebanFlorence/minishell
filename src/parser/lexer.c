@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:46:34 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/12 22:36:25 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 		if (lex->state == STATE_DOLLAR_SIGN)
 		{
 			if (numstr(lex->buffer, '$') > 1)
-				lex_multiexpand(lex);
+				lex_multiexpand(lex, lex->shell);
 			else
-				lex_expand(lex);
+				lex_expand(lex, lex->shell);
 		}
 		lex->buffer[lex->len] = '\0';
 		tok_lstadd(token, lex, id);

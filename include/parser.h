@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/08 12:27:33 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/13 00:55:30 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@
 # define WORD 8
 # define REDIRECT 9
 
+# define OUTPUT 10
+# define APPEND 11
+# define INPUT 12
+# define HEREDOC 13
+
 typedef struct s_parser
 {
 	int				id;
@@ -39,6 +44,10 @@ typedef struct s_parser
 
 	int				in;
 	int				out;
+
+	int				numred;
+	int				*redirs;
+	char			**redir_name;
 
 	bool			exec;
 

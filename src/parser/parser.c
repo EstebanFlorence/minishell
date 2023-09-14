@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/10 22:25:12 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/14 03:40:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,68 +41,88 @@ int	here_doc(t_tok *token)
 	return (-1);
 }
 
-void	pars_redirect(t_tok *token, t_pars *command, t_shell *shell)
+void	pars_redir(t_tok *token, int r, t_pars *command)
 {
 	//char	*file;
 
 	//file = ft_strjoin(FILESPATH, token->next->token);
 	if (ft_strncmp(token->token, ">", 2) == 0)
 	{
-		command->out = open(token->next->token, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-		if (command->out < 0)
+		//command->out = open(token->next->token, O_CREAT | O_WRONLY | O_TRUNC, 0666);
+		command->redirs[r] = OUTPUT;
+		command->redir_name[r] = ft_strdup(token->next->token);
+/* 		if (command->out < 0)
 		{
 			perror(token->next->token);
 			exit_status = 1;
 			shell->exit = exit_status;
-		}
+		} */
+	printf("> = %d\n", command->redirs[r]);
 	}
 	else if (ft_strncmp(token->token, ">>", 3) == 0)
 	{
-		command->out = open(token->next->token, O_CREAT | O_WRONLY | O_APPEND, 0666);
-		if (command->out < 0)
+		//command->out = open(token->next->token, O_CREAT | O_WRONLY | O_APPEND, 0666);
+		command->redirs[r] = APPEND;
+		command->redir_name[r] = ft_strdup(token->next->token);
+/* 		if (command->out < 0)
 		{
 			perror(token->next->token);
 			exit_status = 1;
 			shell->exit = exit_status;
-		}
+		} */
 	}
 	else if (ft_strncmp(token->token, "<", 2) == 0)
 	{
-		command->in = open(token->next->token, O_RDONLY);
-		if (command->in < 0)
+		//command->in = open(token->next->token, O_RDONLY);
+		command->redirs[r] = INPUT;
+		command->redir_name[r] = ft_strdup(token->next->token);
+/* 		if (command->in < 0)
 		{
 			perror(token->next->token);
 			exit_status = 1;
 			shell->exit = exit_status;
-		}
+		} */
 	}
 	else if (ft_strncmp(token->token, "<<", 3) == 0)
 	{
-		command->in = here_doc(token);
+		//command->in = here_doc(token);
+		command->redirs[r] = HEREDOC;
+		command->redir_name[r] = ft_strdup(token->next->token);
 	}
 	//free(file);
 }
 
-void	pars_commander(t_tok *token, t_pars *command, t_shell *shell)
+void	pars_commander(t_tok *token, t_pars *command)
 {
 	int		i;
 	int		n;
+	int		r;
 	t_tok	*tmp;
 
-	tmp = token;
 	n = 0;
+	r = 0;
+	tmp = token;
 	while (tmp)
 	{
 		if (tmp->type == REDIRECT)
 		{
 			if (tmp->next)
-				tmp = tmp->next;	
+			{
+				r++;
+				tmp = tmp->next;
+			}		
 		}
 		else
 			n++;
 		tmp = tmp->next;
 	}
 	command->cmds = (char **)ft_calloc(n + 1, sizeof(char *));
+	if (r)
+	{
+		command->numred = r;
+		command->redirs = (int *)ft_calloc(r, sizeof(int));
+		command->redir_name = (char **)ft_calloc(r  + 1, sizeof(char *));
+	}
 	i = 0;
 	tmp = token;
 	while (tmp)
@@ -111,9 +131,12 @@ void	pars_commander(t_tok *token, t_pars *command, t_shell *shell)
 		{
 			if (tmp->id == 1)
 				command->exec = false;
-			pars_redirect(tmp, command, shell);
 			if (tmp->next)
+			{
+				pars_redir(tmp, r, command);
+				r++;
 				tmp = tmp->next;
+			}
 		}
 		else
 		{
@@ -156,10 +179,13 @@ void	shell_parser(t_shell *shell, t_pars **command)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
-		if (token == NULL || shell->exit == 1)
-			break ;
+/* 		if (token == NULL || shell->exit == 1)
+		{
+			tok_free(token);
+			continue ;
+		} */
 		pars_lstadd_back(command, pars_lstnew(i + 1));
-		pars_commander(token, pars_lstlast(*command), shell);
+		pars_commander(token, pars_lstlast(*command));
 		tok_free(token);
 		token = NULL;
 		i++;
@@ -180,8 +206,16 @@ void	pars_free(t_pars *command)
 		command = command->next;
 		while (tmp->cmds[i])
 			free(tmp->cmds[i++]);
-		i = 0;
 		free(tmp->cmds);
+		i = 0;
+		if (tmp->redirs)
+		{
+			free(tmp->redirs);
+			while(tmp->redir_name[i])
+				free(tmp->redir_name[i++]);
+			free(tmp->redir_name);
+			i = 0;
+		}
 		free(tmp);
 	}
 }

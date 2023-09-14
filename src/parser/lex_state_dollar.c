@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 23:13:24 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/11 18:56:43 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/12 22:36:26 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	state_dollarquote_end(t_lex *lex, t_tok **token, int *id)
 		if (numstr(lex->buffer, '$') > 2)
 		{
 			lex->buffer[lex->len] = '\0';
-			lex_multiexpand(lex);
+			lex_multiexpand(lex, lex->shell);
 			tok_lstadd(token, lex, id);
 			lex->len = 0;
 		}
 		else
 		{
 			lex->buffer[lex->len] = '\0';
-			lex_expand(lex);
+			lex_expand(lex, lex->shell);
 			tok_lstadd(token, lex, id);
 			lex->len = 0;				
 		}
@@ -46,14 +46,14 @@ void	state_dollarquote_append(char c, t_lex *lex)
 		if (numstr(lex->buffer, '$') > 1)
 		{
 			lex->buffer[lex->len] = '\0';
-			lex_multiexpand(lex);
+			lex_multiexpand(lex, lex->shell);
 			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
 		else
 		{
 			lex->buffer[lex->len] = '\0';
-			lex_expand(lex);
+			lex_expand(lex, lex->shell);
 			lex->buffer[lex->len] = c;
 			lex->len++;
 		}
@@ -99,14 +99,14 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 			if (numstr(lex->buffer, '$') > 1)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_multiexpand(lex);
+				lex_multiexpand(lex, lex->shell);
 				tok_lstadd(token, lex, id);
 				lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_expand(lex);
+				lex_expand(lex, lex->shell);
 				tok_lstadd(token, lex, id);
 				lex->len = 0;				
 			}
@@ -122,14 +122,14 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 			if (numstr(lex->buffer, '$') > 2)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_multiexpand(lex);
+				lex_multiexpand(lex, lex->shell);
 				//tok_lstadd(token, lex, id);
 				//lex->len = 0;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_expand(lex);
+				lex_expand(lex, lex->shell);
 				//tok_lstadd(token, lex, id);
 				//lex->len = 0;
 			}
@@ -147,14 +147,14 @@ void	state_dollar(char c, t_lex *lex, t_tok **token, int *id)
 			if (numstr(lex->buffer, '$') > 1)
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_multiexpand(lex);
+				lex_multiexpand(lex, lex->shell);
 				lex->buffer[lex->len] = c;
 				lex->len++;
 			}
 			else
 			{
 				lex->buffer[lex->len] = '\0';
-				lex_expand(lex);
+				lex_expand(lex, lex->shell);
 				lex->buffer[lex->len] = c;
 				lex->len++;
 			}
