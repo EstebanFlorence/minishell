@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 22:10:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:57:01 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int			ft_echo(char **str);
 int			ft_env(t_shell *shell);
 int			ft_export(char **str, t_shell *shell);
 int			ft_unset(char **str, t_shell *shell);
+int			ft_setexport(char *name, char *value, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 int			ft_exit(char **str, t_shell *shell, t_pars *cmd);

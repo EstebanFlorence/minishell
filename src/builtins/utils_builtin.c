@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/09 12:44:29 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:53:07 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,33 @@ int	ft_unsetenv(char *name, t_shell *shell)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	ft_setexport(char *name, char *value, t_shell *shell)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (shell->env[i])
+	{
+		if (ft_strncmp(shell->env[i], name, ft_strlen(name)) == 0)
+		{
+			free(shell->env[i]);
+			tmp = ft_strjoin(name, NULL);
+			shell->env[i] = ft_strjoin(tmp, value);
+			free(tmp);
+			return (0);
+		}
+		i++;
+	}
+	while (shell->env[i])
+		i++;
+	shell->env = ft_realloc(shell->env, sizeof(char *) * (i + 2));
+	tmp = ft_strjoin(name, NULL);
+	shell->env[i] = ft_strjoin(tmp, value);
+	shell->env[i + 1] = NULL;
+	free(tmp);
 	return (0);
 }

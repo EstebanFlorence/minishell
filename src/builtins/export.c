@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 15:43:38 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/07 17:06:15 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 14:53:39 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_export(char **str, t_shell *shell)
 	{
 		while (str[i])
 		{
-			ft_setenv(str[i], NULL, shell);
+			ft_setexport(str[i], NULL, shell);
 			i++;
 		}
 	}
