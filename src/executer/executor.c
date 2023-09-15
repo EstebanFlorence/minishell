@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 22:46:02 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 20:40:21 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	signal_print(int sig)
 
 void	exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell)
 {
+	if (command->cmds[0] == NULL)
+		return ;
 	if (access(cmd_path, F_OK) == 0)
 	{
 		execve(cmd_path, tmp->cmds, shell->env);
@@ -32,6 +34,8 @@ void	exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell)
 
 void	exec1(t_pars *command, t_shell *shell)
 {
+	if (command->cmds[0] == NULL)
+		return ;
 	if (access(command->cmds[0], F_OK) == 0)
 	{
 		execve(command->cmds[0], command->cmds, shell->env);
@@ -65,55 +69,79 @@ void	execute(t_pars *command, t_shell *shell)
 		j = 0;
 		i++;
 	}
-	printf("Command not found: %s\n", tmp->cmds[0]);
-	//write(STDERR_FILENO, "Command not found: &s\n", 23);
+	write(STDERR_FILENO, "Command not found: ", 20);
+	if (tmp->cmds[0])
+		write(STDERR_FILENO, tmp->cmds[0], ft_strlen(tmp->cmds[0]));
+	else
+		write(STDERR_FILENO, "\'\'", 3);
+	write(STDERR_FILENO, "\n", 2);
 	pars_free(command);
 	shell_free(shell);
 	exit(127);
 }
 
+void	close_pipe(t_pars *cmd, t_shell *shell)
+{
+	if (cmd->next)
+	{
+		if (cmd->in == -2)
+		{
+			close(shell->pipe[0]);
+		}
+		if (cmd->out == -2)
+		{
+			close(shell->pipe[1]);
+		}
+	}
+}
+
 void	close_redir(t_pars *cmd)
 {
-	if (cmd->in)
+	if (cmd->in != -2)
 		close(cmd->in);
-	if (cmd->out)
+	if (cmd->out != -2)
 		close(cmd->out);
 }
 
-void	handle_redir(t_pars *cmd, t_shell *shell)
+void	handle_redir_pipe(t_pars *cmd, t_shell *shell)
 {
+/* 	if (cmd->in == -2)
+	{
+		close(shell->pipe[1]);
+		dup2(shell->pipe[0], STDOUT_FILENO);
+		close(shell->pipe[0]);
+	} */
+	//	Input redir
 	if (cmd->in != -2)
 	{
-		//close(shell->pipe[1]);
-		close(shell->pipe[0]);
-		close(STDIN_FILENO);
+		//close(shell->pipe[0]);
 		dup2(cmd->in, STDIN_FILENO);
 		close(cmd->in);
 	}
-	if (cmd->out != -2)
+	//	No output redir
+	if (cmd->out == -2)
 	{
-		//close(shell->pipe[0]);
+		dup2(shell->pipe[1], STDOUT_FILENO);
 		close(shell->pipe[1]);
-		close(STDOUT_FILENO);
+	}
+	else
+	{
+		close(shell->pipe[1]);
 		dup2(cmd->out, STDOUT_FILENO);
 		close(cmd->out);
 	}
 }
 
-void	child_redir(t_pars *cmd, t_shell *shell)
+void	handle_redir(t_pars *cmd)
 {
 	if (cmd->in != -2)
 	{
-		//close(shell->pipe[1]);
-		close(shell->pipe[0]);
 		close(STDIN_FILENO);
 		dup2(cmd->in, STDIN_FILENO);
 		close(cmd->in);
 	}
 	if (cmd->out != -2)
 	{
-		//close(shell->pipe[0]);
-		close(shell->pipe[1]);
 		close(STDOUT_FILENO);
 		dup2(cmd->out, STDOUT_FILENO);
 		close(cmd->out);
@@ -137,8 +165,8 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 			if (cmd->out < 0)
 			{
 				perror(cmd->redir_name[i]);
-				exit_status = 1;
-				shell->exit = exit_status;
+				g_exit = 1;
+				shell->exit = g_exit;
 			}
 		}
 		if (cmd->redirs[i] == APPEND)
@@ -149,8 +177,8 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 			if (cmd->out < 0)
 			{
 				perror(cmd->redir_name[i]);
-				exit_status = 1;
-				shell->exit = exit_status;
+				g_exit = 1;
+				shell->exit = g_exit;
 			}
 		}
 		if (cmd->redirs[i] == INPUT)
@@ -161,8 +189,8 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 			if (cmd->in < 0)
 			{
 				perror(cmd->redir_name[i]);
-				exit_status = 1;
-				shell->exit = exit_status;
+				g_exit = 1;
+				shell->exit = g_exit;
 			}
 		}
 		if (cmd->redirs[i] == HEREDOC)
@@ -173,8 +201,8 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 			if (cmd->in < 0)
 			{
 				perror(cmd->redir_name[i]);
-				exit_status = 1;
-				shell->exit = exit_status;
+				g_exit = 1;
+				shell->exit = g_exit;
 			}
 		}
 		i++;
@@ -188,6 +216,12 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
 
+	if (cmd->cmds[0] && cmd->next)
+	{
+		close(shell->pipe[1]);
+		dup2(shell->pipe[0], STDIN_FILENO);
+		close(shell->pipe[0]);
+	}
 	if (cmd->out != -2)
 	{
 		close(cmd->out);
@@ -196,22 +230,19 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	{
 		close(cmd->in);
 	}
-	else if (cmd->next)
-	{
-		close(shell->pipe[1]);
-		dup2(shell->pipe[0], STDIN_FILENO);
-		close(shell->pipe[0]);
-	}
+	//	Free pars if cmd not found
 	
-	if (cmd->out != -2)
-		close(cmd->out);	
-
 
 	waitpid(shell->pid, &status, 0);
 	if (WIFEXITED(status))
 	{
-		exit_status = WEXITSTATUS(status);
-		shell->exit = exit_status;
+		g_exit = WEXITSTATUS(status);
+		shell->exit = g_exit;
+	}
+	else if (WIFSIGNALED(status))
+	{
+		g_exit = WTERMSIG(status) + 128;
+		shell->exit = g_exit;
 	}
 }
 
@@ -222,22 +253,22 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	if (cmd->numred)
 	{
 		exec_redir(cmd, shell);
-		child_redir(cmd, shell);
 	}
-	else if (cmd->next)
+	if (cmd->next)
 	{
-		if (cmd->in == -2)
-			close(shell->pipe[0]);
-		dup2(shell->pipe[1], STDOUT_FILENO);
-		close(shell->pipe[1]);
+		handle_redir_pipe(cmd, shell);
+	}
+	else
+	{
+		handle_redir(cmd);
 	}
 	if (is_builtin(cmd->cmds[0]))
 	{
-		exit_status = exec_builtin(cmd, shell);
-		shell->exit = exit_status;
+		g_exit = exec_builtin(cmd, shell);
+		shell->exit = g_exit;
 		pars_free(cmd);
 		shell_free(shell);
-		exit(exit_status);
+		exit(g_exit);
 	}
 	else if (cmd->exec == true)
 		execute(cmd, shell);
@@ -268,12 +299,6 @@ void	shell_executor(t_pars **command, t_shell *shell)
 	cmd = *command;
 	while (cmd)
 	{
-		if (cmd->in == -1 || cmd->out == -1)
-		{
-			//cmd = cmd->next;
-			//continue ;
-			break ;
-		}
 		if (cmd->next)
 		{
 			if (pipe(shell->pipe) < 0)
@@ -281,36 +306,29 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				perror("pipe");
 				exit(EXIT_FAILURE);
 			}
-			//close(shell->pipe[0]);
-			//close(shell->pipe[1]);
 		}
-		if (cmd->exec == false)
+		if (is_builtin(cmd->cmds[0]))
 		{
+			if (cmd->numred)
+			{
+				exec_redir(cmd, shell);
+			}
 			if (cmd->next)
 			{
-				close(shell->pipe[0]);
-				close(shell->pipe[1]);
-			}
-			if (cmd->numred)
-				exec_redir(cmd, shell);
-			close_redir(cmd);
-		}
-		else
-		{
-			if (is_builtin(cmd->cmds[0]) && ft_strncmp(cmd->cmds[0], "echo", 5) && ft_strncmp(cmd->cmds[0], "pwd", 4))
-			{
-				if (cmd->numred)
-				{
-					exec_redir(cmd, shell);
-					if (cmd->next)
-						handle_redir(cmd, shell);
-				}
-				exec_builtin(cmd, shell);
-				close_redir(cmd);
+				handle_redir_pipe(cmd, shell);
 			}
 			else
-				exec_command(cmd, shell);
+			{
+				handle_redir(cmd);
+			}
+			exec_builtin(cmd, shell);
+			close_pipe(cmd, shell);
+			close_redir(cmd);
+			dup2(shell->in, STDIN_FILENO);
+			dup2(shell->out, STDOUT_FILENO);
 		}
+		else
+			exec_command(cmd, shell);
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);

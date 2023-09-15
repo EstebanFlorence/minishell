@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/15 14:57:01 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/15 15:24:10 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@
 # define PURPLE "\033[1;35m"
 # define CYAN "\033[1;36m"
 
-extern int	exit_status;
+extern int	g_exit;
 
 typedef struct s_shell
 {

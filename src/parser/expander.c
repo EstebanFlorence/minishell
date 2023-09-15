@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 18:58:07 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 15:24:10 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*lex_expand_status(char *s)
 
 	i = 0;
 	j = is_status(s);
-	status = ft_itoa(exit_status);
+	status = ft_itoa(g_exit);
 	if (ft_strlen(s) > 1)
 	{
 		if (j == 0)

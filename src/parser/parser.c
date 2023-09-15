@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/14 21:15:44 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 15:24:10 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ void	shell_parser(t_shell *shell, t_pars **command)
 	{
 		write(STDERR_FILENO, "syntax error near unexpected token", 35);
 		ft_printf(" \"%c\"\n", '|');
-		exit_status = 1;
-		shell->exit = exit_status;
+		g_exit = 1;
+		shell->exit = g_exit;
 		return ;
 	}
 	if (pipes > 1)

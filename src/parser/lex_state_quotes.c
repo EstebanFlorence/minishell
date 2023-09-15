@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 17:10:30 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/26 15:32:27 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/15 19:18:56 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	state_quotes_single(char c, t_lex *lex)
 void	state_quotes_double(char c, t_lex *lex)
 {
 		if (c == DOUBLE_QUOTE)
-		{
+		{			
 			// End of double quoted sequence
 			lex->state = STATE_NORMAL;
 		}
