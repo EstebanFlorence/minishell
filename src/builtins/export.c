@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 15:43:38 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/15 14:53:39 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/18 18:49:08 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	ft_export(char **str, t_shell *shell)
 	}
 	else
 	{
+		if (strchr_index(str[1], '=') == -1)
+			return (0);
 		while (str[i])
 		{
 			ft_setexport(str[i], NULL, shell);

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:56:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/18 04:15:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/18 18:33:49 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "env", 4) == 0)
 		return (1);
 	if (ft_strncmp(cmd, "exit", 5) == 0)
-		return (1);
+		return (2);
 	return (0);
 }
 
