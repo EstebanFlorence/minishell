@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/15 20:40:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/18 04:26:39 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,35 +103,6 @@ void	close_redir(t_pars *cmd)
 		close(cmd->out);
 }
 
-void	handle_redir_pipe(t_pars *cmd, t_shell *shell)
-{
-/* 	if (cmd->in == -2)
-	{
-		close(shell->pipe[1]);
-		dup2(shell->pipe[0], STDOUT_FILENO);
-		close(shell->pipe[0]);
-	} */
-	//	Input redir
-	if (cmd->in != -2)
-	{
-		//close(shell->pipe[0]);
-		dup2(cmd->in, STDIN_FILENO);
-		close(cmd->in);
-	}
-	//	No output redir
-	if (cmd->out == -2)
-	{
-		dup2(shell->pipe[1], STDOUT_FILENO);
-		close(shell->pipe[1]);
-	}
-	else
-	{
-		close(shell->pipe[1]);
-		dup2(cmd->out, STDOUT_FILENO);
-		close(cmd->out);
-	}
-}
-
 void	handle_redir(t_pars *cmd)
 {
 	if (cmd->in != -2)
@@ -216,11 +187,14 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
 
-	if (cmd->cmds[0] && cmd->next)
+	if (cmd->next)
 	{
 		close(shell->pipe[1]);
-		dup2(shell->pipe[0], STDIN_FILENO);
-		close(shell->pipe[0]);
+		if (cmd->cmds[0])
+		{
+			dup2(shell->pipe[0], STDIN_FILENO);
+			close(shell->pipe[0]);
+		}
 	}
 	if (cmd->out != -2)
 	{
@@ -256,7 +230,22 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	}
 	if (cmd->next)
 	{
-		handle_redir_pipe(cmd, shell);
+		close(shell->pipe[0]);
+		if (cmd->in != -2)
+		{
+			dup2(cmd->in, STDIN_FILENO);
+			close(cmd->in);
+		}
+		if (cmd->out != -2)
+		{
+			dup2(cmd->out, STDOUT_FILENO);
+			close(cmd->out);
+		}
+		else
+		{
+			dup2(shell->pipe[1], STDOUT_FILENO);
+			close(shell->pipe[1]);
+		}
 	}
 	else
 	{
@@ -307,25 +296,24 @@ void	shell_executor(t_pars **command, t_shell *shell)
 				exit(EXIT_FAILURE);
 			}
 		}
-		if (is_builtin(cmd->cmds[0]))
+		if (!cmd->next && is_builtin(cmd->cmds[0]) == 2)
 		{
 			if (cmd->numred)
 			{
 				exec_redir(cmd, shell);
-			}
-			if (cmd->next)
-			{
-				handle_redir_pipe(cmd, shell);
-			}
-			else
-			{
 				handle_redir(cmd);
 			}
 			exec_builtin(cmd, shell);
-			close_pipe(cmd, shell);
-			close_redir(cmd);
-			dup2(shell->in, STDIN_FILENO);
-			dup2(shell->out, STDOUT_FILENO);
+			if (cmd->out != -2)
+			{
+				close(cmd->out);
+			}
+			if (cmd->in != -2)
+			{
+				close(cmd->in);
+			}
+			//dup2(shell->in, STDIN_FILENO);
+			//dup2(shell->out, STDOUT_FILENO);
 		}
 		else
 			exec_command(cmd, shell);
