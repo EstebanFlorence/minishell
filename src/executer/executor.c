@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 18:21:54 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/18 04:26:39 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/18 18:13:13 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 				shell->exit = g_exit;
 			}
 		}
-		if (cmd->redirs[i] == APPEND)
+		else if (cmd->redirs[i] == APPEND)
 		{
 			if (cmd->out != -2)
 				close(cmd->out);
@@ -152,7 +152,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 				shell->exit = g_exit;
 			}
 		}
-		if (cmd->redirs[i] == INPUT)
+		else if (cmd->redirs[i] == INPUT)
 		{
 			if (cmd->in != -2)
 				close(cmd->in);
@@ -164,7 +164,7 @@ void	exec_redir(t_pars *cmd, t_shell *shell)
 				shell->exit = g_exit;
 			}
 		}
-		if (cmd->redirs[i] == HEREDOC)
+		else if (cmd->redirs[i] == HEREDOC)
 		{
 			if (cmd->in != -2)
 				close(cmd->in);
@@ -187,7 +187,12 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
 
-	if (cmd->next)
+	if (cmd->exec == false)
+	{
+		if (cmd->next)
+			close(shell->pipe[1]);
+	}
+	else if (cmd->next)
 	{
 		close(shell->pipe[1]);
 		if (cmd->cmds[0])
@@ -204,9 +209,6 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	{
 		close(cmd->in);
 	}
-	//	Free pars if cmd not found
-	
-
 	waitpid(shell->pid, &status, 0);
 	if (WIFEXITED(status))
 	{
@@ -228,7 +230,15 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	{
 		exec_redir(cmd, shell);
 	}
-	if (cmd->next)
+	if (cmd->exec == false)
+	{
+		close_redir(cmd);
+		if (cmd->next)
+			close(shell->pipe[0]);
+		pars_free(cmd);
+		shell_exit(shell);
+	}
+	else if (cmd->next)
 	{
 		close(shell->pipe[0]);
 		if (cmd->in != -2)

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/15 15:24:10 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/18 18:21:45 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,10 @@ void	pars_free(t_pars *command)
 	int		i;
 	t_pars	*tmp;
 
+	if (!command)
+		return ;
+	while (command->prev)
+		command = command->prev;
 	i = 0;
 	while (command)
 	{
