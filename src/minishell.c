@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/18 19:13:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/19 16:59:27 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	shell_loop(t_shell *shell)
 	{
 		signal(SIGQUIT, SIG_IGN);
 		signal(SIGINT, signal_handler);
-		shell->exit = 0;
 		shell->input = readline(shell->prompt);
 		if (!ft_strncmp(shell->input, "exit", 5) || shell->input == NULL)
 			shell_exit(shell);
@@ -39,7 +38,7 @@ void	shell_loop(t_shell *shell)
 		{
 			add_history(shell->input);
 			shell_parser(shell, &command);
-			if (shell->exit == 0)
+			if (g_exit == 0)
 				shell_executor(&command, shell);
 		}
 		pars_free(command);
@@ -79,11 +78,8 @@ void	shell_innit(t_shell *shell, char **env)
 
 	shell->in = dup(STDIN_FILENO);
 	shell->out = dup(STDOUT_FILENO);
-
 	shell->pipe[0] = -2;
 	shell->pipe[1] = -2;
-
-	shell->exit = 0;
 	shell->status = 0;
 	user = ft_strjoin(PURPLE, getenv("USER"));
 	shell->prompt = ft_strjoin(user, "@SmolShell" CLR_RMV " > ");

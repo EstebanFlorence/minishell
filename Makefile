@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/09/07 16:51:17 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/09/19 22:55:27 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,10 +23,14 @@ SRCS		=   ${SRC_DIR}/minishell.c\
 \
 				${SRC_DIR}/parser/lexer.c				${SRC_DIR}/parser/parser.c\
 				${SRC_DIR}/parser/lex_state_normal.c	${SRC_DIR}/parser/lex_state_quotes.c\
-				${SRC_DIR}/parser/lex_state_dollar.c	${SRC_DIR}/parser/expander.c\
-				${SRC_DIR}/parser/lex_state_redirect.c\
+				${SRC_DIR}/parser/lex_state_dollar.c	${SRC_DIR}/parser/lex_state_dollarquotes.c\
+				${SRC_DIR}/parser/expander.c			${SRC_DIR}/parser/lex_state_redirect.c\
+				${SRC_DIR}/parser/lex_tools.c			${SRC_DIR}/parser/expand_tools.c\
 \
-				${SRC_DIR}/executer/executor.c\
+				${SRC_DIR}/redirect/redirect.c			${SRC_DIR}/redirect/redir_open.c\
+				${SRC_DIR}/redirect/redir_tools.c\
+\
+				${SRC_DIR}/executer/execute.c			${SRC_DIR}/executer/exec_tools.c\
 \
 				${SRC_DIR}/builtins/builtin.c			${SRC_DIR}/builtins/cd.c\
 				${SRC_DIR}/builtins/echo.c				${SRC_DIR}/builtins/env.c\

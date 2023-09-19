@@ -6,68 +6,44 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/18 18:21:45 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:38:58 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	here_doc(t_tok *token)
+void	commander_alloc(t_tok *token, t_pars *command)
 {
-	char	*tmplimiter;
-	char	*line;
-	int		heredoc;
+	int		n;
+	int		r;
 
-	tmplimiter = ft_strjoin(token->next->token, "\n");
-	line = get_next_line(STDIN_FILENO);
-	heredoc = open(HEREPATH, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (heredoc < 0)
-		perror("heredoc");
-	while (line)
+	n = 0;
+	r = 0;
+	while (token)
 	{
-		if (!ft_strncmp(line, tmplimiter, ft_strlen(tmplimiter) + 1))
+		if (token->type == REDIRECT)
 		{
-			close(heredoc);
-			free(tmplimiter);
-			free(line);
-			get_next_line(-42);
-			heredoc = open(HEREPATH, O_RDONLY, 0666);
-			return (heredoc);
+			if (token->next)
+			{
+				r++;
+				token = token->next;
+			}
 		}
-		ft_putstr_fd(line, heredoc);
-		free(line);
-		line = get_next_line(STDIN_FILENO);
+		else
+			n++;
+		token = token->next;
 	}
-	return (-1);
-}
-
-void	pars_redir(t_tok *token, int r, t_pars *command)
-{
-	if (ft_strncmp(token->token, ">", 2) == 0)
+	command->cmds = (char **)ft_calloc(n + 1, sizeof(char *));
+	if (r)
 	{
-		command->redirs[r] = OUTPUT;
-		command->redir_name[r] = ft_strdup(token->next->token);
-	}
-	else if (ft_strncmp(token->token, ">>", 3) == 0)
-	{
-		command->redirs[r] = APPEND;
-		command->redir_name[r] = ft_strdup(token->next->token);
-	}
-	else if (ft_strncmp(token->token, "<", 2) == 0)
-	{
-		command->redirs[r] = INPUT;
-		command->redir_name[r] = ft_strdup(token->next->token);
-	}
-	else if (ft_strncmp(token->token, "<<", 3) == 0)
-	{
-		command->redirs[r] = HEREDOC;
-		command->redir_name[r] = ft_strdup(token->next->token);
+		command->numred = r;
+		command->redirs = (int *)ft_calloc(r, sizeof(int));
+		command->redir_name = (char **)ft_calloc(r + 1, sizeof(char *));
 	}
 }
 
 void	pars_commander(t_tok *token, t_pars *command)
 {
-	int		i;
 	int		n;
 	int		r;
 	t_tok	*tmp;
@@ -75,29 +51,7 @@ void	pars_commander(t_tok *token, t_pars *command)
 	n = 0;
 	r = 0;
 	tmp = token;
-	while (tmp)
-	{
-		if (tmp->type == REDIRECT)
-		{
-			if (tmp->next)
-			{
-				r++;
-				tmp = tmp->next;
-			}		
-		}
-		else
-			n++;
-		tmp = tmp->next;
-	}
-	command->cmds = (char **)ft_calloc(n + 1, sizeof(char *));
-	if (r)
-	{
-		command->numred = r;
-		command->redirs = (int *)ft_calloc(r, sizeof(int));
-		command->redir_name = (char **)ft_calloc(r  + 1, sizeof(char *));
-	}
-	i = 0;
-	r = 0;
+	commander_alloc(tmp, command);
 	tmp = token;
 	while (tmp)
 	{
@@ -114,31 +68,24 @@ void	pars_commander(t_tok *token, t_pars *command)
 		}
 		else
 		{
-			command->cmds[i] = ft_strdup(tmp->token);
-			i++;
+			command->cmds[n] = ft_strdup(tmp->token);
+			n++;
 		}
 		tmp = tmp->next;
 	}
 }
 
-void	shell_parser(t_shell *shell, t_pars **command)
+char	**input_split(t_shell *shell)
 {
-	t_tok		*token;
-	static int	n;
-	int			pipes;
-	int			i;
-	char		**inputs;
+	int		pipes;
+	char	**inputs;
 
-	*command = NULL;
-	token = NULL;
 	pipes = pipe_numstr(shell->input, '|');
 	if (pipes == -1)
 	{
-		write(STDERR_FILENO, "syntax error near unexpected token", 35);
-		ft_printf(" \"%c\"\n", '|');
+		write(STDERR_FILENO, "syntax error near unexpected token: \"|\"\n", 41);
 		g_exit = 1;
-		shell->exit = g_exit;
-		return ;
+		return (NULL);
 	}
 	if (pipes > 1)
 		inputs = pipe_split(shell->input, '|');
@@ -148,16 +95,24 @@ void	shell_parser(t_shell *shell, t_pars **command)
 		inputs[0] = ft_strdup(shell->input);
 		inputs[1] = NULL;
 	}
+	return (inputs);
+}
+
+void	shell_parser(t_shell *shell, t_pars **command)
+{
+	t_tok		*token;
+	static int	n;
+	int			i;
+	char		**inputs;
+
+	*command = NULL;
+	token = NULL;
 	n = 0;
 	i = 0;
+	inputs = input_split(shell);
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
-/* 		if (token == NULL || shell->exit == 1)
-		{
-			tok_free(token);
-			continue ;
-		} */
 		pars_lstadd_back(command, pars_lstnew(i + 1));
 		pars_commander(token, pars_lstlast(*command));
 		tok_free(token);
@@ -189,7 +144,7 @@ void	pars_free(t_pars *command)
 		if (tmp->redirs)
 		{
 			free(tmp->redirs);
-			while(tmp->redir_name[i])
+			while (tmp->redir_name[i])
 				free(tmp->redir_name[i++]);
 			free(tmp->redir_name);
 			i = 0;

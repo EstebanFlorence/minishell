@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:33:21 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/01 22:04:45 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/19 19:37:16 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	state_normal_dollar(t_lex *lex)
 
 void	state_normal_space(t_lex *lex, t_tok **token, int *id)
 {
-	// End of word
 	if (lex->len > 0)
 	{
 		lex->buffer[lex->len] = '\0';
@@ -51,21 +50,15 @@ void	state_normal(char c, t_lex *lex, t_tok **token, int *id)
 	}
 	else if (c == '>' || c == '<')
 	{
-		//	Check redirection (ex. >text without spaces)
 		if (lex->len > 0)
 		{
 			lex->buffer[lex->len] = '\0';
 			tok_lstadd(token, lex, id);
 			lex->len = 0;
 		}
-		lex->buffer[lex->len] = c;
-		lex->len++;
+		lex_append(c, lex);
 		lex->state = STATE_REDIRECT;
 	}
 	else
-	{
-		// Append char to current word
-		lex->buffer[lex->len] = c;
-		lex->len++;
-	}		
+		lex_append(c, lex);
 }

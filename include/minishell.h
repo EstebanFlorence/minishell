@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 13:04:29 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/19 23:07:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,22 @@ void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
 void		shell_command(t_shell *shell, t_pars **command);
 void		shell_parser(t_shell *shell, t_pars **command);
+char		*shell_getenv(char *var, t_shell *shell);
 
 //	Exec
 void		shell_executor(t_pars **command, t_shell *shell);
-void		execute(t_pars *command, t_shell *shell);
+void		execvshell(t_pars *command, t_shell *shell);
 void		exec1(t_pars *command, t_shell *shell);
 void		exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell);
 void		exec_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
-void		exec_redir(t_pars *cmd, t_shell *shell);
+void		exec_redir(t_pars *cmd);
 void		close_redir(t_pars *cmd);
+void		exec_builtin_main(t_pars *cmd, t_shell *shell);
+void		exec_builtin_fork(t_pars *cmd, t_shell *shell);
+void		handle_redir(t_pars *cmd);
+void		handle_piperedir(t_pars *cmd, t_shell *shell);
 
 //	Tools
 void		ft_error(int n);
@@ -104,6 +109,7 @@ void		signal_print(int sig);
 
 //	Lexer
 void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);
+void		lex_tokenizer_end(t_lex *lex, t_tok **token, int *id);
 void		lex_free_inputs(char **inputs);
 void		lex_bzero(void *s, unsigned int start, int end);
 int			lex_type(const char *s, t_shell *shell);
@@ -116,14 +122,24 @@ void		state_quotes(char c, t_lex *lex);
 void		state_quotes_double(char c, t_lex *lex);
 void		state_quotes_single(char c, t_lex *lex);
 void		state_dollar(char c, t_lex *lex, t_tok **token, int *id);
+void		state_dollar_end(t_lex *lex, t_tok **token, int *id);
 void		state_dollarquotes(char c, t_lex *lex, t_tok **token, int *id);
 void		state_dollarquote_append(char c, t_lex *lex);
 void		state_dollarquote_end(t_lex *lex, t_tok **token, int *id);
+void		state_dollar_exp(char c, t_lex *lex);
+void		state_dollar_append(char c, t_lex *lex);
 void		state_redirect(char c, t_lex *lex, t_tok **token, int *id);
 
 void		lex_expand(t_lex *lexer, t_shell *shell);
+void		lex_expand_status(char *name, t_lex *lexer);
+void		lex_expand_var(char *name, t_lex *lexer, t_shell *shell);
 void		lex_multiexpand(t_lex *lexer, t_shell *shell);
-char		*lex_expand_status(char *s);
+void		lex_multiexpand_status(int i, t_exp *exp);
+void		lex_multiexpand_var(t_exp *exp);
+void		lex_multiexpand_putvar(t_exp *exp, t_lex *lexer);
+void		lex_expand_free(t_exp *exp);
+
+char		*exp_status(char *var);
 int			is_status(char *s);
 
 void		tok_lstadd(t_tok **token, t_lex *lexer, int *id);
@@ -134,20 +150,25 @@ t_tok		*tok_lstnew(t_lex *lexer, int *id);
 void		lex_remove(t_tok *end, t_tok *start);
 void		tok_free(t_tok *token);
 
+void		lex_append(char c, t_lex *lex);
+
 //	Parser
+char		**input_split(t_shell *shell);
 void		pars_commander(t_tok *token, t_pars *command);
 void		pars_free(t_pars *command);
-
-void		pars_redir(t_tok *token, int r, t_pars *command);
-int			here_doc(t_tok *token);
 
 void		pars_lstadd(t_pars **command, int id);
 void		pars_lstadd_back(t_pars **command, t_pars *new);
 t_pars		*pars_lstlast(t_pars *command);
 t_pars		*pars_lstnew(int id);
 
-//	Environment
-void		env_freepaths(char **paths);
+//	Redirect
+void		pars_redir(t_tok *token, int r, t_pars *command);
+void		redir_output(t_pars *cmd, int i);
+void		redir_append(t_pars *cmd, int i);
+void		redir_input(t_pars *cmd, int i);
+void		redir_heredoc(t_pars *cmd, int i);
+int			here_doc(t_tok *token);
 
 //	Executer
 void		ft_exec(t_shell *shell, t_pars *command, char **env);

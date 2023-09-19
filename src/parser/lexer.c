@@ -6,41 +6,30 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/15 15:24:10 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/19 20:56:59 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_command(const char *cmd, t_shell *shell)
+void	lex_tokenizer_end(t_lex *lex, t_tok **token, int *id)
 {
-	int		i;
-	char	*cmd_path;
-
-	if (access(cmd, F_OK))
-		return (1);
-	i = 0;
-	while (shell->paths[i])
+	if (lex->type == -2)
+		g_exit = 2;
+	else if (lex->len)
 	{
-		cmd_path = ft_strjoin(shell->paths[i], cmd);
-		if (access(cmd_path, F_OK) == 0)
+		lex->buffer[lex->len] = '\0';
+		if (lex->state == STATE_DOLLAR_SIGN)
 		{
-			free(cmd_path);
-			return (1);
+			if (numstr(lex->buffer, '$') > 1)
+				lex_multiexpand(lex, lex->shell);
+			else
+				lex_expand(lex, lex->shell);
 		}
-		free(cmd_path);
-		i++;
+		lex->buffer[lex->len] = '\0';
+		tok_lstadd(token, lex, id);
 	}
-	return (0);
-}
-
-int	lex_type(const char *s, t_shell *shell)
-{
-	if (ft_strlen(s) < 1)
-		return (EMPTY);
-	else if (is_command(s, shell))
-		return (CMD);
-	return (WORD);
+	free(lex);
 }
 
 void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
@@ -59,7 +48,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 		if (lex->state == STATE_NORMAL)
 			state_normal(input[i], lex, token, id);
 		else if (lex->state == STATE_DOUBLE_QUOTE
-				|| lex->state == STATE_SINGLE_QUOTE)
+			|| lex->state == STATE_SINGLE_QUOTE)
 			state_quotes(input[i], lex);
 		else if (lex->state == STATE_DOLLAR_SIGN)
 			state_dollar(input[i], lex, token, id);
@@ -69,25 +58,7 @@ void	lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id)
 			state_redirect(input[i], lex, token, id);
 		i++;
 	}
-	if (lex->type == -2)
-	{
-		g_exit = 2;
-		shell->exit = g_exit;
-	}
-	else if (lex->len)
-	{
-		lex->buffer[lex->len] = '\0';
-		if (lex->state == STATE_DOLLAR_SIGN)
-		{
-			if (numstr(lex->buffer, '$') > 1)
-				lex_multiexpand(lex, lex->shell);
-			else
-				lex_expand(lex, lex->shell);
-		}
-		lex->buffer[lex->len] = '\0';
-		tok_lstadd(token, lex, id);
-	}
-	free(lex);
+	lex_tokenizer_end(lex, token, id);
 }
 
 void	lex_free_inputs(char **inputs)
