@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/18 18:52:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:03:26 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,22 @@ int	ft_setexport(char *name, char *value, t_shell *shell)
 		}
 		i++;
 	}
+	free(var);
+	return (ft_setexport_add(name, value, shell));
+}
+
+int	ft_setexport_add(char *name, char *value, t_shell *shell)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
 	while (shell->env[i])
 		i++;
 	shell->env = ft_realloc(shell->env, sizeof(char *) * (i + 2));
 	tmp = ft_strjoin(name, NULL);
 	shell->env[i] = ft_strjoin(tmp, value);
 	shell->env[i + 1] = NULL;
-	free(var);
 	free(tmp);
 	return (0);
 }

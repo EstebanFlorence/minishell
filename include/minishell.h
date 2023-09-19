@@ -6,7 +6,7 @@
 /*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/16 21:14:49 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:04:29 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int			ft_env(t_shell *shell);
 int			ft_export(char **str, t_shell *shell);
 int			ft_unset(char **str, t_shell *shell);
 int			ft_setexport(char *name, char *value, t_shell *shell);
+int			ft_setexport_add(char *name, char *value, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 int			ft_exit(char **str, t_shell *shell, t_pars *cmd);
