@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 22:54:31 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/20 17:01:16 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,20 @@ char	*shell_getenv(char *var, t_shell *shell)
 {
 	int		i;
 	char	*content;
+	char	*tmp;
 
+	tmp = ft_strjoin(var, "=");
 	i = 0;
 	while (shell->env[i])
 	{
-		if (ft_strnstr(shell->env[i], var, ft_strlen(var)))
+		if (!ft_strncmp(shell->env[i], tmp, ft_strlen(tmp)))
 		{
-			content = ft_strdup(shell->env[i] + ft_strlen(var) + 1);
+			content = ft_strdup(shell->env[i] + ft_strlen(tmp));
 			return (content);
 		}
 		i++;
 	}
+	free(tmp);
 	return (NULL);
 }
 
