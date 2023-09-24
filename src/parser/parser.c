@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 18:57:22 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:07:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void	shell_parser(t_shell *shell, t_pars **command)
 	n = 0;
 	i = 0;
 	inputs = input_split(shell);
+	if (inputs == NULL)
+		return ;
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);

@@ -6,19 +6,19 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:36:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 19:10:42 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:02:40 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	here_doc(t_tok *token)
+int	here_doc(t_pars *cmd, int i)
 {
 	char	*tmplimiter;
 	char	*line;
 	int		heredoc;
 
-	tmplimiter = ft_strjoin(token->next->token, "\n");
+	tmplimiter = ft_strjoin(cmd->redir_name[i], "\n");
 	line = get_next_line(STDIN_FILENO);
 	heredoc = open(HEREPATH, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (heredoc < 0)

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 23:07:23 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 20:02:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void		shell_env(char **env, t_shell *shell);
 void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
 void		shell_exit(t_shell *shell);
-void		shell_command(t_shell *shell, t_pars **command);
 void		shell_parser(t_shell *shell, t_pars **command);
 char		*shell_getenv(char *var, t_shell *shell);
 
@@ -97,7 +96,6 @@ void		handle_piperedir(t_pars *cmd, t_shell *shell);
 //	Tools
 void		ft_error(int n);
 int			ft_isvalid(char *s);
-int			check_builtins(char *s);
 int			strchr_index(char *s, char c);
 
 char		**pipe_split(const char *s, char pipe);
@@ -168,7 +166,7 @@ void		redir_output(t_pars *cmd, int i);
 void		redir_append(t_pars *cmd, int i);
 void		redir_input(t_pars *cmd, int i);
 void		redir_heredoc(t_pars *cmd, int i);
-int			here_doc(t_tok *token);
+int			here_doc(t_pars *cmd, int i);
 
 //	Executer
 void		ft_exec(t_shell *shell, t_pars *command, char **env);
