@@ -74,6 +74,12 @@ void	pipe_splitter(const char *s, char pipe, char **split, size_t n)
 			{
 				tok = ft_substr(s, (unsigned int)(i - len), len);
 				split[j] = tok;
+				//free(tok);
+				j++;
+			}
+			else
+			{
+				split[j] = NULL;
 				j++;
 			}
 			len = 0;
