@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:47:41 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 17:49:48 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 18:51:24 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void	exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell)
 void	exec_builtin_fork(t_pars *cmd, t_shell *shell)
 {
 	g_exit = exec_builtin(cmd, shell);
+	shell->exit = g_exit;
 	pars_free(cmd);
 	shell_exit(shell);
 }

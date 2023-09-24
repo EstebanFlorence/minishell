@@ -66,9 +66,16 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	close_redir(cmd);
 	waitpid(shell->pid, &status, 0);
 	if (WIFEXITED(status))
+	{
 		g_exit = WEXITSTATUS(status);
+		shell->exit = g_exit;
+	}
 	else if (WIFSIGNALED(status))
+	{
 		g_exit = WTERMSIG(status) + 128;
+		shell->exit = g_exit;
+	}
+		
 }
 
 void	child_process(t_pars *cmd, t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 19:38:58 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 18:57:22 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ char	**input_split(t_shell *shell)
 	{
 		write(STDERR_FILENO, "syntax error near unexpected token: \"|\"\n", 41);
 		g_exit = 1;
+		shell->exit = g_exit;
 		return (NULL);
 	}
 	if (pipes > 1)
@@ -113,6 +114,15 @@ void	shell_parser(t_shell *shell, t_pars **command)
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
+		if (token == NULL)
+		{
+			g_exit = 2;
+			shell->exit = g_exit;
+			if (i > 0)
+				write(STDERR_FILENO, "syntax error near unexpected token: \"|\"\n", 41);
+			i++;
+			continue ;
+		}
 		pars_lstadd_back(command, pars_lstnew(i + 1));
 		pars_commander(token, pars_lstlast(*command));
 		tok_free(token);
