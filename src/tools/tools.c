@@ -6,7 +6,7 @@
 /*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 19:09:41 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/24 19:47:56 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,11 @@ void	shell_exit(t_shell *shell)
 		free(shell->env[i++]);
 	free(shell->env);
 	i = 0;
-	while (shell->paths[i])
-		free(shell->paths[i++]);
-	free(shell->paths);
+	if (shell->paths != NULL)
+	{
+		while (shell->paths[i])
+			free(shell->paths[i++]);
+		free(shell->paths);
+	}
 	exit(g_exit);
 }

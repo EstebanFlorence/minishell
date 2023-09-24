@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:56:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/18 18:33:49 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/24 19:30:21 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (2);
 	if (ft_strncmp(cmd, "pwd", 4) == 0)
-		return (1);
+		return (2);
 	if (ft_strncmp(cmd, "export", 7) == 0)
 		return (2);
 	if (ft_strncmp(cmd, "unset", 6) == 0)
