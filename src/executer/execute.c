@@ -137,11 +137,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		if (!cmd->next && is_builtin(cmd->cmds[0]) == 2)
 			exec_builtin_main(cmd, shell);
 		else if (shell->paths && shell->exit == 0)
-		{
-			if (is_builtin(cmd->cmds[0]))
-				exec_builtin_main(cmd, shell);
 			exec_command(cmd, shell);
-		} //	shell->exit try
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);
