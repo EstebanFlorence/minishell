@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 15:43:38 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/18 18:49:08 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/25 19:35:10 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_export(char **str, t_shell *shell)
 	{
 		while (shell->env[j])
 		{
-			ft_printf("%s\n", shell->env[j]);
+			ft_printf("declare -x %s\n", shell->env[j]);
 			j++;
 		}
 	}
