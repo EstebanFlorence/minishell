@@ -107,7 +107,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		}
 		if (!cmd->next && is_builtin(cmd->cmds[0]) == 2)
 			exec_builtin_main(cmd, shell);
-		else if (shell->paths && shell->exit == 0)
+		else if (shell->exit == 0)
 			fork_command(cmd, shell);
 		cmd = cmd->next;
 	}

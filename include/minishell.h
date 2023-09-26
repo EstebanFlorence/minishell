@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 20:07:41 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 21:42:51 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void		ft_error(int n);
 void		command_notfound(t_pars *cmd);
 int			ft_isvalid(char *s);
 int			strchr_index(char *s, char c);
+void		set_path(char *path, t_shell *shell);
 
 char		**pipe_split(const char *s, char pipe);
 void		pipe_splitter(const char *s, char pipe, char **split, size_t n);

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:47:41 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 20:19:02 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:19:22 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	execvshell(t_pars *command, t_shell *shell)
 	j = 0;
 	exec1(command, shell);
 	tmp = command;
-	while (tmp->cmds[i])
+	while (tmp->cmds[i] && shell->paths)
 	{
 		while (shell->paths[j])
 		{
@@ -84,7 +84,8 @@ void	exec_builtin_main(t_pars *cmd, t_shell *shell)
 		exec_redir(cmd, shell);
 		handle_redir(cmd);
 	}
-	exec_builtin(cmd, shell);
+	g_exit = exec_builtin(cmd, shell);
+	shell->exit = g_exit;
 	if (cmd->out != -2)
 	{
 		close(cmd->out);

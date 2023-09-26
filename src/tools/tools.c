@@ -6,11 +6,30 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 17:27:25 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:08:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	set_path(char *path, t_shell *shell)
+{
+	int		i;
+	char	**paths;
+
+	i = 0;
+	paths = ft_split(path + 5, ':');	//	path + len di '='
+	while (paths[i])
+		i++;
+	shell->paths = (char **)ft_calloc(i + 1, sizeof(char *));
+	i = -1;
+	while (paths[++i])
+		shell->paths[i] = ft_strjoin(paths[i], "/");
+	i = 0;
+	while (paths[i])
+		free(paths[i++]);
+	free(paths);
+}
 
 void	command_notfound(t_pars *cmd)
 {
@@ -92,10 +111,13 @@ void	shell_free(t_shell *shell)
 	while (shell->env[i])
 		free(shell->env[i++]);
 	free(shell->env);
-	i = 0;
-	while (shell->paths[i])
-		free(shell->paths[i++]);
-	free(shell->paths);
+	if (shell->paths)
+	{
+		i = 0;
+		while (shell->paths[i])
+			free(shell->paths[i++]);
+		free(shell->paths);
+	}
 }
 
 void	shell_exit(t_shell *shell)
@@ -110,7 +132,7 @@ void	shell_exit(t_shell *shell)
 		free(shell->env[i++]);
 	free(shell->env);
 	i = 0;
-	if (shell->paths != NULL)
+	if (shell->paths)
 	{
 		while (shell->paths[i])
 			free(shell->paths[i++]);
