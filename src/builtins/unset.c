@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 16:04:25 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/24 19:25:21 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/26 16:37:19 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_unset(char **str, t_shell *shell)
 	int	i;
 	int	j;
 
-	if (strncmp(str[1], "PATH", 5) == 0)
+	if (str[1] && ft_strncmp(str[1], "PATH", 5) == 0 && shell->paths)
 	{
 		i = 0;
 		while (shell->paths[i])

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 18:54:20 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 15:23:05 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	shell_innit(t_shell *shell, char **env)
 	shell->status = 0;
 	shell->exit = 0;
 	user = ft_strjoin(PURPLE, getenv("USER"));
-	shell->prompt = ft_strjoin(user, "@SmolShell" CLR_RMV " > ");
+	shell->prompt = ft_strjoin(user, "@smolShell" CLR_RMV " > ");
 	free(user);
 	shell_env(env, shell);
 }
