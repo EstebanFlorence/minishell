@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 15:23:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:23:29 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	signal_handler(int sig)
 {
 	(void)sig;
 	write(STDOUT_FILENO, "\n", 1);
+	g_exit = 130;
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
