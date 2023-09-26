@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 21:42:51 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:31:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ void		lex_tokenizer(t_shell *shell, char *input, t_tok **token, int *id);
 void		lex_tokenizer_end(t_lex *lex, t_tok **token, int *id);
 void		lex_free_inputs(char **inputs);
 void		lex_bzero(void *s, unsigned int start, int end);
-int			lex_type(const char *s, t_shell *shell);
+int			lex_type(const char *s);
 int			is_command(const char *cmd, t_shell *shell);
 
 void		state_normal(char c, t_lex *lex, t_tok **token, int *id);

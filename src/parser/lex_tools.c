@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 18:56:22 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 19:35:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 22:32:00 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ int	is_command(const char *cmd, t_shell *shell)
 	return (0);
 }
 
-int	lex_type(const char *s, t_shell *shell)
+int	lex_type(const char *s)
 {
 	if (ft_strlen(s) < 1)
 		return (EMPTY);
-	else if (is_command(s, shell))
-		return (CMD);
+//	else if (is_command(s, shell))
+//		return (CMD);
 	return (WORD);
 }
