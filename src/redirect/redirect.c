@@ -6,13 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:36:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 20:02:40 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:08:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	here_doc(t_pars *cmd, int i)
+int	here_doc(int i, t_pars *cmd)
 {
 	char	*tmplimiter;
 	char	*line;
@@ -41,7 +41,7 @@ int	here_doc(t_pars *cmd, int i)
 	return (-1);
 }
 
-void	exec_redir(t_pars *cmd)
+void	exec_redir(t_pars *cmd, t_shell *shell)
 {
 	int	i;
 	int	n;
@@ -51,13 +51,13 @@ void	exec_redir(t_pars *cmd)
 	while (i < n)
 	{
 		if (cmd->redirs[i] == OUTPUT)
-			redir_output(cmd, i);
+			redir_output(i, cmd, shell);
 		else if (cmd->redirs[i] == APPEND)
-			redir_append(cmd, i);
+			redir_append(i, cmd, shell);
 		else if (cmd->redirs[i] == INPUT)
-			redir_input(cmd, i);
+			redir_input(i, cmd, shell);
 		else if (cmd->redirs[i] == HEREDOC)
-			redir_heredoc(cmd, i);
+			redir_heredoc(i, cmd, shell);
 		i++;
 	}
 }

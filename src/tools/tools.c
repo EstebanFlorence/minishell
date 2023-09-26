@@ -3,18 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 19:47:56 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/26 17:27:25 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	command_notfound(t_pars *cmd)
+{
+	write(STDERR_FILENO, "Command not found: ", 20);
+	if (cmd->cmds[0])
+		write(STDERR_FILENO, cmd->cmds[0], ft_strlen(cmd->cmds[0]));
+	else
+		write(STDERR_FILENO, "\'\'", 3);
+	write(STDERR_FILENO, "\n", 2);
+}
+
 void	signal_print(int sig)
 {
 	(void)sig;
+	g_exit = 130;
 	write(STDOUT_FILENO, "\n", 1);
 }
 

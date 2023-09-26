@@ -12,44 +12,25 @@
 
 #include "minishell.h"
 
-void	execvshell(t_pars *command, t_shell *shell)
+void	parent_end(t_shell *shell)
 {
-	int		i;
-	int		j;
-	char	*cmd_path;
-	t_pars	*tmp;
+	int	status;
 
-	i = 0;
-	j = 0;
-	exec1(command, shell);
-	tmp = command;
-	while (tmp->cmds[i])
+	waitpid(shell->pid, &status, 0);
+	if (WIFEXITED(status))
 	{
-		while (shell->paths[j])
-		{
-			cmd_path = ft_strjoin(shell->paths[j], tmp->cmds[i]);
-			exec2(cmd_path, tmp, command, shell);
-			free(cmd_path);
-			j++;
-		}
-		j = 0;
-		i++;
+		g_exit = WEXITSTATUS(status);
+		shell->exit = g_exit;
 	}
-	write(STDERR_FILENO, "Command not found: ", 20);
-	if (tmp->cmds[0])
-		write(STDERR_FILENO, tmp->cmds[0], ft_strlen(tmp->cmds[0]));
-	else
-		write(STDERR_FILENO, "\'\'", 3);
-	write(STDERR_FILENO, "\n", 2);
-	pars_free(command);
-	shell_free(shell);
-	exit(127);
+	else if (WIFSIGNALED(status))
+	{
+		g_exit = WTERMSIG(status) + 128;
+		shell->exit = g_exit;
+	}
 }
 
 void	parent_process(t_pars *cmd, t_shell *shell)
 {
-	int	status;
-
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
 	if (cmd->exec == false && cmd->next)
@@ -64,17 +45,7 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 		}
 	}
 	close_redir(cmd);
-	waitpid(shell->pid, &status, 0);
-	if (WIFEXITED(status))
-	{
-		g_exit = WEXITSTATUS(status);
-		shell->exit = g_exit;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		g_exit = WTERMSIG(status) + 128;
-		shell->exit = g_exit;
-	}
+	parent_end(shell);
 }
 
 void	child_process(t_pars *cmd, t_shell *shell)
@@ -82,7 +53,7 @@ void	child_process(t_pars *cmd, t_shell *shell)
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (cmd->numred)
-		exec_redir(cmd);
+		exec_redir(cmd, shell);
 	if (cmd->exec == false)
 	{
 		close_redir(cmd);
@@ -101,7 +72,7 @@ void	child_process(t_pars *cmd, t_shell *shell)
 		execvshell(cmd, shell);
 }
 
-void	exec_command(t_pars *cmd, t_shell *shell)
+void	fork_command(t_pars *cmd, t_shell *shell)
 {
 	shell->pid = fork();
 	if (shell->pid < 0)
@@ -137,7 +108,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 		if (!cmd->next && is_builtin(cmd->cmds[0]) == 2)
 			exec_builtin_main(cmd, shell);
 		else if (shell->paths && shell->exit == 0)
-			exec_command(cmd, shell);
+			fork_command(cmd, shell);
 		cmd = cmd->next;
 	}
 	dup2(shell->in, STDIN_FILENO);

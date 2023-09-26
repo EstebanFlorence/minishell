@@ -6,25 +6,27 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:04:22 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 20:02:36 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:11:00 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_heredoc(t_pars *cmd, int i)
+void	redir_heredoc(int i, t_pars *cmd, t_shell *shell)
 {
 	if (cmd->in != -2)
 		close(cmd->in);
-	cmd->in = here_doc(cmd, i);
+	cmd->in = here_doc(i, cmd);
 	if (cmd->in < 0)
 	{
 		perror(cmd->redir_name[i]);
 		g_exit = 1;
+		shell->exit = g_exit;
+		cmd->exec = false;
 	}
 }
 
-void	redir_input(t_pars *cmd, int i)
+void	redir_input(int i, t_pars *cmd, t_shell *shell)
 {
 	if (cmd->in != -2)
 		close(cmd->in);
@@ -33,10 +35,12 @@ void	redir_input(t_pars *cmd, int i)
 	{
 		perror(cmd->redir_name[i]);
 		g_exit = 1;
+		shell->exit = g_exit;
+		cmd->exec = false;	
 	}
 }
 
-void	redir_append(t_pars *cmd, int i)
+void	redir_append(int i, t_pars *cmd, t_shell *shell)
 {
 	if (cmd->out != -2)
 		close(cmd->out);
@@ -45,18 +49,22 @@ void	redir_append(t_pars *cmd, int i)
 	{
 		perror(cmd->redir_name[i]);
 		g_exit = 1;
+		shell->exit = g_exit;
+		cmd->exec = false;
 	}
 }
 
-void	redir_output(t_pars *cmd, int i)
+void	redir_output(int i, t_pars *cmd, t_shell *shell)
 {
 	if (cmd->out != -2)
 		close(cmd->out);
-	cmd->out = open(cmd->redir_name[i], 
+	cmd->out = open(cmd->redir_name[i],
 			O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (cmd->out < 0)
 	{
 		perror(cmd->redir_name[i]);
 		g_exit = 1;
+		shell->exit = g_exit;
+		cmd->exec = false;
 	}
 }

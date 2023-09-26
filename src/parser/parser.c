@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 20:07:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 18:18:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ void	pars_commander(t_tok *token, t_pars *command)
 	{
 		if (tmp->type == REDIRECT)
 		{
-			if (tmp->id == 1)
-				command->exec = false;
 			if (tmp->next)
 			{
 				pars_redir(tmp, r, command);
@@ -73,6 +71,8 @@ void	pars_commander(t_tok *token, t_pars *command)
 		}
 		tmp = tmp->next;
 	}
+	if (n == 0)
+		command->exec = false;
 }
 
 char	**input_split(t_shell *shell)

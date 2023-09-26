@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 20:02:23 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:07:41 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,11 @@ void		shell_executor(t_pars **command, t_shell *shell);
 void		execvshell(t_pars *command, t_shell *shell);
 void		exec1(t_pars *command, t_shell *shell);
 void		exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell);
-void		exec_command(t_pars *cmd, t_shell *shell);
+void		fork_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
-void		exec_redir(t_pars *cmd);
+void		parent_end(t_shell *shell);
+void		exec_redir(t_pars *cmd, t_shell *shell);
 void		close_redir(t_pars *cmd);
 void		exec_builtin_main(t_pars *cmd, t_shell *shell);
 void		exec_builtin_fork(t_pars *cmd, t_shell *shell);
@@ -95,6 +96,7 @@ void		handle_piperedir(t_pars *cmd, t_shell *shell);
 
 //	Tools
 void		ft_error(int n);
+void		command_notfound(t_pars *cmd);
 int			ft_isvalid(char *s);
 int			strchr_index(char *s, char c);
 
@@ -162,16 +164,11 @@ t_pars		*pars_lstnew(int id);
 
 //	Redirect
 void		pars_redir(t_tok *token, int r, t_pars *command);
-void		redir_output(t_pars *cmd, int i);
-void		redir_append(t_pars *cmd, int i);
-void		redir_input(t_pars *cmd, int i);
-void		redir_heredoc(t_pars *cmd, int i);
-int			here_doc(t_pars *cmd, int i);
-
-//	Executer
-void		ft_exec(t_shell *shell, t_pars *command, char **env);
-int			exec_check(t_shell *shell, t_pars **command, char **env);
-char		*exec_path(char *cmd, char **env);
+void		redir_output(int i, t_pars *cmd, t_shell *shell);
+void		redir_append(int i, t_pars *cmd, t_shell *shell);
+void		redir_input(int i, t_pars *cmd, t_shell *shell);
+void		redir_heredoc(int i, t_pars *cmd, t_shell *shell);
+int			here_doc(int i, t_pars *cmd);
 
 //	Builtin
 int			is_builtin(char *cmd);

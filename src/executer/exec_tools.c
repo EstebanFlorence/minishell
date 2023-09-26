@@ -6,11 +6,40 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:47:41 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/24 18:51:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:19:02 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	execvshell(t_pars *command, t_shell *shell)
+{
+	int		i;
+	int		j;
+	char	*cmd_path;
+	t_pars	*tmp;
+
+	i = 0;
+	j = 0;
+	exec1(command, shell);
+	tmp = command;
+	while (tmp->cmds[i])
+	{
+		while (shell->paths[j])
+		{
+			cmd_path = ft_strjoin(shell->paths[j], tmp->cmds[i]);
+			exec2(cmd_path, tmp, command, shell);
+			free(cmd_path);
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	command_notfound(command);
+	pars_free(command);
+	shell_free(shell);
+	exit(127);
+}
 
 void	exec1(t_pars *command, t_shell *shell)
 {
@@ -52,7 +81,7 @@ void	exec_builtin_main(t_pars *cmd, t_shell *shell)
 {
 	if (cmd->numred)
 	{
-		exec_redir(cmd);
+		exec_redir(cmd, shell);
 		handle_redir(cmd);
 	}
 	exec_builtin(cmd, shell);

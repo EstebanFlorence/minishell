@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:39:18 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 18:55:26 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 20:14:46 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ void	close_pipe(t_pars *cmd, t_shell *shell)
 
 void	close_redir(t_pars *cmd)
 {
-	if (cmd->in != -2)
+	if (cmd->in > 0)
 		close(cmd->in);
-	if (cmd->out != -2)
+	if (cmd->out > 0)
 		close(cmd->out);
 }
 

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 21:28:07 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 16:41:08 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 18:31:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,5 @@ void	state_redirect(char c, t_lex *lex, t_tok **token, int *id)
 	if (c != ' ')
 		lex_append(c, lex);
 	lex->state = STATE_NORMAL;
+	lex->type = -1;
 }

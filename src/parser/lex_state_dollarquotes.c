@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:25:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 19:40:17 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/26 17:49:04 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	state_dollarquote_end(t_lex *lex, t_tok **token, int *id)
 {
 	if (lex->len > 0)
 	{
-		if (numstr(lex->buffer, '$') > 2)
+		if (numstr(lex->buffer, '$') > 1)
 		{
 			lex->buffer[lex->len] = '\0';
 			lex_multiexpand(lex, lex->shell);
