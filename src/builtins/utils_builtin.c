@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/19 13:03:26 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:12:47 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ char	**ft_realloc(char **env, size_t size)
 	{
 		new[i] = ft_strdup(env[i]);
 		i++;
-	}
+	}	
 	new[i] = NULL;
-	i = 0;
-	while (env[i])
-		free(env[i++]);
-	free(env);
+	if (env)
+	{
+		i = 0;
+		while (env[i])
+			free(env[i++]);
+		free(env);
+	}
+
 	return (new);
 }
 
@@ -86,32 +90,63 @@ int	ft_unsetenv(char *name, t_shell *shell)
 	return (0);
 }
 
+int	ft_unsetexp(char *name, t_shell *shell)
+{
+	int		i;
+	int		j;
+	char	**exp;
+
+	i = 0;
+	j = 0;
+	exp = shell->export;
+	while (exp && exp[i])
+	{
+		if (ft_strncmp(exp[i], name, ft_strlen(name)) == 0)
+		{
+			free(exp[i]);
+			while (exp[i + j])
+			{
+				exp[i + j] = exp[i + j + 1];
+				j++;
+			}
+			return (0);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	ft_setexport(char *name, char *value, t_shell *shell)
 {
 	int		i;
 	char	*var;
 	char	*tmp;
 
-	var = ft_substr(name, 0, (size_t)strchr_index(name, '='));
+	if (strchr_index(name, '=') > 0)
+		var = ft_substr(name, 0, (size_t)strchr_index(name, '='));
+	else
+		var = ft_strdup(name);
 	i = 0;
-	while (shell->env[i])
-	{
-		if (ft_strncmp(shell->env[i], var, ft_strlen(var)) == 0)
+
+		while (shell->env[i])
 		{
-			free(shell->env[i]);
-			tmp = ft_strjoin(name, NULL);
-			shell->env[i] = ft_strjoin(tmp, value);
-			free(var);
-			free(tmp);
-			return (0);
+			if (ft_strncmp(shell->env[i], var, ft_strlen(var)) == 0)
+			{
+				free(shell->env[i]);
+				tmp = ft_strjoin(name, NULL);
+				shell->env[i] = ft_strjoin(tmp, value);
+				free(var);
+				free(tmp);
+				return (0);
+			}
+			i++;
 		}
-		i++;
-	}
-	free(var);
-	return (ft_setexport_add(name, value, shell));
+		free(var);
+		ft_setexport_addenv(name, value, shell);
+	return (0);
 }
 
-int	ft_setexport_add(char *name, char *value, t_shell *shell)
+int	ft_setexport_addenv(char *name, char *value, t_shell *shell)
 {
 	int		i;
 	char	*tmp;
@@ -126,3 +161,19 @@ int	ft_setexport_add(char *name, char *value, t_shell *shell)
 	free(tmp);
 	return (0);
 }
+
+/* int	ft_setexport_addexp(char *name, char *value, t_shell *shell)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (shell->export && shell->export[i])
+		i++;
+	shell->export = ft_realloc(shell->export, sizeof(char *) * (i + 2));
+	tmp = ft_strjoin(name, NULL);
+	shell->export[i] = ft_strjoin(tmp, value);
+	shell->export[i + 1] = NULL;
+	free(tmp);
+	return (0);
+} */

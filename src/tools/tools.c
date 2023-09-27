@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 22:08:23 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:35:50 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	set_path(char *path, t_shell *shell)
 	char	**paths;
 
 	i = 0;
-	paths = ft_split(path + 5, ':');	//	path + len di '='
+	paths = ft_split(path + 5, ':');
 	while (paths[i])
 		i++;
 	shell->paths = (char **)ft_calloc(i + 1, sizeof(char *));
@@ -118,6 +118,13 @@ void	shell_free(t_shell *shell)
 			free(shell->paths[i++]);
 		free(shell->paths);
 	}
+	if (shell->export)
+	{
+		i = 0;
+		while (shell->export[i])
+			free(shell->export[i++]);
+		free(shell->export);
+	}
 }
 
 void	shell_exit(t_shell *shell)
@@ -137,6 +144,13 @@ void	shell_exit(t_shell *shell)
 		while (shell->paths[i])
 			free(shell->paths[i++]);
 		free(shell->paths);
+	}
+	if (shell->export)
+	{
+		i = 0;
+		while (shell->export[i])
+			free(shell->export[i++]);
+		free(shell->export);
 	}
 	exit(g_exit);
 }

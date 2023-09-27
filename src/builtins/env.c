@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/01 14:47:30 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/26 22:19:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:10:20 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,13 @@ int	ft_env(t_shell *shell)
 	env = shell->env;
 	while (env && *env)
 	{
-		ft_printf("%s\n", *env);
-		env++;
+		if (strchr_index(*env, '=') <= 0)
+			env++;
+		else
+		{
+			ft_printf("%s\n", *env);
+			env++;
+		}
 	}
 	return (0);
 }

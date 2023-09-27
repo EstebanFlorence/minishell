@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 16:04:25 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/26 16:37:19 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:57:06 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int	ft_unset(char **str, t_shell *shell)
 		while (str[i][j] && str[i][j] != '=')
 			j++;
 		if (str[i][j] != '=')
+		{
 			ft_unsetenv(str[i], shell);
+			ft_unsetexp(str[i], shell);
+		}
 		else
 			write(STDERR_FILENO, "not a valid identifier\n", 24);
 		i++;

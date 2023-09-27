@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 22:31:15 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:39:39 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_shell
 
 	char	**env;
 	char	**paths;
+	char	**export;
 
 	int		pipe[2];
 	int		in;
@@ -180,8 +181,10 @@ int			ft_env(t_shell *shell);
 int			ft_export(char **str, t_shell *shell);
 int			ft_unset(char **str, t_shell *shell);
 int			ft_setexport(char *name, char *value, t_shell *shell);
-int			ft_setexport_add(char *name, char *value, t_shell *shell);
+int			ft_setexport_addenv(char *name, char *value, t_shell *shell);
+int			ft_setexport_addexp(char *name, char *value, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
+int			ft_unsetexp(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 int			ft_exit(char **str, t_shell *shell, t_pars *cmd);
 int			ft_pwd(int n);
