@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 15:43:38 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/27 18:11:26 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:56:49 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	ft_export(char **str, t_shell *shell)
 {
-	int	i;
+	int		i;
+	char	*var;
 
 	if (str[1] == NULL)
 	{
@@ -25,13 +26,18 @@ int	ft_export(char **str, t_shell *shell)
 	else
 	{
 		i = 1;
+		if (strchr_index(str[i], '=') > 0)
+			var = ft_substr(str[i], 0, (size_t)strchr_index(str[i], '='));
+		else
+			var = ft_strdup(str[i]);		
 		while (str[i])
 		{
 			ft_setexport(str[i], NULL, shell);
-			if (ft_strncmp(str[i], "PATH", 5) == 0)
+			if (ft_strncmp(var, "PATH", 5) == 0)
 				set_path(str[i], shell);
 			i++;
 		}
+		free(var);
 	}
 	return (0);
 }

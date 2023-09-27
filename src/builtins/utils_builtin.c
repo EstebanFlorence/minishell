@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/27 18:12:47 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:16:21 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,19 +161,3 @@ int	ft_setexport_addenv(char *name, char *value, t_shell *shell)
 	free(tmp);
 	return (0);
 }
-
-/* int	ft_setexport_addexp(char *name, char *value, t_shell *shell)
-{
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	while (shell->export && shell->export[i])
-		i++;
-	shell->export = ft_realloc(shell->export, sizeof(char *) * (i + 2));
-	tmp = ft_strjoin(name, NULL);
-	shell->export[i] = ft_strjoin(tmp, value);
-	shell->export[i + 1] = NULL;
-	free(tmp);
-	return (0);
-} */

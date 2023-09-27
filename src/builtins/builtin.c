@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:56:33 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/26 16:20:36 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:08:31 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_builtin(char *cmd)
 {
 	if (ft_strncmp(cmd, "echo", 5) == 0)
-		return (2);
+		return (1);
 	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (2);
 	if (ft_strncmp(cmd, "pwd", 4) == 0)
@@ -25,7 +25,7 @@ int	is_builtin(char *cmd)
 	if (ft_strncmp(cmd, "unset", 6) == 0)
 		return (2);
 	if (ft_strncmp(cmd, "env", 4) == 0)
-		return (2);
+		return (1);
 	if (ft_strncmp(cmd, "exit", 5) == 0)
 		return (2);
 	return (0);

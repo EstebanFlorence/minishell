@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 18:18:09 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/27 18:37:32 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,9 @@ void	shell_parser(t_shell *shell, t_pars **command)
 		lex_tokenizer(shell, inputs[i], &token, &n);
 		if (token == NULL)
 		{
-			g_exit = 2;
-			shell->exit = g_exit;
+			//g_exit = 127;	//	0
+			//shell->exit = g_exit;
+			shell->exit = 1;
 			if (i > 0)
 				write(STDERR_FILENO, "syntax error near unexpected token: \"|\"\n", 41);
 			i++;
