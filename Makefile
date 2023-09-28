@@ -6,7 +6,7 @@
 #    By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/26 14:22:56 by adi-nata          #+#    #+#              #
-#    Updated: 2023/09/28 18:49:44 by adi-nata         ###   ########.fr        #
+#    Updated: 2023/09/28 21:10:28 by adi-nata         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,27 +18,30 @@ OBJ_DIR		=	.obj
 
 SRCS		=   ${SRC_DIR}/minishell.c\
 \
-				${SRC_DIR}/tools/tools.c				${SRC_DIR}/tools/lexer_innit.c\
-				${SRC_DIR}/tools/parser_innit.c			${SRC_DIR}/tools/pipe_split.c\
-				${SRC_DIR}/tools/pipe_numstr.c			${SRC_DIR}/tools/free.c\
+				${SRC_DIR}/tools/tools.c						${SRC_DIR}/tools/lexer_innit.c\
+				${SRC_DIR}/tools/parser_innit.c					${SRC_DIR}/tools/pipe_split.c\
+				${SRC_DIR}/tools/pipe_numstr.c					${SRC_DIR}/tools/free.c\
 				${SRC_DIR}/tools/signal.c\
 \
-				${SRC_DIR}/parser/lexer.c				${SRC_DIR}/parser/parser.c\
-				${SRC_DIR}/parser/lex_state_normal.c	${SRC_DIR}/parser/lex_state_quotes.c\
-				${SRC_DIR}/parser/lex_state_dollar.c	${SRC_DIR}/parser/lex_state_dollarquotes.c\
-				${SRC_DIR}/parser/expander.c			${SRC_DIR}/parser/lex_state_redirect.c\
-				${SRC_DIR}/parser/lex_tools.c			${SRC_DIR}/parser/expand_tools.c\
-				${SRC_DIR}/parser/multiexpand_tools.c\
+				${SRC_DIR}/parser/parser.c						${SRC_DIR}/parser/parser_tools.c\
 \
-				${SRC_DIR}/redirect/redirect.c			${SRC_DIR}/redirect/redir_open.c\
+				${SRC_DIR}/parser/lexer/lexer.c					${SRC_DIR}/parser/lexer/lex_tools.c\
+				${SRC_DIR}/parser/lexer/lex_state_normal.c		${SRC_DIR}/parser/lexer/lex_state_quotes.c\
+				${SRC_DIR}/parser/lexer/lex_state_dollar.c		${SRC_DIR}/parser/lexer/lex_state_dollarquotes.c\
+				${SRC_DIR}/parser/lexer/lex_state_redirect.c\
+\
+				${SRC_DIR}/parser/expander/expander.c			${SRC_DIR}/parser/expander/expand_tools.c\
+				${SRC_DIR}/parser/expander/multiexpand_tools.c\
+\
+				${SRC_DIR}/redirect/redirect.c					${SRC_DIR}/redirect/redir_open.c\
 				${SRC_DIR}/redirect/redir_tools.c\
 \
-				${SRC_DIR}/executer/execute.c			${SRC_DIR}/executer/exec_tools.c\
+				${SRC_DIR}/executer/execute.c					${SRC_DIR}/executer/exec_tools.c\
 \
-				${SRC_DIR}/builtins/builtin.c			${SRC_DIR}/builtins/cd.c\
-				${SRC_DIR}/builtins/echo.c				${SRC_DIR}/builtins/env.c\
-				${SRC_DIR}/builtins/exit.c				${SRC_DIR}/builtins/export.c\
-				${SRC_DIR}/builtins/pwd.c				${SRC_DIR}/builtins/unset.c\
+				${SRC_DIR}/builtins/builtin.c					${SRC_DIR}/builtins/cd.c\
+				${SRC_DIR}/builtins/echo.c						${SRC_DIR}/builtins/env.c\
+				${SRC_DIR}/builtins/exit.c						${SRC_DIR}/builtins/export.c\
+				${SRC_DIR}/builtins/pwd.c						${SRC_DIR}/builtins/unset.c\
 				${SRC_DIR}/builtins/utils_builtin.c\
 
 

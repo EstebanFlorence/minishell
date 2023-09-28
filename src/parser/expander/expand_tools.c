@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 22:50:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 18:49:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:47:15 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,17 @@ int	is_status(char *s)
 		i++;
 	}
 	return (-1);
+}
+
+void	lex_expand_free(t_exp *exp)
+{
+	int	i;
+
+	i = 0;
+	while (exp->expandables[i])
+		free(exp->expandables[i++]);
+	free(exp->expandables);
+	free(exp->expanded);
+	free(exp->names);
+	free(exp);
 }

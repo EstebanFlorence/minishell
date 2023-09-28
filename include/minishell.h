@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 20:39:34 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:48:39 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,8 @@ void		lex_append(char c, t_lex *lex);
 
 //	Parser
 char		**input_split(t_shell *shell);
-void		pars_loop(char **inputs, t_tok *token, t_pars **command, t_shell *shell);
+void		pars_loop(char **inputs, t_tok *token,
+				t_pars **command, t_shell *shell);
 void		pars_commander(t_tok *token, t_pars *command);
 void		commander_alloc(t_tok *token, t_pars *command);
 void		commander_loop(t_tok *token, t_pars *command);

@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 18:12:21 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:47:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,4 @@ void	lex_expand(t_lex *lexer, t_shell *shell)
 		lex_expand_status(name, lexer);
 	else
 		lex_expand_var(name, lexer, shell);
-}
-
-void	lex_expand_free(t_exp *exp)
-{
-	int	i;
-
-	i = 0;
-	while (exp->expandables[i])
-		free(exp->expandables[i++]);
-	free(exp->expandables);
-	free(exp->expanded);
-	free(exp->names);
-	free(exp);
 }
