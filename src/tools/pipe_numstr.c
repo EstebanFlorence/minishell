@@ -1,76 +1,59 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_split.c                                      :+:      :+:    :+:   */
+/*   pipe_numstr.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/17 18:16:49 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/07/17 18:32:28 by adi-nata         ###   ########.fr       */
+/*   Created: 2023/09/28 18:36:11 by adi-nata          #+#    #+#             */
+/*   Updated: 2023/09/28 18:37:09 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pipe_splitter_quotes(const char *s, size_t *i, size_t *len)
+int	pipe_numstr_quote(const char *s, size_t *i)
 {
 	char	quote;
 
 	quote = s[*i];
 	(*i)++;
-	(*len)++;
 	while (s[*i] && s[*i] != quote)
-	{
 		(*i)++;
-		(*len)++;
-	}
-	(*len)++;
+	if (s[*i] == '\0')
+		return (1);
+	return (0);
 }
 
-char	*pipe_splitter_add(const char *s, size_t *i, size_t *len)
+void	pipe_numstr_add(size_t *n, size_t *len)
 {
-	char	*tok;
-
 	if (*len > 0)
-		tok = ft_substr(s, (unsigned int)(*i - *len), *len);
-	else
-		tok = NULL;
+		(*n)++;
 	*len = 0;
-	return (tok);
 }
 
-void	pipe_splitter(const char *s, char pipe, char **split, size_t n)
+int	pipe_numstr(const char *s, char pipe)
 {
 	size_t	i;
-	size_t	j;
+	size_t	n;
 	size_t	len;
 
 	i = 0;
-	j = 0;
+	n = 0;
 	len = 0;
-	while (j < n)
+	while (1)
 	{
 		if (s[i] == pipe || s[i] == '\0')
-		{
-			split[j] = pipe_splitter_add(s, &i, &len);
-			j++;
-		}
+			pipe_numstr_add(&n, &len);
+		if (s[i] == pipe && n == 0)
+			return (-1);
 		else if (s[i] == DOUBLE_QUOTE || s[i] == SINGLE_QUOTE)
-			pipe_splitter_quotes(s, &i, &len);
+			pipe_numstr_quote(s, &i);
 		else
 			len++;
+		if (s[i] == '\0')
+			break ;
 		i++;
 	}
-}
-
-char	**pipe_split(const char *s, char pipe)
-{
-	char	**split;
-	int		n;
-
-	n = pipe_numstr(s, pipe);
-	split = malloc(sizeof(*split) * ((size_t)n + 1));
-	pipe_splitter(s, pipe, split, n);
-	split[n] = NULL;
-	return (split);
+	return (n);
 }

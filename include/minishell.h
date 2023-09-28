@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/27 16:39:39 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:39:34 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void		shell_innit(t_shell *shell, char **env);
 void		shell_env(char **env, t_shell *shell);
 void		shell_loop(t_shell *shell);
 void		shell_free(t_shell *shell);
+void		shell_freepath(t_shell *shell);
 void		shell_exit(t_shell *shell);
 void		shell_parser(t_shell *shell, t_pars **command);
 char		*shell_getenv(char *var, t_shell *shell);
@@ -104,7 +105,12 @@ void		set_path(char *path, t_shell *shell);
 
 char		**pipe_split(const char *s, char pipe);
 void		pipe_splitter(const char *s, char pipe, char **split, size_t n);
+char		*pipe_splitter_add(const char *s, size_t *i, size_t *len);
+void		pipe_splitter_quotes(const char *s, size_t *i, size_t *len);
+
 int			pipe_numstr(const char *s, char pipe);
+void		pipe_numstr_add(size_t *n, size_t *len);
+int			pipe_numstr_quote(const char *s, size_t *i);
 
 void		signal_handler(int sig);
 void		signal_print(int sig);
@@ -141,8 +147,10 @@ void		lex_multiexpand_var(t_exp *exp);
 void		lex_multiexpand_putvar(t_exp *exp, t_lex *lexer);
 void		lex_expand_free(t_exp *exp);
 
-char		*exp_status(char *var);
 int			is_status(char *s);
+char		*exp_status(char *var);
+void		status_putstat(char *status, char *exp, int *i);
+void		status_putvar(char *var, char *exp, int *i, int *j);
 
 void		tok_lstadd(t_tok **token, t_lex *lexer, int *id);
 void		tok_lstadd_back(t_tok **token, t_tok *new);
@@ -156,8 +164,12 @@ void		lex_append(char c, t_lex *lex);
 
 //	Parser
 char		**input_split(t_shell *shell);
+void		pars_loop(char **inputs, t_tok *token, t_pars **command, t_shell *shell);
 void		pars_commander(t_tok *token, t_pars *command);
+void		commander_alloc(t_tok *token, t_pars *command);
+void		commander_loop(t_tok *token, t_pars *command);
 void		pars_free(t_pars *command);
+void		pars_free_content(t_pars **command);
 
 void		pars_lstadd(t_pars **command, int id);
 void		pars_lstadd_back(t_pars **command, t_pars *new);
@@ -182,12 +194,12 @@ int			ft_export(char **str, t_shell *shell);
 int			ft_unset(char **str, t_shell *shell);
 int			ft_setexport(char *name, char *value, t_shell *shell);
 int			ft_setexport_addenv(char *name, char *value, t_shell *shell);
-int			ft_setexport_addexp(char *name, char *value, t_shell *shell);
 int			ft_unsetenv(char *name, t_shell *shell);
 int			ft_unsetexp(char *name, t_shell *shell);
 int			ft_setenv(char *name, char *value, t_shell *shell);
 int			ft_exit(char **str, t_shell *shell, t_pars *cmd);
 int			ft_pwd(int n);
+char		*varalloc(char **str);
 char		**ft_realloc(char **env, size_t size);
 
 #endif

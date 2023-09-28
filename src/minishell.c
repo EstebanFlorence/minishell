@@ -6,24 +6,13 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:43 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/27 16:09:25 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:05:26 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_exit = 0;
-
-void	signal_handler(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	g_exit = 130;
-	get_next_line(-42);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
 
 void	shell_loop(t_shell *shell)
 {

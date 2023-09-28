@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/27 18:37:32 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 20:39:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,45 +34,50 @@ void	commander_alloc(t_tok *token, t_pars *command)
 		token = token->next;
 	}
 	command->cmds = (char **)ft_calloc(n + 1, sizeof(char *));
-	if (r)
-	{
-		command->numred = r;
-		command->redirs = (int *)ft_calloc(r, sizeof(int));
-		command->redir_name = (char **)ft_calloc(r + 1, sizeof(char *));
-	}
+	if (!r)
+		return ;
+	command->numred = r;
+	command->redirs = (int *)ft_calloc(r, sizeof(int));
+	command->redir_name = (char **)ft_calloc(r + 1, sizeof(char *));
 }
 
-void	pars_commander(t_tok *token, t_pars *command)
+void	commander_loop(t_tok *token, t_pars *command)
 {
 	int		n;
 	int		r;
-	t_tok	*tmp;
 
 	n = 0;
 	r = 0;
-	tmp = token;
-	commander_alloc(tmp, command);
-	tmp = token;
-	while (tmp)
+	while (token)
 	{
-		if (tmp->type == REDIRECT)
+		if (token->type == REDIRECT)
 		{
-			if (tmp->next)
+			if (token->next)
 			{
-				pars_redir(tmp, r, command);
+				pars_redir(token, r, command);
 				r++;
-				tmp = tmp->next;
+				token = token->next;
 			}
 		}
 		else
 		{
-			command->cmds[n] = ft_strdup(tmp->token);
+			command->cmds[n] = ft_strdup(token->token);
 			n++;
 		}
-		tmp = tmp->next;
+		token = token->next;
 	}
 	if (n == 0)
 		command->exec = false;
+}
+
+void	pars_commander(t_tok *token, t_pars *command)
+{
+	t_tok	*tmp;
+
+	tmp = token;
+	commander_alloc(tmp, command);
+	tmp = token;
+	commander_loop(tmp, command);
 }
 
 char	**input_split(t_shell *shell)
@@ -99,20 +104,13 @@ char	**input_split(t_shell *shell)
 	return (inputs);
 }
 
-void	shell_parser(t_shell *shell, t_pars **command)
+void	pars_loop(char **inputs, t_tok *token, t_pars **command, t_shell *shell)
 {
-	t_tok		*token;
-	static int	n;
 	int			i;
-	char		**inputs;
+	static int	n;
 
-	*command = NULL;
-	token = NULL;
 	n = 0;
 	i = 0;
-	inputs = input_split(shell);
-	if (inputs == NULL)
-		return ;
 	while (inputs[i])
 	{
 		lex_tokenizer(shell, inputs[i], &token, &n);
@@ -122,7 +120,8 @@ void	shell_parser(t_shell *shell, t_pars **command)
 			//shell->exit = g_exit;
 			shell->exit = 1;
 			if (i > 0)
-				write(STDERR_FILENO, "syntax error near unexpected token: \"|\"\n", 41);
+				write(STDERR_FILENO,
+					"syntax error near unexpected token: \"|\"\n", 41);
 			i++;
 			continue ;
 		}
@@ -132,24 +131,31 @@ void	shell_parser(t_shell *shell, t_pars **command)
 		token = NULL;
 		i++;
 	}
+}
+
+void	shell_parser(t_shell *shell, t_pars **command)
+{
+	t_tok		*token;
+	char		**inputs;
+
+	*command = NULL;
+	token = NULL;
+	inputs = input_split(shell);
+	if (inputs == NULL)
+		return ;
+	pars_loop(inputs, token, command, shell);
 	tok_free(token);
 	lex_free_inputs(inputs);
 }
 
-void	pars_free(t_pars *command)
+void	pars_free_content(t_pars **command)
 {
 	int		i;
 	t_pars	*tmp;
-
-	if (!command)
-		return ;
-	while (command->prev)
-		command = command->prev;
 	i = 0;
-	while (command)
-	{
-		tmp = command;
-		command = command->next;
+
+		tmp = *command;
+		*command = (*command)->next;
 		while (tmp->cmds[i])
 			free(tmp->cmds[i++]);
 		free(tmp->cmds);
@@ -163,5 +169,18 @@ void	pars_free(t_pars *command)
 			i = 0;
 		}
 		free(tmp);
-	}
+
+
+}
+
+void	pars_free(t_pars *command)
+{
+
+
+	if (!command)
+		return ;
+	while (command->prev)
+		command = command->prev;
+	while (command)
+		pars_free_content(&command);
 }

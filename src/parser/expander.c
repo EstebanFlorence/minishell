@@ -6,15 +6,30 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 23:06:07 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:12:21 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exp_status_putvar()
+void	status_putvar(char *var, char *exp, int *i, int *j)
 {
+	while (var[*j])
+	{
+		exp[*i] = var[*j];
+		(*i)++;
+		(*j)++;
+	}
+}
 
+void	status_putstat(char *status, char *exp, int *i)
+{
+	while (status[*i])
+	{
+		exp[*i] = status[*i];
+		(*i)++;
+	}
+	(*i)++;
 }
 
 char	*exp_status(char *var)
@@ -33,21 +48,11 @@ char	*exp_status(char *var)
 		{
 			exp = ft_calloc((ft_strlen(var) + ft_strlen(status) + 1),
 					sizeof(char));
-			while (status[i])
-			{
-				exp[i] = status[i];
-				i++;
-			}
-			i++;
+			status_putstat(status, exp, &i);
 		}
 		else
 			exp = ft_calloc((ft_strlen(var) - j + 1), sizeof(char));
-		while (var[j])
-		{
-			exp[i] = var[j];
-			i++;
-			j++;
-		}
+		status_putvar(var, exp, &i, &j);
 		free(status);
 		return (exp);
 	}

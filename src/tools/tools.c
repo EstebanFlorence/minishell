@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 22:45:02 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/27 16:35:50 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 18:41:58 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,6 @@ void	command_notfound(t_pars *cmd)
 	else
 		write(STDERR_FILENO, "\'\'", 3);
 	write(STDERR_FILENO, "\n", 2);
-}
-
-void	signal_print(int sig)
-{
-	(void)sig;
-	g_exit = 130;
-	write(STDOUT_FILENO, "\n", 1);
 }
 
 char	*shell_getenv(char *var, t_shell *shell)
@@ -98,59 +91,4 @@ int	ft_isvalid(char *s)
 		i++;
 	}
 	return (0);
-}
-
-void	shell_free(t_shell *shell)
-{
-	int	i;
-
-	rl_clear_history();
-	free(shell->input);
-	free(shell->prompt);
-	i = 0;
-	while (shell->env[i])
-		free(shell->env[i++]);
-	free(shell->env);
-	if (shell->paths)
-	{
-		i = 0;
-		while (shell->paths[i])
-			free(shell->paths[i++]);
-		free(shell->paths);
-	}
-	if (shell->export)
-	{
-		i = 0;
-		while (shell->export[i])
-			free(shell->export[i++]);
-		free(shell->export);
-	}
-}
-
-void	shell_exit(t_shell *shell)
-{
-	int	i;
-
-	rl_clear_history();
-	free(shell->input);
-	free(shell->prompt);
-	i = 0;
-	while (shell->env[i])
-		free(shell->env[i++]);
-	free(shell->env);
-	i = 0;
-	if (shell->paths)
-	{
-		while (shell->paths[i])
-			free(shell->paths[i++]);
-		free(shell->paths);
-	}
-	if (shell->export)
-	{
-		i = 0;
-		while (shell->export[i])
-			free(shell->export[i++]);
-		free(shell->export);
-	}
-	exit(g_exit);
 }

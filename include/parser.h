@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/19 20:45:39 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 16:14:22 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,9 @@ typedef struct s_token
 typedef struct s_exp
 {
 	char	**expandables;
+	char	*expanded;
 	char	*names;
 	char	*var;
-	char	*expanded;
 	char	*status;
 }	t_exp;
 

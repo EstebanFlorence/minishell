@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_builtin.c                                    :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/30 10:23:26 by gcavanna          #+#    #+#             */
-/*   Updated: 2023/09/28 18:35:01 by adi-nata         ###   ########.fr       */
+/*   Created: 2023/09/28 18:40:59 by adi-nata          #+#    #+#             */
+/*   Updated: 2023/09/28 18:41:57 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**ft_realloc(char **env, size_t size)
+void	signal_print(int sig)
 {
-	char	**new;
-	int		i;
+	(void)sig;
+	g_exit = 130;
+	write(STDOUT_FILENO, "\n", 1);
+}
 
-	i = 0;
-	new = (char **)malloc(size);
-	while (env && env[i])
-	{
-		new[i] = ft_strdup(env[i]);
-		i++;
-	}	
-	new[i] = NULL;
-	if (env)
-	{
-		i = 0;
-		while (env[i])
-			free(env[i++]);
-		free(env);
-	}
-	return (new);
+void	signal_handler(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	g_exit = 130;
+	get_next_line(-42);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }

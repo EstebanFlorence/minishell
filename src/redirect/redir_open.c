@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:04:22 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 20:11:00 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/28 16:10:43 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	redir_input(int i, t_pars *cmd, t_shell *shell)
 		perror(cmd->redir_name[i]);
 		g_exit = 1;
 		shell->exit = g_exit;
-		cmd->exec = false;	
+		cmd->exec = false;
 	}
 }
 

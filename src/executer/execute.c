@@ -51,7 +51,7 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 void	child_process(t_pars *cmd, t_shell *shell)
 {
 	signal(SIGINT, SIG_DFL);
-	//signal(SIGINT, signal_handler);
+	//signal(SIGINT, signal_handler);	//	heredoc handler?
 	signal(SIGQUIT, SIG_DFL);
 	if (cmd->numred)
 		exec_redir(cmd, shell);
