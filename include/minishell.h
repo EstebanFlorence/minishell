@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/29 20:01:15 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/09/30 18:17:32 by gcavanna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void		exec2(char *cmd_path, t_pars *tmp, t_pars *command, t_shell *shell);
 void		fork_command(t_pars *cmd, t_shell *shell);
 void		child_process(t_pars *cmd, t_shell *shell);
 void		parent_process(t_pars *cmd, t_shell *shell);
-void		parent_wait(t_shell *shell);
+void		parent_end(t_shell *shell);
 void		exec_redir(t_pars *cmd, t_shell *shell);
 void		close_redir(t_pars *cmd);
 void		exec_builtin_main(t_pars *cmd, t_shell *shell);
@@ -189,6 +189,7 @@ int			here_doc(int i, t_pars *cmd);
 int			is_builtin(char *cmd);
 int			exec_builtin(t_pars *cmd, t_shell *shell);
 int			ft_cd(char **str, t_shell *shell);
+int			ft_stupid_norm(char *pwd, char *oldpwd);
 int			ft_echo(char **str);
 int			ft_env(t_shell *shell);
 int			ft_export(char **str, t_shell *shell);
