@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	parent_end(t_shell *shell)
+void	parent_wait(t_shell *shell)
 {
 	int	status;
 
@@ -34,7 +34,11 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 	signal(SIGINT, signal_print);
 	signal(SIGQUIT, signal_print);
 	if (cmd->exec == false && cmd->next)
+	{
 		close(shell->pipe[1]);
+		dup2(shell->pipe[0], STDIN_FILENO);
+		close(shell->pipe[0]);
+	}
 	else if (cmd->exec == true && cmd->next)
 	{
 		close(shell->pipe[1]);
@@ -45,7 +49,7 @@ void	parent_process(t_pars *cmd, t_shell *shell)
 		}
 	}
 	close_redir(cmd);
-	parent_end(shell);
+	parent_wait(shell);
 }
 
 void	child_process(t_pars *cmd, t_shell *shell)
@@ -98,6 +102,7 @@ void	shell_executor(t_pars **command, t_shell *shell)
 	cmd = *command;
 	while (cmd)
 	{
+		shell->exit = 0;
 		if (cmd->next)
 		{
 			if (pipe(shell->pipe) < 0)
