@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gcavanna <gcavanna@student.42firenze.it    +#+  +:+       +#+        */
+/*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 16:44:45 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/30 18:17:32 by gcavanna         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:30:52 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,7 @@ void		redir_output(int i, t_pars *cmd, t_shell *shell);
 void		redir_append(int i, t_pars *cmd, t_shell *shell);
 void		redir_input(int i, t_pars *cmd, t_shell *shell);
 void		redir_heredoc(int i, t_pars *cmd, t_shell *shell);
-int			here_doc(int i, t_pars *cmd);
+int			here_doc(int i, t_pars *cmd, t_shell *shell);
 
 //	Builtin
 int			is_builtin(char *cmd);

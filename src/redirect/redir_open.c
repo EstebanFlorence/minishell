@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 19:04:22 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 16:10:43 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:30:37 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	redir_heredoc(int i, t_pars *cmd, t_shell *shell)
 {
 	if (cmd->in != -2)
 		close(cmd->in);
-	cmd->in = here_doc(i, cmd);
+	cmd->in = here_doc(i, cmd, shell);
 	if (cmd->in < 0)
 	{
 		perror(cmd->redir_name[i]);

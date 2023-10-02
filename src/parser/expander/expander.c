@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 23:11:15 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/29 19:53:24 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:39:41 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	status_putstat(char *status, char *exp, int *i)
 		exp[*i] = status[*i];
 		(*i)++;
 	}
-	//(*i)++;
 }
 
 char	*exp_status(char *var)
@@ -49,7 +48,7 @@ char	*exp_status(char *var)
 			exp = ft_calloc((ft_strlen(var) + ft_strlen(status) + 1),
 					sizeof(char));
 			status_putstat(status, exp, &i);
-			j = i;
+			j = 1;
 		}
 		else
 			exp = ft_calloc((ft_strlen(var) - j + 1), sizeof(char));

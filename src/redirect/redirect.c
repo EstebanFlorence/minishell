@@ -6,20 +6,20 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:36:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/26 20:08:54 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:34:54 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	here_doc(int i, t_pars *cmd)
+int	here_doc(int i, t_pars *cmd, t_shell *shell)
 {
 	char	*tmplimiter;
 	char	*line;
 	int		heredoc;
 
 	tmplimiter = ft_strjoin(cmd->redir_name[i], "\n");
-	line = get_next_line(STDIN_FILENO);
+	line = get_next_line(shell->in);
 	heredoc = open(HEREPATH, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	if (heredoc < 0)
 		perror("heredoc");
@@ -36,7 +36,7 @@ int	here_doc(int i, t_pars *cmd)
 		}
 		ft_putstr_fd(line, heredoc);
 		free(line);
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(shell->in);
 	}
 	return (-1);
 }

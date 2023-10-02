@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/11 16:02:14 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/04 17:37:05 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 19:22:44 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 
 char				*get_next_line(int fd);
 char				*zeline(int fd, char **stat, char *buffer);
+char				*get_next_free(char **stat);
 size_t				endornewline(char *buffer, int bytesread);
 
 #endif

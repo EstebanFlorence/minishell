@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/16 15:04:27 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 16:14:22 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:19:23 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 # include "minishell.h"
 # include <stdbool.h>
 
-# define SINGLE_QUOTE '\''
-# define DOUBLE_QUOTE '\"'
+# define SINGLE_QUOTE 39
+# define DOUBLE_QUOTE 34
 
 # define STATE_NORMAL 0
 # define STATE_DOUBLE_QUOTE 1

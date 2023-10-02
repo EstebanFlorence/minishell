@@ -6,38 +6,35 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:22:40 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/08/03 17:21:02 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 19:23:02 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*get_next_line(int fd)
+char	*get_next_free(char **stat)
 {
-	static char		*stat;
-	char			*buffer;
-	char			*line;
+	if (*stat)
+		free(*stat);
+	return (NULL);
+}
 
-	if (fd == -42)
-		free(stat);
-	if (fd < 0 || BUFFER_SIZE < 0 || read(fd, &buffer, 0) < 0)
-		return (NULL);
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
-	if (!stat)
+size_t	endornewline(char *buffer, int bytesread)
+{
+	int		i;
+
+	if (buffer == NULL)
+		return (0);
+	i = 0;
+	while (buffer[i])
 	{
-		stat = (char *)malloc(1);
-		stat[0] = '\0';
+		if (buffer[i] == '\n')
+			return (i + 1);
+		i++;
 	}
-	line = zeline(fd, &stat, buffer);
-	if (line == NULL)
-	{
-		free (stat);
-		stat = NULL;
-	}
-	free (buffer);
-	return (line);
+	if (bytesread == 0 && buffer[0] != '\0')
+		return (ft_strlen(buffer));
+	return (0);
 }
 
 char	*zeline(int fd, char **stat, char *buffer)
@@ -69,20 +66,30 @@ char	*zeline(int fd, char **stat, char *buffer)
 	return (0);
 }
 
-size_t	endornewline(char *buffer, int bytesread)
+char	*get_next_line(int fd)
 {
-	int		i;
+	static char		*stat;
+	char			*buffer;
+	char			*line;
 
-	if (buffer == NULL)
-		return (0);
-	i = 0;
-	while (buffer[i])
+	if (fd == -42)
+		return (get_next_free(&stat));
+	if (fd < 0 || BUFFER_SIZE < 0 || read(fd, &buffer, 0) < 0)
+		return (NULL);
+	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	if (!stat)
 	{
-		if (buffer[i] == '\n')
-			return (i + 1);
-		i++;
+		stat = (char *)malloc(1);
+		stat[0] = '\0';
 	}
-	if (bytesread == 0 && buffer[0] != '\0')
-		return (ft_strlen(buffer));
-	return (0);
+	line = zeline(fd, &stat, buffer);
+	if (line == NULL)
+	{
+		free (stat);
+		stat = NULL;
+	}
+	free (buffer);
+	return (line);
 }

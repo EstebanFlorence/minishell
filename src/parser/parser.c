@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:45:03 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/28 20:45:33 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:16:04 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,6 @@ void	pars_loop(char **inputs, t_tok *token, t_pars **command, t_shell *shell)
 		lex_tokenizer(shell, inputs[i], &token, &n);
 		if (token == NULL)
 		{
-			//g_exit = 127;	//	0
-			//shell->exit = g_exit;
 			shell->exit = 1;
 			if (i > 0)
 				write(STDERR_FILENO,

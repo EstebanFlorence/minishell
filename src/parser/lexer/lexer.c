@@ -6,7 +6,7 @@
 /*   By: adi-nata <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/17 17:22:06 by adi-nata          #+#    #+#             */
-/*   Updated: 2023/09/29 20:10:12 by adi-nata         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:17:04 by adi-nata         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	lex_tokenizer_end(t_lex *lex, t_tok **token, int *id)
 {
 	if (lex->type == -2)
 	{
-		//g_exit = 2;
-		lex->shell->exit = 1;
+		g_exit = 2;
+		lex->shell->exit = g_exit;
 	}
 	else if (lex->len)
 	{
