@@ -51,13 +51,19 @@ CC			=	gcc
 
 RM			=	rm -rf
 
-FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
-
-MAKEFLAGS	+=	--silent
-
 LIB			=	libft
 
+FLAGS		=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror
+
 LIBFLAGS	=	-L./libft/include/ -lft
+
+# Flags for Macs
+MACFLAGS	=	-g -Iinclude/ -Ilibft/include/ -Wall -Wextra -Werror -I/usr/local/Cellar/readline/8.2.7/include
+
+LIBMAC		=	-L./libft/include/ -lft -L/usr/local/Cellar/readline/8.2.7/lib
+
+
+MAKEFLAGS	+=	--silent
 
 CLR_RMV		=	\033[0m
 RED		    =	\033[1;31m
@@ -67,9 +73,18 @@ BLUE		=	\033[1;34m
 CYAN 		=	\033[1;36m
 
 
+ifeq ($(shell uname), Darwin)
+	TRUEFLAGS = ${MACFLAGS}
+	TRUELIBS = ${LIBMAC}
+else
+	TRUEFLAGS = ${FLAGS}
+	TRUELIBS = ${LIBFLAGS}
+endif
+
+
 ${OBJ_DIR}/%.o:	${SRC_DIR}/%.c
 				@mkdir -p ${@D}
-				${CC} ${FLAGS} -c $< -o $@
+				${CC} ${TRUEFLAGS} -c $< -o $@
 
 ${NAME}:		${OBJS}
 				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${LIB} ${CLR_RMV}..."
@@ -77,7 +92,7 @@ ${NAME}:		${OBJS}
 				@echo "${GREEN}${LIB} created[0m ✔️"
 
 				@echo "${GREEN}Compilation ${CLR_RMV}of ${YELLOW}${NAME} ${CLR_RMV}..."
-				${CC} ${FLAGS} ${OBJS} ${LIBFLAGS} -lreadline -o ${NAME}
+				${CC} ${TRUEFLAGS} ${OBJS} ${TRUELIBS} -lreadline -o ${NAME}
 				@echo "${GREEN}${NAME} created[0m ✔️"
 
 all:			${NAME}
