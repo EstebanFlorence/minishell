@@ -14,7 +14,7 @@ A simple UNIX shell implementation written in C
 - Environment variables handling
 
 ## Usage
-Minishell uses the 'readline' library
+Minishell uses the [readline](https://man7.org/linux/man-pages/man3/readline.3.html) library
 
 **Clone the Repository**
   ```shell
