@@ -14,7 +14,7 @@
 
 void	lex_tokenizer_end(t_lex *lex, t_tok **token, int *id)
 {
-	if (lex->type == -2)
+	if (lex->type == -2 || (lex->state != STATE_NORMAL && lex->state != STATE_DOLLAR_SIGN))
 	{
 		g_exit = 2;
 		lex->shell->exit = g_exit;
